@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Akquise-Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        :root { --ts-yellow: #f9b233; --ts-black: #1a1a1a; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: #ffffff; margin: 0; overflow: hidden; }
+        .sidebar { background-color: var(--ts-black); border-right: 1px solid #333; z-index: 10; }
+        .ts-input { background: #252525; border: 1px solid #444; color: white; border-radius: 0.5rem; width: 100%; padding: 0.6rem; font-size: 0.85rem; }
+        .ts-input:focus { border-color: var(--ts-yellow); outline: none; }
+        .ts-label { color: #999; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+        .preview-pane { flex: 1; background: #000; display: flex; justify-content: center; align-items: flex-start; overflow-y: auto; padding: 40px 20px; }
+        .mail-content { background: white; color: black; width: 100%; max-width: 600px; padding: 30px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-family: Arial, sans-serif; line-height: 1.6; }
+        .btn-primary { background-color: var(--ts-yellow); color: black; font-weight: 800; border-radius: 0.75rem; text-transform: uppercase; transition: all 0.2s; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col lg:flex-row h-screen w-full">
+        <div class="sidebar lg:w-[420px] w-full p-6 overflow-y-auto flex flex-col">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-[#f9b233] rounded flex items-center justify-center font-black text-black italic text-xl">TS</div>
+                <h1 class="text-xl font-black italic text-white uppercase leading-none text-left">Top Sports<br><span class="text-[10px] tracking-[3px] font-normal not-italic text-white/50 text-left">Akquise Tool</span></h1>
+            </div>
+
+            <div class="space-y-6 flex-grow">
+                <section>
+                    <label class="ts-label">Zielgruppe</label>
+                    <select id="in_typ" onchange="update()" class="ts-input mb-4">
+                        <option value="verein">Sportverein (Kooperation)</option>
+                        <option value="firma">Unternehmen (Firmenfitness)</option>
+                        <option value="influencer">Creator / Influencer</option>
+                    </select>
+                    
+                    <label class="ts-label">Name (Firma/Verein)</label>
+                    <input type="text" id="in_name" oninput="update()" class="ts-input mb-4" placeholder="z.B. Muster GmbH">
+                    
+                    <label class="ts-label">Ansprechpartner (optional)</label>
+                    <input type="text" id="in_ansprech" oninput="update()" class="ts-input mb-4" placeholder="z.B. Herr Müller">
+
+                    <label class="ts-label">Mein Bookings-Link (CTA)</label>
+                    <input type="text" id="in_booking" oninput="update()" class="ts-input mb-4" placeholder="outlook.office365.com/bookings/...">
+
+                    <label class="ts-label text-[#f9b233]">Eigene Signatur Name</label>
+                    <input type="text" id="in_signatur" oninput="update()" class="ts-input" placeholder="Dein Name">
+                </section>
+
+                <div class="h-[1px] bg-[#333]"></div>
+
+                <div class="space-y-3">
+                    <button onclick="copyText()" class="w-full py-3 bg-white/10 text-white rounded-lg font-bold hover:bg-white/20 transition-all text-xs uppercase">Text kopieren</button>
+                    <button onclick="openMail()" class="btn-primary w-full py-4 shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                        📩 E-Mail Entwurf öffnen
+                    </button>
+                </div>
+            </div>
+            
+            <a href="index.html" class="mt-6 text-[10px] text-gray-500 uppercase text-center hover:text-[#f9b233]">← Dashboard</a>
+        </div>
+
+        <div class="preview-pane">
+            <div class="mail-content">
+                <div class="text-xs text-gray-400 mb-4 border-b pb-2">
+                    <strong>Betreff:</strong> <span id="out_subject"></span>
+                </div>
+                <div id="out_body" class="whitespace-pre-wrap text-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function update() {
+            const typ = document.getElementById('in_typ').value;
+            const name = document.getElementById('in_name').value || "[Name]";
+            const ansprech = document.getElementById('in_ansprech').value;
+            const signatur = document.getElementById('in_signatur').value || "[Dein Name]";
+            const booking = document.getElementById('in_booking').value;
+            
+            let greeting = ansprech ? `Sehr geehrte/r ${ansprech},` : "Hallo zusammen,";
+            if(typ === 'influencer') greeting = `Hey ${ansprech || name},`;
+
+            let cta = "";
+            if (booking) {
+                cta = `Hier können Sie direkt einen passenden Termin für ein 10-minütiges Kennenlernen in meinem Kalender wählen:\n🔗 ${booking}`;
+            } else {
+                cta = `Wann würde es Ihnen zeitlich passen, wenn wir uns dazu einmal unverbindlich für 5-10 Minuten austauschen? Ich freue mich auf Ihre Rückmeldung.`;
+            }
+
+            let subject = "";
+            let body = "";
+
+            if(typ === 'firma') {
+                subject = `Mitarbeiter-Benefits für ${name} | Kooperation mit TOP SPORTS`;
+                body = `${greeting}\n\nich schreibe Ihnen, da wir aktuell ausgewählten Unternehmen in der Region die Möglichkeit bieten, Teil unseres Firmenfitness-Netzwerks zu werden.\n\nGerade in der heutigen Zeit ist die Gesundheit der Mitarbeiter ein entscheidender Faktor für den Unternehmenserfolg. Mit TOP SPORTS bieten wir ${name} ein unkompliziertes Konzept, um Sport und Prävention direkt in den Alltag Ihres Teams zu integrieren – und das zu exklusiven Sonderkonditionen.\n\n${cta}\n\nBeste Grüße aus Reutlingen,\n\n${signatur}\nTOP SPORTS Fitness Team`;
+            } else if(typ === 'influencer') {
+                subject = `Kooperationsanfrage: TOP SPORTS x ${name}`;
+                body = `${greeting}\n\nich verfolge deinen Content schon eine Weile und finde deinen Vibe echt stark! \n\nWir von TOP SPORTS betreiben moderne Fitnessstudios in der Region und sind immer auf der Suche nach authentischen Creators, die Lust haben, unsere Marke zu repräsentieren. Im Gegenzug bieten wir dir nicht nur eine VIP-Mitgliedschaft, sondern auch spannende Möglichkeiten für gemeinsamen Content.\n\n${cta.replace('Sie', 'du').replace('Ihnen', 'dir')}\n\nLiebe Grüße,\n\n${signatur}\nMarketing | TOP SPORTS`;
+            } else {
+                subject = `Sportliche Partnerschaft: TOP SPORTS & ${name}`;
+                body = `${greeting}\n\nals regional verwurzeltes Fitnessunternehmen liegt uns die Förderung des lokalen Sports sehr am Herzen. Wir sind beeindruckt von der Arbeit, die ihr bei ${name} leistet.\n\nGerne würden wir euch als Kooperationspartner unterstützen und euren Mitgliedern sowie Trainern exklusive Vorteile bei uns in den Studios ermöglichen, um die sportliche Leistungsfähigkeit im Verein weiter zu steigern.\n\n${cta}\n\nSportliche Grüße,\n\n${signatur}\nTOP SPORTS Fitness GmbH & Co. KG`;
+            }
+
+            document.getElementById('out_subject').innerText = subject;
+            document.getElementById('out_body').innerText = body;
+        }
+
+        function copyText() {
+            const body = document.getElementById('out_body').innerText;
+            navigator.clipboard.writeText(body);
+            alert("E-Mail Text wurde kopiert!");
+        }
+
+        function openMail() {
+            const subject = encodeURIComponent(document.getElementById('out_subject').innerText);
+            const body = encodeURIComponent(document.getElementById('out_body').innerText);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        }
+
+        update();
+    </script>
+</body>
+</html>
