@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Sales-Argumentarium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        :root { --ts-yellow: #f9b233; --ts-black: #1a1a1a; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: #ffffff; margin: 0; overflow: hidden; }
+        .sidebar { background-color: var(--ts-black); border-right: 1px solid #333; z-index: 10; }
+        .ts-input { background: #252525; border: 1px solid #444; color: white; border-radius: 0.5rem; width: 100%; padding: 0.6rem; font-size: 0.85rem; }
+        .ts-input:focus { border-color: var(--ts-yellow); outline: none; }
+        .ts-label { color: #999; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+        .preview-pane { flex: 1; background: #000; display: flex; justify-content: center; align-items: flex-start; overflow-y: auto; padding: 40px 20px; }
+        .sales-card { background: white; color: black; width: 100%; max-width: 700px; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .roi-box { background: #fdf2f2; border-left: 4px solid #ef4444; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .btn-primary { background-color: var(--ts-yellow); color: black; font-weight: 800; border-radius: 0.75rem; text-transform: uppercase; transition: all 0.2s; }
+        .advantage-chip { background: #333; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; border: 1px solid #444; transition: all 0.2s; }
+        .advantage-chip.active { background: var(--ts-yellow); color: black; border-color: var(--ts-yellow); }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col lg:flex-row h-screen w-full">
+        <div class="sidebar lg:w-[450px] w-full p-6 overflow-y-auto flex flex-col">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-[#f9b233] rounded flex items-center justify-center font-black text-black italic text-xl">TS</div>
+                <h1 class="text-xl font-black italic text-white uppercase leading-none">Top Sports<br><span class="text-[10px] tracking-[3px] font-normal not-italic text-white/50">Sales Argumentarium</span></h1>
+            </div>
+
+            <div class="space-y-6 flex-grow">
+                <section class="bg-white/5 p-4 rounded-xl border border-white/10">
+                    <label class="ts-label text-[#f9b233]">BGM Nutzen-Rechner</label>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="text-[10px] uppercase text-gray-500">Mitarbeiterzahl</label>
+                            <input type="number" id="in_mitarbeiter" oninput="calculateROI()" value="50" class="ts-input">
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase text-gray-500">Kosten Krankheit/Tag (€)</label>
+                            <input type="number" id="in_tagessatz" oninput="calculateROI()" value="400" class="ts-input">
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 italic leading-tight">Basis: Statistik besagt, dass Sport den Krankenstand um ca. 1-2 Tage/Jahr senken kann.</p>
+                </section>
+
+                <section>
+                    <label class="ts-label text-white">Das Warum (Argumente wählen)</label>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <div class="advantage-chip active" onclick="toggleAdv(this, 'health')">Gesundheitsquote</div>
+                        <div class="advantage-chip active" onclick="toggleAdv(this, 'branding')">Employer Branding</div>
+                        <div class="advantage-chip" onclick="toggleAdv(this, 'recruiting')">Recruiting-Vorteil</div>
+                        <div class="advantage-chip" onclick="toggleAdv(this, 'tax')">Steuervorteile</div>
+                        <div class="advantage-chip" onclick="toggleAdv(this, 'culture')">Team-Culture</div>
+                    </div>
+                </section>
+
+                <div class="h-[1px] bg-[#333]"></div>
+
+                <section>
+                    <label class="ts-label">Empfänger & Status</label>
+                    <input type="text" id="in_firma" oninput="update()" class="ts-input mb-3" placeholder="Firma / Verein">
+                    <select id="in_status" onchange="update()" class="ts-input">
+                        <option value="nachfassen">Nachfassen (nach Erstkontakt)</option>
+                        <option value="angebot">Detailliertes Argumentarium</option>
+                        <option value="meeting">Terminbestätigung + Vorabinfo</option>
+                    </select>
+                </section>
+
+                <div class="space-y-3">
+                    <button onclick="copyText()" class="w-full py-3 bg-white/10 text-white rounded-lg font-bold hover:bg-white/20 transition-all text-xs uppercase italic">Argumente kopieren</button>
+                    <button onclick="openMail()" class="btn-primary w-full py-4 shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                        📩 E-Mail Entwurf öffnen
+                    </button>
+                </div>
+            </div>
+            <a href="index.html" class="mt-6 text-[10px] text-gray-500 uppercase text-center hover:text-[#f9b233]">← Dashboard</a>
+        </div>
+
+        <div class="preview-pane">
+            <div class="sales-card" id="sales_content">
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <div class="font-black italic text-xl">TOP SPORTS <span class="text-[#f9b233]">BUSINESS</span></div>
+                    <div class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Wirtschaftlichkeits-Analyse</div>
+                </div>
+
+                <div id="out_text" class="text-sm space-y-4">
+                    </div>
+
+                <div class="roi-box mt-8">
+                    <h4 class="font-bold text-red-600 uppercase text-xs mb-2 italic">Potenzielle jährliche Kostenersparnis für <span id="out_firma_name">Ihre Firma</span>:</h4>
+                    <div class="text-3xl font-black text-black"><span id="out_roi_val">0,00</span> €*</div>
+                    <p class="text-[9px] mt-2 text-gray-500 italic">*Berechnung basiert auf einer Reduzierung der Fehlzeiten um 1,5 Tage/Jahr pro Mitarbeiter durch regelmäßiges Training (ø Statistik Krankenkassen).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedAdv = ['health', 'branding'];
+
+        function toggleAdv(el, key) {
+            el.classList.toggle('active');
+            if(selectedAdv.includes(key)) selectedAdv = selectedAdv.filter(k => k !== key);
+            else selectedAdv.push(key);
+            update();
+        }
+
+        function calculateROI() {
+            const anz = document.getElementById('in_mitarbeiter').value || 0;
+            const satz = document.getElementById('in_tagessatz').value || 0;
+            const savings = anz * satz * 1.5; // Reduzierung um 1.5 Tage
+            document.getElementById('out_roi_val').innerText = savings.toLocaleString('de-DE', {minimumFractionDigits: 2});
+            update();
+        }
+
+        function update() {
+            const firma = document.getElementById('in_firma').value || "Ihr Unternehmen";
+            const status = document.getElementById('in_status').value;
+            const savings = document.getElementById('out_roi_val').innerText;
+            
+            document.getElementById('out_firma_name').innerText = firma;
+
+            let intro = "";
+            let argumentsText = "";
+
+            if(status === 'nachfassen') {
+                intro = `Hallo zusammen,\n\nich wollte mich kurz erkundigen, ob Sie bereits Zeit hatten, über unseren ersten Austausch nachzudenken. Um Ihnen die Entscheidung für Ihre Mitarbeiter zu erleichtern, habe ich hier kurz die wirtschaftlichen Fakten zusammengefasst:`;
+            } else if(status === 'angebot') {
+                intro = `Sehr geehrte Damen und Herren,\n\nvielen Dank für Ihr Interesse an einer Kooperation mit TOP SPORTS. Ein modernes Gesundheitsmanagement ist heute kein "Bonus" mehr, sondern eine wirtschaftliche Notwendigkeit.`;
+            } else {
+                intro = `Hallo,\n\nich freue mich auf unser baldiges Gespräch! Vorab habe ich Ihnen bereits eine kurze Analyse erstellt, warum eine Partnerschaft mit TOP SPORTS für ${firma} absolut Sinn macht:`;
+            }
+
+            const advTexts = {
+                health: "✅ **Senkung des Krankenstands:** Durch gezieltes Kraft- und Ausdauertraining wird das Immunsystem gestärkt und Rückenleiden (Hauptgrund für Fehlzeiten) massiv reduziert.",
+                branding: "✅ **Employer Branding:** Positionieren Sie sich als moderner Arbeitgeber, dem die Vitalität seines Teams am Herzen liegt.",
+                recruiting: "✅ **Wettbewerbsvorteil Recruiting:** Ein Fitness-Benefit ist im War for Talents oft das Zünglein an der Waage.",
+                tax: "✅ **Steuerliche Vorteile:** Nutzen Sie Möglichkeiten wie den steuerfreien Sachbezug oder § 3 Nr. 34 EStG für Ihre Mitarbeiter.",
+                culture: "✅ **Team-Kultur:** Gemeinsamer Sport fördert den Zusammenhalt über alle Hierarchien hinweg."
+            };
+
+            argumentsText = selectedAdv.map(key => advTexts[key]).join('\n\n');
+
+            let finalBody = `${intro}\n\n${argumentsText}\n\n**Der wirtschaftliche Hebel:**\nBasierend auf Ihrer Teamgröße ergibt sich ein kalkulatorisches Einsparpotenzial von ca. **${savings} € pro Jahr**, wenn wir gemeinsam den Krankenstand stabilisieren.\n\nIch freue mich auf Ihr Feedback!`;
+            
+            document.getElementById('out_text').innerText = finalBody;
+        }
+
+        function copyText() {
+            const text = document.getElementById('out_text').innerText + "\n\nErsparnis: " + document.getElementById('out_roi_val').innerText + " €";
+            navigator.clipboard.writeText(text);
+            alert("Argumentation wurde kopiert!");
+        }
+
+        function openMail() {
+            const firma = document.getElementById('in_firma').value || "Kooperation";
+            const subject = encodeURIComponent(`Mehrwert für ${firma} | TOP SPORTS Analyse`);
+            const body = encodeURIComponent(document.getElementById('out_text').innerText);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        }
+
+        calculateROI();
+    </script>
+</body>
+</html>
