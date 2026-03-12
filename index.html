@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Vertrags-Designer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --ts-yellow: #f9b233;
+            --ts-black: #1a1a1a;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f0f0f; 
+            color: #ffffff;
+            margin: 0;
+            overflow: hidden; 
+        }
+        
+        .sidebar { background-color: var(--ts-black); border-right: 1px solid #333; z-index: 10; }
+        .ts-input { background: #252525; border: 1px solid #444; color: white; border-radius: 0.5rem; width: 100%; padding: 0.6rem; font-size: 0.85rem; }
+        .ts-input:focus { border-color: var(--ts-yellow); outline: none; }
+        .ts-label { color: #999; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+
+        .card { background: #2a2a2a; border-left: 4px solid var(--ts-yellow); padding: 0.75rem; border-radius: 0.4rem; position: relative; margin-bottom: 0.75rem; }
+        .btn-primary { background-color: var(--ts-yellow); color: black; font-weight: 800; width: 100%; py: 1rem; border-radius: 0.75rem; text-transform: uppercase; transition: all 0.2s; }
+        .btn-primary:hover { background-color: #e09f2a; transform: scale(1.02); }
+
+        /* PREVIEW AREA */
+        .preview-pane {
+            flex: 1;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        /* Das eigentliche A4 Dokument */
+        #pdf-template {
+            background: white;
+            color: black;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            box-sizing: border-box;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            /* Verhindert das Ausbrechen von Text */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* PDF Sektions-Handling */
+        .pdf-section { margin-bottom: 15pt; page-break-inside: avoid; }
+        .pdf-header { border-bottom: 2px solid #eee; padding-bottom: 10pt; margin-bottom: 20pt; }
+        .pdf-title { border-bottom: 3px solid var(--ts-yellow); display: inline-block; padding-bottom: 5pt; margin-bottom: 20pt; font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: 1px; }
+
+        ul { list-style: disc; margin-left: 20pt; padding: 0; }
+        li { margin-bottom: 5pt; white-space: pre-wrap; }
+
+        .logo-box { width: 45%; height: 60px; display: flex; align-items: center; }
+        img.logo-img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+        .no-print { display: block; }
+        @media print { .no-print { display: none; } }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col lg:flex-row h-screen w-full">
+        
+        <div class="sidebar lg:w-[420px] w-full p-6 overflow-y-auto no-print">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-[#f9b233] rounded flex items-center justify-center font-black text-black italic">TS</div>
+                <h1 class="text-xl font-black italic tracking-tighter text-white uppercase leading-none">Top Sports<br><span class="text-[10px] tracking-[3px] font-normal not-italic text-gray-500">Contract Designer</span></h1>
+            </div>
+
+            <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="group">
+                        <label class="ts-label">TS Logo</label>
+                        <div onclick="document.getElementById('in_logo_ts').click()" id="btn_logo_ts" class="bg-[#222] h-12 border-2 border-dashed border-[#444] rounded flex items-center justify-center text-[9px] font-bold uppercase cursor-pointer hover:border-[#f9b233]">Upload</div>
+                        <input type="file" id="in_logo_ts" class="hidden" accept="image/*" onchange="window.loadLogo(this, 'out_logo_ts')">
+                    </div>
+                    <div>
+                        <label class="ts-label">Partner Logo</label>
+                        <div onclick="document.getElementById('in_logo_partner').click()" id="btn_logo_partner" class="bg-[#222] h-12 border-2 border-dashed border-[#444] rounded flex items-center justify-center text-[9px] font-bold uppercase cursor-pointer hover:border-[#f9b233]">Upload</div>
+                        <input type="file" id="in_logo_partner" class="hidden" accept="image/*" onchange="window.loadLogo(this, 'out_logo_partner')">
+                    </div>
+                </div>
+
+                <div class="h-[1px] bg-[#333]"></div>
+
+                <section>
+                    <label class="ts-label text-white">Kooperationstyp</label>
+                    <select id="in_typ" onchange="update()" class="ts-input mb-4">
+                        <option value="verein">Sportverein</option>
+                        <option value="firma">Unternehmen / Firma</option>
+                        <option value="influencer">Influencer / Creator</option>
+                    </select>
+                    <label id="label_name" class="ts-label">Partner Name</label>
+                    <input type="text" id="in_name" oninput="update()" class="ts-input mb-4" placeholder="z.B. FC Beispiel">
+                    <label class="ts-label text-white">Anschrift</label>
+                    <textarea id="in_adresse" oninput="update()" rows="2" class="ts-input" placeholder="Straße, PLZ Ort"></textarea>
+                </section>
+
+                <div class="h-[1px] bg-[#333]"></div>
+
+                <section>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xs font-black uppercase text-white tracking-widest italic">§2 Leistungen TS</h3>
+                        <button onclick="addItem('ts')" class="bg-[#f9b233] text-black text-[10px] font-bold px-3 py-1 rounded-full">+ Add</button>
+                    </div>
+                    <div id="ts_container"></div>
+                </section>
+
+                <section>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xs font-black uppercase text-white tracking-widest italic">§3 Leistungen Partner</h3>
+                        <button onclick="addItem('partner')" class="bg-white/20 text-white text-[10px] font-bold px-3 py-1 rounded-full">+ Add</button>
+                    </div>
+                    <div id="partner_container"></div>
+                </section>
+
+                <div class="h-[1px] bg-[#333]"></div>
+
+                <section>
+                    <label class="ts-label">Vertragsmodell</label>
+                    <select id="in_modell" onchange="update()" class="ts-input mb-4">
+                        <option value="fest">Feste Laufzeit</option>
+                        <option value="unbefristet">Unbefristet (mtl. kündbar)</option>
+                    </select>
+                    <div id="laufzeit_settings" class="grid grid-cols-2 gap-4">
+                        <input type="text" id="in_laufzeit" oninput="update()" value="2 Jahre" class="ts-input" placeholder="Laufzeit">
+                        <input type="text" id="in_frist" oninput="update()" value="3 Monate" class="ts-input" placeholder="Frist">
+                    </div>
+                </section>
+
+                <section class="grid grid-cols-2 gap-4">
+                    <input type="text" id="in_ort" oninput="update()" value="Reutlingen" class="ts-input">
+                    <input type="text" id="in_mitarbeiter" oninput="update()" placeholder="Mitarbeiter" class="ts-input">
+                </section>
+
+                <button onclick="generatePDF()" class="btn-primary py-4 mb-10">
+                    Vertrag als PDF speichern
+                </button>
+            </div>
+        </div>
+
+        <div class="preview-pane">
+            <div id="pdf-template">
+                <div class="pdf-header flex justify-between items-center">
+                    <div class="logo-box">
+                        <img id="out_logo_ts" class="logo-img hidden">
+                        <span id="out_logo_ts_text" class="font-black text-2xl italic">TOP SPORTS</span>
+                    </div>
+                    <div class="logo-box justify-end">
+                        <img id="out_logo_partner" class="logo-img hidden">
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <div class="pdf-title text-xl px-10">Kooperationsvereinbarung</div>
+                </div>
+
+                <div class="pdf-section">
+                    <p class="mb-2">zwischen der <strong>Top Sports Fitness GmbH & Co. KG</strong>, Storlachstraße 1, 72760 Reutlingen (nachfolgend „TOP SPORTS“)</p>
+                    <p class="mb-2 text-center italic text-sm">und</p>
+                    <p class="mb-4"><strong id="out_name" class="text-lg">Partner Name</strong><span id="out_adresse_wrap">, <span id="out_adresse">Anschrift</span></span> (nachfolgend „Partner“)</p>
+                </div>
+
+                <section class="pdf-section">
+                    <h3 class="font-bold border-l-4 border-[#f9b233] pl-2 mb-2 uppercase text-sm italic">§1 Gegenstand der Kooperation</h3>
+                    <p id="out_praambel" class="text-justify italic"></p>
+                </section>
+
+                <section class="pdf-section">
+                    <h3 class="font-bold border-l-4 border-[#f9b233] pl-2 mb-2 uppercase text-sm italic">§2 Leistungen von TOP SPORTS</h3>
+                    <ul id="out_ts_list"></ul>
+                </section>
+
+                <section class="pdf-section">
+                    <h3 class="font-bold border-l-4 border-[#f9b233] pl-2 mb-2 uppercase text-sm italic">§3 Leistungen des Partners</h3>
+                    <ul id="out_partner_list"></ul>
+                </section>
+
+                <section class="pdf-section">
+                    <h3 class="font-bold border-l-4 border-[#f9b233] pl-2 mb-2 uppercase text-sm italic">§4 Laufzeit & Kündigung</h3>
+                    <p id="out_laufzeit_text"></p>
+                </section>
+
+                <section class="pdf-section">
+                    <h3 class="font-bold border-l-4 border-[#f9b233] pl-2 mb-2 uppercase text-sm italic">§5 Schlussbestimmungen</h3>
+                    <p class="text-xs text-gray-600">Änderungen bedürfen der Schriftform. Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. Gerichtsstand ist Reutlingen.</p>
+                </section>
+
+                <div class="mt-auto pt-10">
+                    <p class="mb-10 text-sm"><span id="out_ort">Reutlingen</span>, den <span id="out_date"></span></p>
+                    <div class="flex justify-between gap-20">
+                        <div class="border-t border-black pt-2 flex-1">
+                            <p class="text-[8pt] uppercase font-bold mb-1">TOP SPORTS Fitness</p>
+                            <p class="text-xs" id="out_mitarbeiter">Max Mustermann</p>
+                        </div>
+                        <div class="border-t border-black pt-2 flex-1">
+                            <p class="text-[8pt] uppercase font-bold mb-1">Partner</p>
+                            <p class="text-xs" id="out_name_sig">Partner Name</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tsItems = [{text: 'Bereitstellung einer Firmenfitness-Mitgliedschaft (All In)'}];
+        let partnerItems = [{text: 'Werbewirksame Präsenz auf Social Media'}];
+
+        window.loadLogo = function(input, outputId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(outputId);
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    if (outputId === 'out_logo_ts') {
+                        document.getElementById('out_logo_ts_text').classList.add('hidden');
+                        document.getElementById('btn_logo_ts').innerText = "Logo Geladen OK";
+                    } else {
+                        document.getElementById('btn_logo_partner').innerText = "Partner Logo Geladen";
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        function addItem(type) {
+            if(type === 'ts') tsItems.push({text: ''});
+            else partnerItems.push({text: ''});
+            render();
+        }
+
+        function removeItem(type, index) {
+            if(type === 'ts') tsItems.splice(index, 1);
+            else partnerItems.splice(index, 1);
+            render();
+        }
+
+        function render() {
+            const tsCont = document.getElementById('ts_container');
+            tsCont.innerHTML = '';
+            tsItems.forEach((it, i) => {
+                const d = document.createElement('div');
+                d.className = 'card';
+                d.innerHTML = `<button onclick="removeItem('ts', ${i})" class="absolute right-2 top-1 text-gray-500 hover:text-white">&times;</button>
+                               <textarea oninput="tsItems[${i}].text = this.value; update()" class="bg-transparent border-none w-full text-white text-sm resize-none focus:outline-none" rows="2">${it.text}</textarea>`;
+                tsCont.appendChild(d);
+            });
+
+            const pCont = document.getElementById('partner_container');
+            pCont.innerHTML = '';
+            partnerItems.forEach((it, i) => {
+                const d = document.createElement('div');
+                d.className = 'card card-blue';
+                d.innerHTML = `<button onclick="removeItem('partner', ${i})" class="absolute right-2 top-1 text-gray-500 hover:text-white">&times;</button>
+                               <textarea oninput="partnerItems[${i}].text = this.value; update()" class="bg-transparent border-none w-full text-white text-sm resize-none focus:outline-none" rows="2">${it.text}</textarea>`;
+                pCont.appendChild(d);
+            });
+            update();
+        }
+
+        function update() {
+            const name = document.getElementById('in_name').value || "[Name]";
+            const adresse = document.getElementById('in_adresse').value;
+            const typ = document.getElementById('in_typ').value;
+            const modell = document.getElementById('in_modell').value;
+            const ma = document.getElementById('in_mitarbeiter').value || "[Mitarbeiter]";
+            const ort = document.getElementById('in_ort').value || "Reutlingen";
+
+            document.getElementById('label_name').innerText = (typ === 'influencer') ? "Name / Accountname" : "Partner Name";
+            document.getElementById('out_name').innerText = name;
+            document.getElementById('out_name_sig').innerText = name;
+            
+            if(adresse) {
+                document.getElementById('out_adresse').innerText = adresse;
+                document.getElementById('out_adresse_wrap').classList.remove('hidden');
+            } else {
+                document.getElementById('out_adresse_wrap').classList.add('hidden');
+            }
+
+            document.getElementById('out_mitarbeiter').innerText = ma;
+            document.getElementById('out_ort').innerText = ort;
+            document.getElementById('out_date').innerText = new Date().toLocaleDateString('de-DE');
+
+            let praambelText = "";
+            if(typ === 'firma') {
+                praambelText = `Die Firma ${name} strebt eine Kooperation zur Förderung der betrieblichen Gesundheit ihrer Mitarbeiter (BGM) an. TOP SPORTS stellt hierfür modernste Trainingsinfrastruktur zur Verfügung.`;
+            } else if(typ === 'influencer') {
+                praambelText = `Der Partner ${name} ist als Content Creator tätig. Ziel ist eine Kooperation zur Steigerung der Markenbekanntheit von TOP SPORTS über die digitalen Kanäle des Partners durch authentisches Marketing.`;
+            } else {
+                praambelText = `TOP SPORTS und der Verein ${name} begründen hiermit eine Partnerschaft zur Förderung der sportlichen Leistung sowie der gegenseitigen regionalen Markenpräsenz.`;
+            }
+            document.getElementById('out_praambel').innerText = praambelText;
+
+            if(modell === 'unbefristet') {
+                document.getElementById('laufzeit_settings').classList.add('hidden');
+                document.getElementById('out_laufzeit_text').innerHTML = `Diese Vereinbarung wird auf <strong>unbestimmte Zeit</strong> geschlossen. Die Kooperation kann von beiden Seiten mit einer Frist von <strong>einem Monat</strong> zum Monatsende ordentlich gekündigt werden.`;
+            } else {
+                document.getElementById('laufzeit_settings').classList.remove('hidden');
+                const l = document.getElementById('in_laufzeit').value;
+                const f = document.getElementById('in_frist').value;
+                document.getElementById('out_laufzeit_text').innerHTML = `Diese Vereinbarung wird für eine feste Laufzeit von <strong>${l}</strong> geschlossen. Eine ordentliche Kündigung ist mit einer Frist von <strong>${f}</strong> zum Ende der jeweiligen Vertragslaufzeit möglich.`;
+            }
+
+            document.getElementById('out_ts_list').innerHTML = tsItems.map(it => it.text ? `<li>${it.text}</li>` : '').join('');
+            document.getElementById('out_partner_list').innerHTML = partnerItems.map(it => it.text ? `<li>${it.text}</li>` : '').join('');
+        }
+
+        function generatePDF() {
+            const element = document.getElementById('pdf-template');
+            const opt = {
+                margin: 0,
+                filename: `Kooperation_TOP_SPORTS_${document.getElementById('in_name').value || 'Neu'}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        render();
+    </script>
+</body>
+</html>
