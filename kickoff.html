@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Onboarding Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        :root { --ts-yellow: #f9b233; --ts-black: #1a1a1a; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: #ffffff; margin: 0; }
+        .sidebar { background-color: var(--ts-black); border-right: 1px solid #333; min-height: 100vh; }
+        .ts-input { background: #252525; border: 1px solid #444; color: white; border-radius: 0.5rem; width: 100%; padding: 0.6rem; font-size: 0.85rem; }
+        .ts-input:focus { border-color: var(--ts-yellow); outline: none; }
+        .ts-label { color: #999; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
+        .content-card { background: white; color: black; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .btn-primary { background-color: var(--ts-yellow); color: black; font-weight: 800; border-radius: 0.75rem; text-transform: uppercase; transition: all 0.2s; }
+        .btn-primary:hover { background-color: #e09f2a; transform: scale(1.02); }
+        
+        .check-group h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: #999; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; letter-spacing: 1px;}
+        .check-item { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; margin-bottom: 8px; padding: 10px; border-radius: 6px; background: #f8f9fa; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .check-item:hover { background: #f1f1f1; border-color: var(--ts-yellow); }
+        .check-item.done { background: #f0fdf4; color: #166534; border-color: #bbf7d0; opacity: 0.8; }
+        .check-item.done span { text-decoration: line-through; }
+        input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--ts-yellow); pointer-events: none; }
+        .copy-btn { background: #f3f4f6; color: #374151; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; transition: all 0.2s; border: 1px solid #d1d5db; }
+        .copy-btn:hover { background: var(--ts-yellow); color: black; border-color: var(--ts-yellow); }
+    </style>
+</head>
+<body class="bg-[#0f0f0f]">
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        
+        <div class="sidebar lg:w-[400px] w-full p-8 flex flex-col no-print">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-[#f9b233] rounded flex items-center justify-center font-black text-black italic text-xl">TS</div>
+                <h1 class="text-xl font-black italic text-white uppercase leading-none">Top Sports<br><span class="text-[10px] tracking-[3px] font-normal not-italic text-white/50 text-left uppercase">Onboarding Hub</span></h1>
+            </div>
+
+            <div class="space-y-6 flex-grow">
+                <section>
+                    <label class="ts-label text-white text-[10px] tracking-widest">1. Partner Infos</label>
+                    <input type="text" id="in_name" oninput="update()" class="ts-input mb-4" placeholder="Partner Name (z.B. Autohaus Müller)">
+                    
+                    <label class="ts-label text-white text-[10px] tracking-widest">2. Der Deal (Vorteil)</label>
+                    <input type="text" id="in_vorteil" oninput="update()" class="ts-input mb-4" placeholder="z.B. 10€ Rabatt & keine Gebühr">
+
+                    <label class="ts-label text-[#f9b233] text-[10px] tracking-widest">3. Vertragsablage (SharePoint)</label>
+                    <input type="hidden" id="in_upload" value="https://topsportsfitnessde-my.sharepoint.com/:f:/g/personal/wenningmann_topsports-fitness_de/IgDb6ACyWF72QbTu1F0wGCbgASEsxsN_pqMvK8wlrMVnafY?e=SkN4Hrungen">
+                    <button onclick="openUpload()" class="btn-primary w-full py-4 shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                        SharePoint Upload
+                    </button>
+                </section>
+
+                <div class="h-[1px] bg-[#333]"></div>
+                
+                <a href="index.html" class="text-[10px] text-gray-500 uppercase text-center block mt-4 hover:text-[#f9b233] transition-colors tracking-widest">← Business Dashboard</a>
+            </div>
+        </div>
+
+        <div class="flex-1 p-8 lg:p-12 max-w-5xl overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-black italic uppercase border-b-4 border-[#f9b233] pb-1 text-[#f9b233] tracking-tighter">🚀 Kooperations Onboarding</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                
+                <div class="content-card h-fit">
+                    <h3 class="font-black uppercase text-sm mb-6 flex items-center gap-2 text-gray-800">
+                        <span class="w-3 h-3 bg-green-500 rounded-full"></span> Prozess-Schritte
+                    </h3>
+                    
+                    <div class="check-group mb-6">
+                        <h4>Verwaltung</h4>
+                        <div class="check-item" onclick="toggleDone(this)"><input type="checkbox"> <span>Firmen-Tarif in Magicline aktiviert</span></div>
+                        <div class="check-item" onclick="toggleDone(this)"><input type="checkbox"> <span>Vertrag in SharePoint hochgeladen</span></div>
+                    </div>
+
+                    <div class="check-group mb-6">
+                        <h4>Branding</h4>
+                        <div class="check-item" onclick="toggleDone(this)"><input type="checkbox"> <span>Welcome-Plakat im Studio aufgehängt</span></div>
+                        <div class="check-item" onclick="toggleDone(this)"><input type="checkbox"> <span>Team-Briefing & Magicline-Schulung</span></div>
+                    </div>
+
+                    <div class="check-group">
+                        <h4>Aktivierung</h4>
+                        <div class="check-item" onclick="toggleDone(this)"><input type="checkbox"> <span>QR-Aufsteller an Partner geliefert</span></div>
+                        <div class="check-item" onclick="toggleDone(this)"><input type="checkbox"> <span>Launch-Post auf Social Media</span></div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="content-card">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold uppercase text-[9px] tracking-widest text-gray-400 italic">An Partner (E-Mail/Intranet)</h3>
+                            <button onclick="copyText('out_mail')" class="copy-btn uppercase">Kopieren</button>
+                        </div>
+                        <div id="out_mail" class="text-[11px] leading-relaxed whitespace-pre-wrap border-l-2 border-[#f9b233] pl-3 text-gray-600"></div>
+                    </div>
+
+                    <div class="content-card border-t-4 border-blue-500">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold uppercase text-[9px] tracking-widest text-blue-500 italic flex items-center gap-2">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14h-9a.5.5 0 01-.5-.5v-7a.5.5 0 01.5-.5h9a.5.5 0 01.5.5v7a.5.5 0 01-.5.5z"/></svg>
+                                MS Teams Briefing (Intern)
+                            </h3>
+                            <button onclick="copyText('out_teams')" class="copy-btn uppercase">Kopieren</button>
+                        </div>
+                        <div id="out_teams" class="text-[11px] leading-relaxed whitespace-pre-wrap border-l-2 border-blue-400 pl-3 text-gray-700 font-semibold bg-blue-50 p-2 rounded"></div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold uppercase text-[9px] tracking-widest text-gray-400 italic">Social Media Caption</h3>
+                            <button onclick="copyText('out_social')" class="copy-btn uppercase">Kopieren</button>
+                        </div>
+                        <div id="out_social" class="text-[10px] leading-relaxed italic bg-gray-50 p-3 rounded text-gray-500"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function update() {
+            const name = document.getElementById('in_name').value || "[Name des Partners]";
+            const vorteil = document.getElementById('in_vorteil').value || "[Deal-Vorteil]";
+            
+            // 1. Mail an Partner (Professionell)
+            let mail = `Betreff: Fit & Motiviert: Unsere neue Partnerschaft mit TOP SPORTS!\n\nHallo zusammen,\n\ngute Neuigkeiten für eure Gesundheit! Wir freuen uns sehr, ab sofort offizieller Kooperationspartner von TOP SPORTS Fitness zu sein.\n\nDurch diese Partnerschaft erhaltet ihr ab sofort exklusive Sonderkonditionen für euer Training:\n🔥 ${vorteil}\n\nEgal ob Krafttraining, Kurse oder Wellness – nutzt die Chance, um fit zu bleiben. Alles was ihr braucht, ist euer Mitarbeiterausweis oder eine Bestätigung.\n\nViel Spaß beim Training!`;
+            
+            // 2. MS Teams Briefing (Intern für Kollegen)
+            let teams = `📢 NEUE KOOPERATION: ${name.toUpperCase()}\n\nHallo Team,\n\nwir haben Zuwachs in der Partner-Familie! Ab sofort ist ${name} offiziell an Board. 🤝\n\n🔥 DER DEAL:\nAlle Mitglieder/Mitarbeiter von ${name} erhalten folgenden Vorteil: ${vorteil}.\n\n🛠 STATUS ONBOARDING:\nCheckliste läuft – bitte stellt sicher, dass ihr bei Anfragen von ${name} Bescheid wisst. Magicline ist vorbereitet.\n\nLasst uns die neuen Mitglieder herzlich willkommen heißen! 🚀💪\n\n#TopSports #NewPartner #Kooperation #Growth`;
+
+            // 3. Social Media Text
+            let social = `🤝 WILLKOMMEN IN DER FAMILIE! 🤝\n\nWir freuen uns riesig, @${name.replace(/\s+/g, '')} ab sofort als offiziellen Kooperationspartner bei TOP SPORTS begrüßen zu dürfen! ✨\n\nAb sofort profitieren alle von ${name} von exklusiven Benefits bei uns im Studio. \n\nAuf eine starke Zusammenarbeit! 🔥💪\n\n#TopSports #Kooperation #ZusammenStark #Fitness #RegionReutlingen #${name.replace(/\s+/g, '')}`;
+
+            document.getElementById('out_mail').innerText = mail;
+            document.getElementById('out_teams').innerText = teams;
+            document.getElementById('out_social').innerText = social;
+        }
+
+        function toggleDone(el) {
+            el.classList.toggle('done');
+            const checkbox = el.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+        }
+
+        function openUpload() {
+            const url = document.getElementById('in_upload').value;
+            window.open(url, '_blank');
+        }
+
+        function copyText(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Text wurde kopiert!");
+            });
+        }
+
+        update();
+    </script>
+</body>
+</html>
