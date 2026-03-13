@@ -15,6 +15,18 @@
         .ts-shadow {
             box-shadow: 0 0 20px rgba(249, 178, 51, 0.15);
         }
+        .category-label {
+            display: block;
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #444;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            margin-left: 0.5rem;
+            font-weight: 900;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -22,12 +34,10 @@
         <div class="w-16 h-16 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-3xl mx-auto mb-6 shadow-lg">TS</div>
         
         <h1 class="text-2xl font-bold mb-2 italic uppercase tracking-tighter">Business Tools</h1>
-        <p class="text-gray-500 text-[10px] uppercase tracking-[3px] mb-8">Top Sports Fitness GmbH & Co. KG</p>
+        <p class="text-gray-500 text-[10px] uppercase tracking-[3px] mb-4">Top Sports Fitness GmbH & Co. KG</p>
         
-        <div class="space-y-4">
-            <a href="kooperation.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
-                <span class="text-lg">🤝</span> Kooperations-Planer
-            </a>
+        <div class="space-y-3">
+            <span class="category-label text-[#f9b233]/50">Partner-Akquise & Onboarding</span>
 
             <a href="akquise.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
                 <span class="text-lg">🚀</span> Kaltakquise-Tool
@@ -37,16 +47,26 @@
                 <span class="text-lg">📊</span> Sales-Argumentarium
             </a>
 
+            <a href="kooperation.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
+                <span class="text-lg">🤝</span> Kooperations-Planer
+            </a>
+
             <a href="kickoff.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
                 <span class="text-lg">🎉</span> Kooperations-Kick-Off
             </a>
 
-            <div class="block w-full py-4 bg-[#121212] opacity-30 rounded-xl font-bold uppercase text-[10px] border border-dashed border-[#333] text-gray-500 flex items-center justify-center gap-3">
+            <span class="category-label text-[#f9b233]/50">Sales & Kampagnen</span>
+
+            <a href="kampagne.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
+                <span class="text-lg">📢</span> Kampagnen-Briefing
+            </a>
+
+            <div class="block w-full py-4 bg-[#121212] opacity-20 rounded-xl font-bold uppercase text-[10px] border border-dashed border-[#333] text-gray-500 flex items-center justify-center gap-3">
                 Weitere Tools folgen...
             </div>
         </div>
 
-        <div class="mt-12 pt-6 border-t border-white/5">
+        <div class="mt-12 pt-6 border-t border-white/5 text-center">
             <p class="text-gray-700 text-[9px] uppercase tracking-[2px]">Einsatz nur für autorisierte Studioleiter</p>
         </div>
     </div>
