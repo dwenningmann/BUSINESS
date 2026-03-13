@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Zeugnis-Generator Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; text-align: left; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 2rem; overflow: hidden; }
+        .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); }
+        .input-box { padding: 1.25rem; border-bottom: 1px solid #262626; }
+        textarea, input, select { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.75rem; width: 100%; font-size: 0.85rem; outline: none; transition: border 0.2s; }
+        textarea:focus, input:focus { border-color: var(--ts-yellow); }
+        
+        .note-select { display: flex; gap: 5px; margin-top: 10px; }
+        .note-btn { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #333; font-size: 10px; font-weight: 800; background: #222; transition: all 0.2s; color: #666; }
+        .note-btn.active { border-color: var(--ts-yellow); color: black; background: var(--ts-yellow); }
+
+        @media print {
+            @page { size: A4; margin: 20mm; }
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .p-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 40px; }
+            .p-content { font-size: 11pt; line-height: 1.6; color: black; text-align: justify; font-family: 'Times New Roman', serif; }
+            .signature-area { margin-top: 60px; display: flex; justify-content: space-between; }
+            .sig-box { border-top: 1px solid #000; padding-top: 8px; text-align: center; font-size: 10pt; width: 200px; font-weight: bold; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Zeugnis-Generator Pro</h1>
+                <p class="text-[9px] text-gray-500 uppercase tracking-[3px] font-bold">HR Management System</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">01. Mitarbeiter & Bildungsweg</div>
+            <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <select id="in_gender" class="md:col-span-2">
+                    <option value="Frau">Frau</option>
+                    <option value="Herr">Herr</option>
+                </select>
+                <input type="text" id="in_name" placeholder="Vor- und Nachname">
+                <input type="text" id="in_role" placeholder="Position (z.B. Fitnessökonom)">
+                <input type="text" id="in_start" placeholder="Eintritt (DD.MM.YYYY)">
+                <input type="text" id="in_end" placeholder="Austritt (DD.MM.YYYY)">
+                
+                <div class="md:col-span-2 mt-2">
+                    <label class="text-[10px] uppercase font-bold text-gray-500 block mb-2">Bildungsträger (optional)</label>
+                    <select id="in_edu">
+                        <option value="">Kein Bildungsträger / Festangestellt</option>
+                        <option value="in Kooperation mit der IHK">IHK</option>
+                        <option value="im Rahmen des dualen Studiums">Dualer Student</option>
+                        <option value="in Kooperation mit der IFAA">IFAA</option>
+                        <option value="in Kooperation mit der Deutschen Sportakademie">Deutsche Sportakademie</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">02. Aufgabenbeschreibung</div>
+            <div class="p-5">
+                <textarea id="in_tasks" rows="4" placeholder="z.B. Betreuung der Mitglieder auf der Trainingsfläche, Durchführung von Beratungsgesprächen, Sales-Aktivitäten, Durchführung von Kursen..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">03. Leistungsbewertung</div>
+            <div class="input-box" data-cat="leistung">
+                <label class="text-xs font-bold uppercase block italic">Gesamtleistung</label>
+                <div class="note-select">
+                    <button class="note-btn" onclick="setNote(this, 1)">Sehr Gut</button>
+                    <button class="note-btn active" onclick="setNote(this, 2)">Gut</button>
+                    <button class="note-btn" onclick="setNote(this, 3)">Befriedigend</button>
+                    <button class="note-btn" onclick="setNote(this, 4)">Ausreichend</button>
+                </div>
+            </div>
+            </div>
+
+        <div class="card">
+            <div class="section-label italic">04. Grund des Ausscheidens</div>
+            <div class="p-5">
+                <select id="in_exit_reason">
+                    <option value="own">Auf eigenen Wunsch (Kündigung AN)</option>
+                    <option value="mutual">Im gegenseitigen Einvernehmen (Aufhebung)</option>
+                    <option value="company">Betriebsbedingt / Ende Befristung</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="generateAndPrint()" class="w-full py-5 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all mb-20">
+            📜 Zeugnis Finalisieren & Drucken
+        </button>
+    </div>
+
+    <div class="print-only mx-auto" style="max-width: 650px;">
+        <div class="p-header">
+            <p style="font-weight: bold; font-size: 16px;">TOP SPORTS Fitness GmbH & Co. KG</p>
+            <p style="font-size: 10px; color: #555;">Human Resources • Personalmanagement</p>
+        </div>
+
+        <div class="p-content">
+            <h2 style="text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 40px; text-decoration: underline;">ZEUGNIS</h2>
+
+            <p><span id="out_gender_sal">Frau/Herr</span> <span id="out_name" style="font-weight: bold;"></span>, war vom <span id="out_start"></span> bis zum <span id="out_end"></span> <span id="out_edu"></span> in unserem Unternehmen als **<span id="out_role"></span>** tätig.</p>
+            
+            <p style="margin-top: 15px; font-weight: bold;">Zu seinen/ihren wesentlichen Aufgaben gehörten:</p>
+            <p id="out_tasks" style="margin-top: 5px;"></p>
+
+            <p style="margin-top: 20px;" id="out_weise_text"></p>
+            <p style="margin-top: 15px;" id="out_leistung_text"></p>
+            <p style="margin-top: 15px;" id="out_verhalten_text"></p>
+
+            <p style="margin-top: 25px;" id="out_closing_text"></p>
+        </div>
+
+        <div class="signature-area">
+            <div class="sig-box">Kornwestheim, den <span id="out_current_date"></span></div>
+            <div class="sig-box">Geschäftsleitung / HR</div>
+        </div>
+    </div>
+
+    <script>
+        const texts = {
+            leistung: {
+                1: "erfüllte die ihm/ihr übertragenen Aufgaben stets zu unserer vollsten Zufriedenheit.",
+                2: "erfüllte die ihm/ihr übertragenen Aufgaben stets zu unserer vollen Zufriedenheit.",
+                3: "erfüllte die ihm/ihr übertragenen Aufgaben zu unserer vollen Zufriedenheit.",
+                4: "erfüllte die ihm/ihr übertragenen Aufgaben zu unserer Zufriedenheit."
+            }
+        };
+
+        let selectedNote = 2;
+
+        function setNote(btn, note) {
+            const container = btn.closest('.input-box');
+            container.querySelectorAll('.note-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedNote = note;
+        }
+
+        function generateAndPrint() {
+            const gender = document.getElementById('in_gender').value;
+            const fullName = document.getElementById('in_name').value;
+            const lastName = fullName.split(' ').pop();
+            const pron = (gender === "Frau") ? "Sie" : "Er";
+            const poss = (gender === "Frau") ? "ihre" : "seine";
+
+            document.getElementById('out_gender_sal').innerText = gender;
+            document.getElementById('out_name').innerText = fullName;
+            document.getElementById('out_role').innerText = document.getElementById('in_role').value;
+            document.getElementById('out_start').innerText = document.getElementById('in_start').value;
+            document.getElementById('out_end').innerText = document.getElementById('in_end').value;
+            document.getElementById('out_edu').innerText = document.getElementById('in_edu').value;
+            document.getElementById('out_tasks').innerText = document.getElementById('in_tasks').value;
+            
+            // Leistungstext mit Pronomen anpassen
+            document.getElementById('out_leistung_text').innerText = pron + " " + texts.leistung[selectedNote];
+            
+            // Standardverhalten-Dummy (da wir hier nur eine Note für die Demo haben)
+            document.getElementById('out_verhalten_text').innerText = (selectedNote <= 2) 
+                ? "Das Verhalten gegenüber Vorgesetzten, Kollegen und Mitgliedern war jederzeit einwandfrei."
+                : "Das Verhalten war gegenüber Vorgesetzten und Kollegen korrekt.";
+
+            // Abschlussformel
+            const exit = document.getElementById('in_exit_reason').value;
+            let closing = "";
+            if(exit === "own") closing = gender + " " + lastName + " verlässt unser Unternehmen auf eigenen Wunsch. Wir bedauern dies sehr, danken für die gute Zusammenarbeit und wünschen für die Zukunft alles Gute.";
+            else if(exit === "mutual") closing = "Das Arbeitsverhältnis endet im gegenseitigen Einvernehmen. Wir danken für die geleistete Arbeit und wünschen für die Zukunft alles Gute.";
+            else closing = "Das Arbeitsverhältnis endet mit Ablauf der vereinbarten Befristung. Wir danken für die Zusammenarbeit und wünschen für den weiteren Lebensweg viel Erfolg.";
+            
+            document.getElementById('out_closing_text').innerText = closing;
+            document.getElementById('out_current_date').innerText = new Date().toLocaleDateString('de-DE');
+
+            window.print();
+        }
+    </script>
+</body>
+</html>
