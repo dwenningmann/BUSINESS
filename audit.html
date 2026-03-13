@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Standort-Audit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { background-color: #0f0f0f; color: white; font-family: 'Inter', sans-serif; text-align: left; }
+        .ts-yellow { color: #f9b233; }
+        .ts-bg-yellow { background-color: #f9b233; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 0.75rem; margin-bottom: 2rem; overflow: hidden; }
+        .audit-row { border-bottom: 1px solid #262626; padding: 1.25rem; }
+        .audit-row:last-child { border-bottom: none; }
+        .status-btn { padding: 0.5rem; border-radius: 0.3rem; border: 1px solid #333; font-weight: 800; font-size: 0.6rem; transition: all 0.2s; width: 100%; text-transform: uppercase; }
+        .status-ok.active { background: #22c55e; color: white; border-color: #22c55e; }
+        .status-fail.active { background: #ef4444; color: white; border-color: #ef4444; }
+        .prio-btn { padding: 0.3rem; border-radius: 0.2rem; border: 1px solid #333; font-size: 0.5rem; font-weight: 900; background: #121212; color: #555; width: 100%; text-transform: uppercase; }
+        .prio-btn.active { border-color: #f9b233; color: #f9b233; }
+        .section-label { background: #252525; padding: 0.6rem 1.25rem; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: #f9b233; font-style: italic; }
+        textarea { background: #0f0f0f; border: 1px solid #333; border-radius: 0.4rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.75rem; margin-top: 0.5rem; outline: none; }
+    </style>
+</head>
+<body class="p-4 pb-32">
+    <div class="max-w-2xl mx-auto">
+        <div class="mb-8">
+            <div class="flex items-center gap-4 mb-6 text-left">
+                <div class="w-12 h-12 ts-bg-yellow rounded-xl flex items-center justify-center font-black text-black italic text-2xl shadow-lg">TS</div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Einzelpunkt-Audit</h1>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <div>
+                    <label class="text-[9px] uppercase text-gray-500 font-bold mb-1 block">Club Standort</label>
+                    <input type="text" id="clubName" placeholder="z.B. Reutlingen" class="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-sm w-full outline-none focus:border-[#f9b233]">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[9px] uppercase text-gray-500 font-bold mb-1 block">📅 Audit am:</label>
+                        <input type="date" id="auditDate" class="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-sm w-full outline-none focus:border-[#f9b233]">
+                    </div>
+                    <div>
+                        <label class="text-[9px] uppercase text-red-500 font-bold mb-1 block italic text-left">🏁 Erledigen bis:</label>
+                        <input type="date" id="deadlineDate" class="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-sm w-full outline-none focus:border-[#f9b233]">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">01. Eingang & Marketing</div>
+            <div class="audit-row" data-task="Eingangsbereich (Sauberkeit)">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Boden & Glasflächen im Eingang</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Was genau?"></textarea></div>
+            </div>
+            <div class="audit-row" data-task="Marketing (Aktualität)">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Veraltete Flyer/Poster im Club?</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Welche Kampagne?"></textarea></div>
+            </div>
+            <div class="audit-row" data-task="Theke (Ordnung)">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Theke/Check-In (Staub & Ordnung)</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Notizen..."></textarea></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">02. Trainingsfläche</div>
+            <div class="audit-row" data-task="Geräte-Ausrichtung">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Geräte exakt in Reihe/Winkel?</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Welche Reihe?"></textarea></div>
+            </div>
+            <div class="audit-row" data-task="Geräte-Polster">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Zustand Polster (Risse/Abnutzung)</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Welches Gerät?"></textarea></div>
+            </div>
+            <div class="audit-row" data-task="Hygiene (Fensterbänke)">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Staub auf Fensterbänken/Fußleisten</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Ort?"></textarea></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">03. Sanitär & Umkleiden</div>
+            <div class="audit-row" data-task="Duschen (Fugen/Kalk)">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Duschen: Fugen, Kalk & Silikon</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea></textarea></div>
+            </div>
+            <div class="audit-row" data-task="WCs (Sauberkeit)">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Toiletten: Tiefenreinigung & Geruch</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea></textarea></div>
+            </div>
+            <div class="audit-row" data-task="Umkleiden (Bänke/Boden)">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Umkleiden: Bänke & Bodenhygiene</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea></textarea></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">04. Personal & Lager</div>
+            <div class="audit-row" data-task="Personalraum">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Personalraum (Ordnung/Hygiene)</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea></textarea></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">05. Personal & Erscheinungsbild</div>
+            <div class="audit-row" data-task="Arbeitskleidung">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Arbeitskleidung (Sauberkeit & CI)</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Welcher Mitarbeiter/Was fehlt?"></textarea></div>
+            </div>
+            <div class="audit-row" data-task="Namensschilder">
+                <p class="text-[11px] font-bold uppercase mb-3 text-left">Namensschilder getragen?</p>
+                <div class="grid grid-cols-2 gap-2 mb-2"><button onclick="setStatus(this,'ok')" class="status-btn status-ok">TOP</button><button onclick="setStatus(this,'fail')" class="status-btn status-fail">MANGEL</button></div>
+                <div class="hidden detail-area"><div class="grid grid-cols-3 gap-1 mb-2"><button onclick="setPrio(this,'P1')" class="prio-btn">Prio 1</button><button onclick="setPrio(this,'P2')" class="prio-btn">Prio 2</button><button onclick="setPrio(this,'P3')" class="prio-btn">Prio 3</button></div><textarea placeholder="Wer fehlt?"></textarea></div>
+            </div>
+        </div>
+
+        <button onclick="generateReport()" class="w-full py-5 ts-bg-yellow text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all">Report für Teams kopieren</button>
+    </div>
+
+    <script>
+        // Heute als Standard-Datum setzen
+        document.getElementById('auditDate').valueAsDate = new Date();
+
+        function setStatus(btn, status) {
+            const row = btn.closest('.audit-row');
+            const details = row.querySelector('.detail-area');
+            row.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            details.classList.toggle('hidden', status === 'ok');
+        }
+        function setPrio(btn, prio) {
+            const row = btn.closest('.audit-row');
+            row.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        function generateReport() {
+            const club = document.getElementById('clubName').value || "STANDORT";
+            
+            const auditInput = document.getElementById('auditDate').value;
+            let formattedAudit = auditInput ? new Date(auditInput).toLocaleDateString('de-DE') : "HEUTE";
+            
+            const deadlineInput = document.getElementById('deadlineDate').value;
+            let formattedDeadline = deadlineInput ? new Date(deadlineInput).toLocaleDateString('de-DE') : "OFFEN/SOFORT";
+            
+            let report = `🚨 **TOP SPORTS AUDIT: ${club.toUpperCase()}**\n`;
+            report += `📅 Audit durchgeführt am: **${formattedAudit}**\n`;
+            report += `🏁 **ERLEDIGEN BIS ZUM: ${formattedDeadline}**\n`;
+            report += `------------------------------------------\n\n`;
+            
+            let mangelCount = 0;
+            document.querySelectorAll('.audit-row').forEach(row => {
+                if(row.querySelector('.status-fail').classList.contains('active')) {
+                    const task = row.getAttribute('data-task');
+                    const note = row.querySelector('textarea').value || "Keine Notiz";
+                    const prioBtn = row.querySelector('.prio-btn.active');
+                    const prio = prioBtn ? prioBtn.innerText : "Prio?";
+                    report += `[${prio}] ❌ **${task}**\n   - Mangel: ${note}\n\n`;
+                    mangelCount++;
+                }
+            });
+            
+            report += mangelCount === 0 ? "✅ Alles im TOP-Zustand! Sehr gute Arbeit." : `⚠️ **${mangelCount} offene Punkte.** Bitte Bestätigung nach Erledigung.`;
+            
+            navigator.clipboard.writeText(report).then(() => alert("Audit-Bericht mit beiden Daten kopiert!"));
+        }
+    </script>
+</body>
+</html>
