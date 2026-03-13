@@ -13,7 +13,7 @@
             font-family: 'Inter', sans-serif; 
         }
         .ts-shadow {
-            box-shadow: 0 0 20px rgba(249, 178, 51, 0.15);
+            box-shadow: 0 0 40px rgba(249, 178, 51, 0.1);
         }
         .category-label {
             display: block;
@@ -21,63 +21,85 @@
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #444;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            margin-left: 0.5rem;
+            color: #f9b233;
+            margin-bottom: 1rem;
             font-weight: 900;
+            opacity: 0.6;
+        }
+        .tool-card {
+            background-color: #252525;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+        }
+        .tool-card:hover {
+            background-color: #f9b233;
+            color: #000;
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="max-w-md w-full p-8 bg-[#1a1a1a] rounded-2xl border border-[#333] shadow-2xl text-center ts-shadow">
-        <div class="w-16 h-16 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-3xl mx-auto mb-6 shadow-lg">TS</div>
+<body class="flex items-center justify-center min-h-screen p-6">
+    <div class="max-w-6xl w-full p-10 bg-[#1a1a1a] rounded-3xl border border-[#333] shadow-2xl ts-shadow">
         
-        <h1 class="text-2xl font-bold mb-2 italic uppercase tracking-tighter text-white">Business Tools</h1>
-        <p class="text-gray-500 text-[10px] uppercase tracking-[3px] mb-4 text-white/50">Top Sports Fitness GmbH & Co. KG</p>
-        
-        <div class="space-y-3">
-            <span class="category-label text-[#f9b233]/50">Partner-Akquise & Onboarding</span>
-
-            <a href="akquise.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
-                <span class="text-lg">🚀</span> Kaltakquise-Tool
-            </a>
-
-            <a href="sales.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
-                <span class="text-lg">📊</span> Sales-Argumentarium
-            </a>
-
-            <a href="kooperation.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
-                <span class="text-lg">🤝</span> Kooperations-Planer
-            </a>
-
-            <a href="kickoff.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
-                <span class="text-lg">🎉</span> Kooperations-Kick-Off
-            </a>
-
-            <span class="category-label text-[#f9b233]/50">Sales & Kampagnen</span>
-
-            <a href="kampagne.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3">
-                <span class="text-lg">📢</span> Kampagnen-Briefing
-            </a>
-
-            <span class="category-label text-[#f9b233]/50">Management & Qualität</span>
-
-            <a href="audit.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3 shadow-lg">
-                <span class="text-lg">🔎</span> Standort-Audit
-            </a>
-
-            <a href="feedback.html" class="group block w-full py-4 bg-[#252525] hover:bg-[#f9b233] hover:text-black rounded-xl transition-all duration-300 font-bold uppercase text-sm border border-[#333] flex items-center justify-center gap-3 shadow-lg">
-                <span class="text-lg">🧠</span> Mitarbeiter-Feedback
-            </a>
-
-            <div class="block w-full py-4 bg-[#121212] opacity-20 rounded-xl font-bold uppercase text-[10px] border border-dashed border-[#333] text-gray-500 flex items-center justify-center gap-3">
-                Weitere Tools folgen...
-            </div>
+        <div class="text-center mb-12">
+            <div class="w-16 h-16 bg-[#f9b233] rounded-2xl flex items-center justify-center font-black text-black italic text-3xl mx-auto mb-6 shadow-lg">TS</div>
+            <h1 class="text-3xl font-black mb-2 italic uppercase tracking-tighter text-white">Business Tool Center</h1>
+            <p class="text-gray-500 text-[10px] uppercase tracking-[4px] text-white/50 font-bold">Top Sports Fitness GmbH & Co. KG</p>
         </div>
 
-        <div class="mt-12 pt-6 border-t border-white/5 text-center">
-            <p class="text-gray-700 text-[9px] uppercase tracking-[2px]">Einsatz nur für autorisierte Studioleiter</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            
+            <div class="flex flex-col space-y-3">
+                <span class="category-label">Partner & Onboarding</span>
+                
+                <a href="akquise.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🚀</span> Kaltakquise-Tool
+                </a>
+                <a href="sales.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">📊</span> Sales-Argumentarium
+                </a>
+                <a href="kooperation.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🤝</span> Kooperations-Planer
+                </a>
+                <a href="kickoff.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🎉</span> Kooperations-Kick-Off
+                </a>
+            </div>
+
+            <div class="flex flex-col space-y-3">
+                <span class="category-label">Management & Qualität</span>
+                
+                <a href="audit.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🔎</span> Standort-Audit
+                </a>
+                <a href="feedback.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🧠</span> Mitarbeiter-Feedback
+                </a>
+                <a href="kampagne.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">📢</span> Kampagnen-Briefing
+                </a>
+            </div>
+
+            <div class="flex flex-col space-y-3">
+                <span class="category-label text-red-500/80">HR & Administration</span>
+                
+                <a href="warning.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 border-red-900/30">
+                    <span class="text-lg">⚠️</span> Abmahnung (Safe-Guard)
+                </a>
+                
+                <div class="p-4 bg-[#121212]/50 rounded-xl font-bold uppercase text-[9px] border border-dashed border-[#333] text-gray-600 flex items-center justify-center gap-2 italic">
+                    Zeugnis-Generator folgt
+                </div>
+                <div class="p-4 bg-[#121212]/50 rounded-xl font-bold uppercase text-[9px] border border-dashed border-[#333] text-gray-600 flex items-center justify-center gap-2 italic">
+                    BEM-Leitfaden folgt
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-16 pt-8 border-t border-white/5 flex justify-between items-center">
+            <p class="text-gray-700 text-[8px] uppercase tracking-[2px] font-bold">Einsatz nur für autorisierte Studioleiter</p>
+            <p class="text-[#f9b233] text-[8px] uppercase tracking-[2px] font-black italic">Performance Hub 2026</p>
         </div>
     </div>
 </body>
