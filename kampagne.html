@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Campaign Master Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        :root { --ts-yellow: #f9b233; --ts-black: #1a1a1a; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: #ffffff; margin: 0; }
+        .sidebar { background-color: var(--ts-black); border-right: 1px solid #333; height: 100vh; overflow-y: auto; }
+        .ts-input { background: #252525; border: 1px solid #444; color: white; border-radius: 0.5rem; width: 100%; padding: 0.6rem; font-size: 0.85rem; }
+        .ts-input:focus { border-color: var(--ts-yellow); outline: none; }
+        .ts-label { color: #f9b233; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.4rem; display: block; letter-spacing: 1px; }
+        .content-card { background: white; color: black; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: relative; }
+        .section-title { border-left: 4px solid var(--ts-yellow); padding-left: 12px; font-weight: 800; text-transform: uppercase; font-style: italic; margin-bottom: 15px; font-size: 0.9rem; }
+        .motivation-banner { background: linear-gradient(135deg, #f9b233 0%, #e09f2a 100%); color: black; padding: 20px; border-radius: 12px; text-align: center; font-weight: 800; text-transform: uppercase; font-style: italic; }
+        .lp-btn { background: #000; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; width: 100%; justify-content: center; }
+        .quick-tag { background: #333; color: #999; font-size: 9px; padding: 4px 8px; border-radius: 4px; cursor: pointer; border: 1px solid #444; margin-right: 4px; margin-bottom: 4px; display: inline-block; transition: 0.2s; }
+        .quick-tag:hover { background: var(--ts-yellow); color: black; border-color: var(--ts-yellow); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#0f0f0f]">
+    <div class="flex flex-col lg:flex-row h-screen w-full text-left">
+        
+        <div class="sidebar lg:w-[480px] w-full p-6 flex flex-col no-print">
+            <div class="flex items-center gap-3 mb-6 text-[#f9b233]">
+                <div class="w-10 h-10 bg-[#f9b233] rounded flex items-center justify-center font-black text-black italic text-xl">TS</div>
+                <h1 class="text-xl font-black italic text-white uppercase leading-none">Campaign Master</h1>
+            </div>
+
+            <div class="space-y-6 pb-10">
+                <section>
+                    <label class="ts-label text-white text-[10px]">1. Basis & Deadlines</label>
+                    <input type="text" id="in_title" oninput="update()" class="ts-input mb-2 font-bold" value="Saisonstart 2026">
+                    <input type="text" id="in_zeitraum" oninput="update()" class="ts-input mb-2" value="27.12. bis Ende Februar">
+                    <input type="text" id="in_deadline" oninput="update()" class="ts-input border-dashed border-yellow-600" value="20.12.2025" placeholder="Vorbereitung bis...">
+                </section>
+
+                <section>
+                    <label class="ts-label text-[10px]">2. Zielvorgaben Standorte</label>
+                    <div id="goals_input_container" class="grid grid-cols-2 gap-3">
+                        <div><label class="text-[9px] text-gray-500 uppercase">Echterdingen</label><input type="number" class="ts-input g-val" data-name="Echterdingen" oninput="update()" value="50"></div>
+                        <div><label class="text-[9px] text-gray-500 uppercase">Reutlingen</label><input type="number" class="ts-input g-val" data-name="Reutlingen" oninput="update()" value="100"></div>
+                        <div><label class="text-[9px] text-gray-500 uppercase">Leinfelden</label><input type="number" class="ts-input g-val" data-name="Leinfelden" oninput="update()" value="60"></div>
+                        <div><label class="text-[9px] text-gray-500 uppercase">Kornwestheim</label><input type="number" class="ts-input g-val" data-name="Kornwestheim" oninput="update()" value="80"></div>
+                        <div><label class="text-[9px] text-gray-500 uppercase">Nürtingen</label><input type="number" class="ts-input g-val" data-name="Nürtingen" oninput="update()" value="70"></div>
+                        <div><label class="text-[9px] text-gray-500 uppercase">Degerloch</label><input type="number" class="ts-input g-val" data-name="Degerloch" oninput="update()" value="55"></div>
+                    </div>
+                </section>
+
+                <section>
+                    <label class="ts-label text-[10px]">3. Highlights & System</label>
+                    <div class="flex flex-wrap mb-2">
+                        <span class="quick-tag" onclick="addText('in_sek1', 'Keine extra Pauschalen!')">No Pauschalen</span>
+                        <span class="quick-tag" onclick="addText('in_sek1', '14-Tage Abrechnungsrhythmus.')">14-Tage</span>
+                        <span class="quick-tag" onclick="addText('in_system', 'Tarife in Magicline anlegen & Codes prüfen.')">System-Setup</span>
+                    </div>
+                    <textarea id="in_sek1" oninput="update()" class="ts-input h-16 mb-2">Keine extra Pauschalen! Abrechnung jetzt alle 14 Tage.</textarea>
+                    <textarea id="in_system" oninput="update()" class="ts-input h-16 border-blue-900/30" placeholder="Ablauf im System/Verwaltung">Tarife in Magicline unter 'Saison26' anlegen.</textarea>
+                </section>
+
+                <section>
+                    <label class="ts-label text-[10px]">4. Logistik & Werbematerial</label>
+                    <div class="flex flex-wrap mb-2">
+                        <span class="quick-tag" onclick="smartLogistik()">Standard-Set</span>
+                        <span class="quick-tag" onclick="addText('in_logistik', 'Roll-Ups & Banner optional.')">Outdoor-Set</span>
+                    </div>
+                    <textarea id="in_logistik" oninput="update()" class="ts-input h-20">Flyer, A1 Plakate, A4 Aufsteller, Social Media Content</textarea>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <div><label class="text-[9px] text-gray-500 uppercase">Anliefer-Ort</label><input type="text" id="in_log_ort" oninput="update()" class="ts-input" value="Direkt in die Clubs"></div>
+                        <div><label class="text-[9px] text-gray-500 uppercase">Anliefer-Datum</label><input type="text" id="in_log_date" oninput="update()" class="ts-input" value="20.12."></div>
+                    </div>
+                </section>
+
+                <section>
+                    <label class="ts-label text-[10px]">5. Performance & Ads</label>
+                    <textarea id="in_ads" oninput="update()" class="ts-input h-16">Tagesbudget: 50€. Meta-Ads & Google Search aktiv.</textarea>
+                </section>
+
+                <section>
+                    <label class="ts-label text-[10px]">6. Landingpages & Ablauf</label>
+                    <input type="text" id="in_lp1" oninput="update()" class="ts-input mb-2 font-mono text-[10px]" value="https://fitness-angebot.de">
+                    <input type="text" id="in_lp2" oninput="update()" class="ts-input mb-2 font-mono text-[10px]" value="https://reservierung-fitness-angebot.de">
+                    <textarea id="in_ablauf" oninput="update()" class="ts-input h-16" placeholder="Lead Flow...">1. Lead auf Seite 1&#10;2. Online-Abschluss auf Seite 2</textarea>
+                </section>
+
+                <section>
+                    <label class="ts-label text-[10px]">7. Motivation</label>
+                    <textarea id="in_motivation" oninput="update()" class="ts-input h-12">Gemeinsam Maßstäbe setzen! 🔥</textarea>
+                </section>
+
+                <button onclick="copyTeams()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold uppercase text-xs hover:bg-blue-700 transition-all shadow-lg flex items-center justify-center gap-2">
+                    <span>🚀</span> Teams-Briefing kopieren
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 p-8 lg:p-12 overflow-y-auto bg-black">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-10 flex justify-between items-end border-b border-white/10 pb-6">
+                    <div>
+                        <h2 class="text-5xl font-black italic uppercase text-[#f9b233] tracking-tighter leading-none" id="out_title">Saisonstart 2026</h2>
+                        <p class="text-gray-500 mt-2 font-bold tracking-[4px] uppercase text-sm" id="out_zeitraum">--</p>
+                        <p class="text-red-500 font-bold uppercase text-[10px] mt-2 italic" id="out_deadline">--</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="bg-yellow-500 text-black text-xs font-black px-4 py-2 rounded shadow-xl mb-1 uppercase italic">Total: <span id="out_total_goal">0</span> Sales</div>
+                        <div class="text-gray-600 text-[9px] uppercase tracking-widest font-bold" id="out_date_now">--</div>
+                    </div>
+                </div>
+
+                <div id="preview_container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+                <div id="out_mot_box" class="mt-8">
+                    <div class="motivation-banner text-lg" id="out_motivation">--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addText(targetId, text) {
+            const el = document.getElementById(targetId);
+            if(!el.value.includes(text)) el.value += (el.value ? "\n" : "") + text;
+            update();
+        }
+
+        function smartLogistik() {
+            const dl = document.getElementById('in_deadline').value;
+            document.getElementById('in_logistik').value = "Flyer, A1 Plakate, A4 Aufsteller, Social Media Content";
+            document.getElementById('in_log_date').value = dl;
+            update();
+        }
+
+        function update() {
+            document.getElementById('out_title').innerText = document.getElementById('in_title').value;
+            document.getElementById('out_zeitraum').innerText = document.getElementById('in_zeitraum').value;
+            document.getElementById('out_deadline').innerText = "Deadline Vorbereitung: " + document.getElementById('in_deadline').value;
+            document.getElementById('out_motivation').innerText = document.getElementById('in_motivation').value;
+            document.getElementById('out_date_now').innerText = "Update: " + new Date().toLocaleDateString('de-DE');
+
+            const vals = document.querySelectorAll('.g-val');
+            let total = 0;
+            let goalsHtml = '<div class="grid grid-cols-1 gap-1">';
+            vals.forEach((vInput) => {
+                const v = parseInt(vInput.value) || 0;
+                total += v;
+                goalsHtml += `<div class="flex justify-between border-b border-gray-100 pb-1 text-xs font-bold"><span>${vInput.dataset.name}</span><span class="text-[#f9b233]">${v}</span></div>`;
+            });
+            goalsHtml += '</div>';
+            document.getElementById('out_total_goal').innerText = total;
+
+            const logContent = document.getElementById('in_logistik').value + 
+                               "\nOrt: " + document.getElementById('in_log_ort').value + 
+                               "\nDatum: " + document.getElementById('in_log_date').value;
+
+            const container = document.getElementById('preview_container');
+            container.innerHTML = '';
+
+            const sections = [
+                { head: "🎯 Zielvorgaben", content: goalsHtml, type: 'raw' },
+                { head: "✨ Highlights", content: document.getElementById('in_sek1').value, type: 'text' },
+                { head: "⚙️ System & Verwaltung", content: document.getElementById('in_system').value, type: 'text' },
+                { head: "📦 Werbemittel", content: logContent, type: 'text' },
+                { head: "📈 Online-Performance", content: document.getElementById('in_ads').value, type: 'text' },
+                { head: "🌐 Landingpages", content: "", type: 'links' },
+                { head: "🔄 Ablauf", content: document.getElementById('in_ablauf').value, type: 'text' }
+            ];
+
+            sections.forEach(s => {
+                const card = document.createElement('div');
+                card.className = "content-card border-l-8 border-gray-200";
+                card.innerHTML = `<div class="section-title text-[#f9b233]">${s.head}</div>`;
+                
+                if (s.type === 'text' && s.content.trim()) {
+                    card.innerHTML += `<div class="whitespace-pre-wrap text-gray-800 font-bold text-xs text-left">${s.content}</div>`;
+                    container.appendChild(card);
+                } else if (s.type === 'raw') {
+                    card.innerHTML += s.content;
+                    container.appendChild(card);
+                } else if (s.type === 'links') {
+                    const l1 = document.getElementById('in_lp1').value;
+                    const l2 = document.getElementById('in_lp2').value;
+                    if(l1) card.innerHTML += `<a href="${l1}" target="_blank" class="lp-btn font-mono">🌐 Seite 1</a>`;
+                    if(l2) card.innerHTML += `<a href="${l2}" target="_blank" class="lp-btn font-mono">🎯 Seite 2</a>`;
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        function copyTeams() {
+            const v = {
+                t: document.getElementById('in_title').value,
+                z: document.getElementById('in_zeitraum').value,
+                dl: document.getElementById('in_deadline').value,
+                sys: document.getElementById('in_system').value,
+                log: document.getElementById('in_logistik').value,
+                l_ort: document.getElementById('in_log_ort').value,
+                l_date: document.getElementById('in_log_date').value,
+                ads: document.getElementById('in_ads').value,
+                hlt: document.getElementById('in_sek1').value,
+                lp1: document.getElementById('in_lp1').value,
+                lp2: document.getElementById('in_lp2').value,
+                abl: document.getElementById('in_ablauf').value,
+                tot: document.getElementById('out_total_goal').innerText,
+                mot: document.getElementById('in_motivation').value
+            };
+
+            let goalStr = "";
+            const vals = document.querySelectorAll('.g-val');
+            vals.forEach((vInput, i) => {
+                let icon = (i < 2) ? '🏆' : '📍';
+                goalStr += `${icon} ${vInput.dataset.name}: ${vInput.value || 0}\n`;
+            });
+
+            let txt = `******************************************\n`;
+            txt += `📢 KAMPAGNEN-BRIEFING: ${v.t.toUpperCase()}\n`;
+            txt += `******************************************\n\n`;
+            txt += `🗓 ZEITRAUM: ${v.z}\n`;
+            txt += `⏱ DEADLINE VORBEREITUNG: ${v.dl}\n`;
+            txt += `🎯 TOTAL TARGET: ${v.tot} SALES\n\n`;
+            txt += `------------------------------------------\n`;
+            txt += `🏆 TARGETS PRO STANDORT:\n${goalStr}\n`;
+            txt += `------------------------------------------\n\n`;
+            
+            if(v.hlt.trim()) txt += `✨ HIGHLIGHTS:\n${v.hlt}\n\n`;
+            if(v.sys.trim()) txt += `⚙️ SYSTEM/ADMIN:\n${v.sys}\n\n`;
+            if(v.log.trim()) txt += `📦 MATERIAL:\n${v.log}\nAnlieferung: ${v.l_ort} am ${v.l_date}\n\n`;
+            if(v.ads.trim()) txt += `📈 PERFORMANCE/ADS:\n${v.ads}\n\n`;
+            
+            txt += `🌐 LANDINGPAGES:\n- Seite 1: ${v.lp1}\n- Seite 2: ${v.lp2}\n\n`;
+            
+            if(v.abl.trim()) txt += `🔄 ABLAUF:\n${v.abl}\n\n`;
+            
+            txt += `------------------------------------------\n`;
+            txt += `🔥 MISSION: ${v.mot}\n`;
+            txt += `------------------------------------------\n`;
+            txt += `#TopSports #OneTeam #Success`;
+
+            navigator.clipboard.writeText(txt).then(() => alert("Master-Briefing mit Ablauf & neuem Design kopiert!"));
+        }
+        update();
+    </script>
+</body>
+</html>
