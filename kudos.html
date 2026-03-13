@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Teams Leadership Hub PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; text-align: left; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 1.5rem; overflow: hidden; }
+        .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); }
+        .input-box { padding: 1.25rem; border-bottom: 1px solid #262626; }
+        textarea, input, select { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.75rem; width: 100%; font-size: 0.85rem; outline: none; transition: 0.2s; border: 1px solid #333; }
+        textarea:focus, input:focus, select:focus { border-color: var(--ts-yellow); }
+        
+        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 1.25rem; }
+        .mode-btn { padding: 12px 5px; border-radius: 10px; border: 1px solid #333; font-weight: 900; font-size: 10px; text-transform: uppercase; transition: 0.2s; color: #555; text-align: center; cursor: pointer; }
+        .mode-btn.active[data-mode="lob"] { background: #22c55e; color: black; border-color: #22c55e; }
+        .mode-btn.active[data-mode="warn"] { background: var(--ts-yellow); color: black; border-color: var(--ts-yellow); }
+        .mode-btn.active[data-mode="hard"] { background: #ef4444; color: white; border-color: #ef4444; }
+
+        .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 1.25rem; }
+        .scen-btn { background: #121212; border: 1px solid #333; padding: 10px 5px; border-radius: 8px; font-size: 9px; font-weight: 700; text-transform: uppercase; color: #888; text-align: center; cursor: pointer; }
+        .scen-btn.active { border-color: var(--ts-yellow); color: var(--ts-yellow); background: #252525; }
+        
+        .reward-btn { padding: 8px; border-radius: 6px; border: 1px solid #333; font-size: 9px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.2s; flex: 1; text-align: center; color: #666; }
+        .reward-btn.active { border-color: #22c55e; color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Teams Leadership Hub</h1>
+                <p class="text-[9px] text-gray-500 uppercase tracking-[3px] font-bold italic">High-Performance Feedback</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">01. Tonalität & Eskalationsstufe</div>
+            <div class="mode-grid">
+                <div class="mode-btn active" data-mode="lob" onclick="setMode('lob', this)">🚀 Anerkennung</div>
+                <div class="mode-btn" data-mode="warn" onclick="setMode('warn', this)">⚠️ Ansage</div>
+                <div class="mode-btn" data-mode="hard" onclick="setMode('hard', this)">🛡️ Endstufe</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">02. Szenario wählen</div>
+            <div class="scenario-grid">
+                <div class="scen-btn active" onclick="setScen('allgemein', this)">Performance</div>
+                <div class="scen-btn" onclick="setScen('pünktlich', this)">Pünktlichkeit</div>
+                <div class="scen-btn" onclick="setScen('handy', this)">Handy / Fokus</div>
+                <div class="scen-btn" onclick="setScen('hygiene', this)">Hygiene</div>
+                <div class="scen-btn" onclick="setScen('sales', this)">Sales / Quote</div>
+                <div class="scen-btn" onclick="setScen('ci', this)">Outfit / CI</div>
+                <div class="scen-btn" onclick="setScen('team', this)">Teamplayer</div>
+                <div class="scen-btn" onclick="setScen('service', this)">Mitglieder</div>
+                <div class="scen-btn" onclick="setScen('verwaltung', this)">Orga / Admin</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">03. Empfänger & Kontext</div>
+            <div class="input-box">
+                <input type="text" id="in_name" placeholder="Vorname des Mitarbeiters">
+            </div>
+            <div class="input-box">
+                <textarea id="in_extra" rows="2" placeholder="Was genau ist passiert? (Stichpunkte reichen)"></textarea>
+            </div>
+        </div>
+
+        <div id="reward_section" class="card">
+            <div class="section-label italic">04. Bonus / Belohnung (Optional)</div>
+            <div class="flex gap-2 p-5">
+                <div class="reward-btn" onclick="toggleReward('shake', this)">🥤 Shake frei</div>
+                <div class="reward-btn" onclick="toggleReward('time', this)">⏱️ 30 Min früher gehen</div>
+                <div class="reward-btn" onclick="toggleReward('pizza', this)">🍕 Pizza-Runde</div>
+                <div class="reward-btn" onclick="toggleReward('coffee', this)">☕ Kaffee-Special</div>
+            </div>
+        </div>
+
+        <button onclick="copyToTeams()" class="w-full py-5 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all mb-10">
+            Copy for Teams 🚀
+        </button>
+    </div>
+
+    <script>
+        let currentMode = 'lob';
+        let currentScen = 'allgemein';
+        let currentReward = null;
+
+        function setMode(mode, btn) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Reward-Sektion nur bei Lob anzeigen
+            document.getElementById('reward_section').style.display = (mode === 'lob') ? 'block' : 'none';
+        }
+
+        function setScen(scen, btn) {
+            currentScen = scen;
+            document.querySelectorAll('.scen-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function toggleReward(reward, btn) {
+            if (currentReward === reward) {
+                currentReward = null;
+                btn.classList.remove('active');
+            } else {
+                document.querySelectorAll('.reward-btn').forEach(b => b.classList.remove('active'));
+                currentReward = reward;
+                btn.classList.add('active');
+            }
+        }
+
+        function copyToTeams() {
+            const name = document.getElementById('in_name').value || "Team-Mitglied";
+            const extra = document.getElementById('in_extra').value || "...";
+            const upperName = name.toUpperCase();
+
+            const rewards = {
+                shake: "\n\n🎁 **BELOHNUNG:** Geh heute auf Nacken des Hauses an die Theke und gönn dir einen Shake deiner Wahl! 🥤",
+                time: "\n\n🎁 **BELOHNUNG:** Starke Leistung muss belohnt werden. Du darfst heute 30 Minuten früher in den Feierabend gehen! ⏱️",
+                pizza: "\n\n🎁 **BELOHNUNG:** Du hast das Team heute so gerissen – die nächste Pizza-Runde geht auf mich! 🍕",
+                coffee: "\n\n🎁 **BELOHNUNG:** Gönn dir heute ein Kaffee-Special deiner Wahl in der Pause. Hast du dir verdient! ☕"
+            };
+
+            const library = {
+                lob: {
+                    allgemein: `🔥 **TOP PERFORMANCE: ${upperName}** \n\nHey ${name}, dein Einsatz bezüglich ${extra} war absolut on point. Genau diese TS-Mentalität brauchen wir. Starkes Ding! 🚀💪`,
+                    pünktlich: `⏰ **PRÄZISION: ${upperName}** \n\nHi ${name}, danke dass du heute bei ${extra} so zuverlässig und pünktlich warst. Ein Vorbild für die Schicht! 🙌`,
+                    handy: `📱 **VOLLES COMMITMENT: ${upperName}** \n\n${name}, mir ist aufgefallen, wie konsequent du dein Handy weggelegt hast, um dich voll auf ${extra} zu fokussieren. Top Fokus! ⭐`,
+                    hygiene: `✨ **STUDIO-PRIDE: ${upperName}** \n\nHey ${name}, danke für dein Auge fürs Detail bei ${extra}. Sauberkeit ist unsere Visitenkarte. Danke! 🧼🔥`,
+                    sales: `📊 **CLOSER-MENTALITÄT: ${upperName}** \n\nBoom! ${name}, wie du ${extra} verwandelt hast, war erstklassig. Sales-Quote on Fire! 🏆💰`,
+                    ci: `👔 **CI-VORBILD: ${upperName}** \n\n${name}, dein Auftreten heute (besonders ${extra}) war absolut professionell. Du repräsentierst TOP SPORTS perfekt! 👌`,
+                    team: `🤜🤛 **TEAM-HELD: ${upperName}** \n\n${name}, danke für deine Unterstützung bei ${extra}. Das ist echter Zusammenhalt. Davon lebt unser Club! ❤️`,
+                    service: `🤝 **SERVICE-GENIE: ${upperName}** \n\n${name}, das Feedback der Mitglieder zu ${extra} war spitze. Du machst den Unterschied am Kunden! ⭐`,
+                    verwaltung: `📂 **ORGA-PROFI: ${upperName}** \n\n${name}, danke für die saubere Abwicklung von ${extra}. Deine Struktur im Hintergrund hält uns den Rücken frei! 📑`
+                },
+                warn: {
+                    allgemein: `👀 **HINWEIS: ${upperName}** \n\nHi ${name}, kurzer Check: Bei ${extra} sind wir gerade unter unserem Standard geblieben. Lass uns das Niveau bitte wieder heben. Du kannst das besser! 🤜🤛`,
+                    pünktlich: `⏰ **ZEIT-CHECK: ${upperName}** \n\nHey ${name}, Pünktlichkeit ist ein Zeichen von Respekt gegenüber dem Team. Bei ${extra} hat es heute nicht gepasst. Bitte achte künftig penibel darauf. ⏳`,
+                    handy: `📱 **FOKUS-CHECK: ${upperName}** \n\n${name}, kurzes Feedback: Dein Fokus sollte bei den Mitgliedern liegen, nicht beim Handy. Das gilt besonders für ${extra}. Pack das Ding bitte weg. 🤝`,
+                    hygiene: `🧼 **QUALITÄTS-CHECK: ${upperName}** \n\nHi ${name}, beim Thema Sauberkeit (speziell ${extra}) haben wir heute geschlampt. Das entspricht nicht dem TS-Niveau. Bitte korrigier das sofort. ✨`,
+                    sales: `📈 **SALES-IMPULS: ${upperName}** \n\n${name}, bei deinen Zahlen zu ${extra} ist noch deutlich Luft nach oben. Woran hakt es? Wir brauchen hier wieder mehr Abschluss-Hunger! 📊`,
+                    ci: `👔 **DRESSCODE-CHECK: ${upperName}** \n\nHey ${name}, bitte achte auf deine CI und dein Erscheinungsbild bei ${extra}. Wir sind Premium – das muss man uns auch ansehen. Danke! 👟`,
+                    team: `🤜🤛 **TEAM-KOMMUNIKATION: ${upperName}** \n\n${name}, mir ist aufgefallen, dass die Abstimmung bei ${extra} nicht optimal lief. Wir müssen im Team besser kommunizieren, um Reibungsverluste zu vermeiden. 📢`,
+                    service: `📣 **SERVICE-HINWEIS: ${upperName}** \n\n${name}, die Betreuung bei ${extra} war heute etwas zu passiv. Geh wieder aktiv auf die Leute zu – das ist unsere Stärke! 🤝`,
+                    verwaltung: `📂 **ORGA-HINWEIS: ${upperName}** \n\n${name}, bei der Verwaltung von ${extra} sind Fehler passiert. Bitte arbeite hier konzentrierter, damit wir keine Daten verlieren. 📑`
+                },
+                hard: {
+                    allgemein: `🚨 **KLARTEXT: ${upperName}** \n\n${name}, ganz direkt: Deine Leistung bei ${extra} ist inakzeptabel. Wir sind kein 15€ Discounter, sondern TOP SPORTS. Ich erwarte ab der nächsten Minute 100% Steigerung! 🛡️`,
+                    pünktlich: `🚨 **LETZTE MAHNUNG: ${upperName}** \n\n${name}, deine Unpünktlichkeit bei ${extra} schadet dem gesamten Teamablauf. Das ist respektlos und wird ab sofort nicht mehr toleriert. Klär das! 🛡️`,
+                    handy: `🚨 **NO-GO AREA: ${upperName}** \n\n${name}, Handynutzung während der Arbeitszeit (${extra}) ist ein Kündigungsgrund. Wir bezahlen dich für Service, nicht fürs Surfen. Letzte Warnung! 🛡️`,
+                    hygiene: `🚨 **SAUBERKEITS-VERSAGEN: ${upperName}** \n\n${name}, der Zustand bei ${extra} ist geschäftsschädigend. Wenn du nicht bereit bist, die Standards umzusetzen, bist du hier falsch. Bring das SOFORT in Ordnung. 🛡️`,
+                    sales: `🚨 **SALES-DRUCK: ${upperName}** \n\n${name}, wer nicht verkauft, bewegt nichts. Deine Leistung bei ${extra} ist völlig unzureichend. Ich erwarte hier keine Ausreden, sondern Ergebnisse. Jetzt! 🛡️`,
+                    ci: `🚨 **PROFESSIONALITÄTS-MANGEL: ${upperName}** \n\n${name}, dein Auftreten bei ${extra} ist unprofessionell und entspricht nicht unserer Brand. Wir sind hier nicht im Privatvergnügen. Ändere das sofort! 🛡️`,
+                    team: `🚨 **TEAM-STÖRUNG: ${upperName}** \n\n${name}, dein Verhalten bei ${extra} belastet das Teamgefüge massiv. Einzelgänger-Mentalität hat bei uns keinen Platz. Ändere deine Einstellung oder wir ziehen Konsequenzen. 🛡️`,
+                    service: `🚨 **MITGLIEDER-VERLUST: ${upperName}** \n\n${name}, so wie du ${extra} gehandhabt hast, riskieren wir Kündigungen. Das ist absolut kontraproduktiv. Ich erwarte sofort ein anderes Auftreten auf der Fläche! 🛡️`,
+                    verwaltung: `🚨 **ADMIN-DESASTER: ${upperName}** \n\n${name}, deine Schlampigkeit bei ${extra} gefährdet unsere Abläufe. Wir können uns solche Patzer in der Verwaltung nicht erlauben. Stell das sofort ab! 🛡️`
+                }
+            };
+
+            let finalMessage = library[currentMode][currentScen];
+            
+            // Reward anhängen, falls ausgewählt und im Lob-Modus
+            if (currentMode === 'lob' && currentReward) {
+                finalMessage += rewards[currentReward];
+            }
+
+            navigator.clipboard.writeText(finalMessage).then(() => {
+                alert("Nachricht kopiert! Ab in Teams damit.");
+            });
+        }
+    </script>
+</body>
+</html>
