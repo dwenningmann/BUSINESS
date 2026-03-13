@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | HR Abmahnung Safe-Guard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; text-align: left; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 2rem; overflow: hidden; }
+        .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); }
+        .input-box { padding: 1.25rem; border-bottom: 1px solid #262626; }
+        textarea, input, select { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.75rem; width: 100%; font-size: 0.85rem; outline: none; }
+        .instruction { font-size: 10px; color: var(--ts-yellow); font-weight: bold; margin-bottom: 4px; display: block; text-transform: uppercase; }
+        
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .p-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 30px; }
+            .p-content { font-size: 13px; line-height: 1.6; color: black; text-align: justify; }
+            .signature-area { margin-top: 60px; display: flex; justify-content: space-between; gap: 40px; }
+            .sig-box { border-top: 1px solid #000; padding-top: 8px; text-align: left; font-size: 10px; font-weight: bold; width: 220px; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Abmahnung Safe-Guard</h1>
+                <p class="text-[9px] text-gray-500 uppercase tracking-[3px] font-bold">Juristischer Leitfaden für Leiter</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">01. Empfänger & Aussteller</div>
+            <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="in_staff_name" placeholder="Name Mitarbeiter">
+                <input type="text" id="in_staff_addr" placeholder="Straße, PLZ, Ort">
+                <div class="md:col-span-2">
+                    <span class="instruction">Wer unterzeichnet die Abmahnung?</span>
+                    <select id="in_sign_role">
+                        <option value="Die Geschäftsleitung">Geschäftsleitung</option>
+                        <option value="Die Regionalleitung">Regionalleitung</option>
+                        <option value="Der Head of Operations">Head of Operations</option>
+                        <option value="Die Studioleitung">Studioleitung</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-2 border-yellow-500/30">
+            <div class="section-label italic">02. Vorfall (Präzise Rekonstruktion)</div>
+            <div class="input-box">
+                <span class="instruction">Wann genau?</span>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="date" id="in_date">
+                    <input type="time" id="in_time">
+                </div>
+            </div>
+            <div class="input-box">
+                <span class="instruction">Wo genau?</span>
+                <input type="text" id="in_location" placeholder="z.B. Am Check-In Counter des Studios Stuttgart">
+            </div>
+            <div class="input-box">
+                <span class="instruction">Was wurde getan? (Das Fehlverhalten)</span>
+                <textarea id="in_action" rows="3" placeholder="z.B. Sie spielten an Ihrem privaten Mobiltelefon, obwohl zwei Mitglieder auf den Check-In warteten."></textarea>
+            </div>
+            <div class="input-box">
+                <span class="instruction">Anwesende Zeugen?</span>
+                <input type="text" id="in_witness" placeholder="Name SL oder Kollegen (wenn vorhanden)">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">03. Vertragliche Einordnung</div>
+            <div class="input-box">
+                <span class="instruction">Verletzte Pflicht wählen</span>
+                <select id="in_duty">
+                    <option value="Ihre vertragliche Pflicht zur pünktlichen Arbeitsaufnahme">Unpünktlichkeit</option>
+                    <option value="Ihre Pflicht zur persönlichen Arbeitsleistung und die strikte Einhaltung von Dienstanweisungen">Missachtung von Anweisungen</option>
+                    <option value="Ihre Pflicht zu einem kundenorientierten und respektvollen Verhalten">Fehlverhalten gegenüber Mitgliedern</option>
+                    <option value="Ihre Pflicht zur sorgfältigen Dokumentation und Kassenführung">Dokumentationsfehler</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="syncAndPrint()" class="w-full py-5 bg-red-600 text-white font-black uppercase italic rounded-xl shadow-xl hover:bg-red-800 transition-all active:scale-95 mb-10">
+            Rechtssicheres PDF Dokument erzeugen
+        </button>
+    </div>
+
+    <div class="print-only mx-auto" style="max-width: 650px; font-family: 'Times New Roman', serif; color: black;">
+        <div class="p-header">
+            <p style="font-weight: bold; font-size: 16px;">TOP SPORTS Fitness GmbH & Co. KG</p>
+            <p style="font-size: 12px; text-align: right;">Kornwestheim, den <span id="out_today"></span></p>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <p id="out_name" style="font-weight: bold;"></p>
+            <p id="out_addr"></p>
+        </div>
+
+        <h2 style="font-size: 18px; font-weight: bold; text-decoration: underline; margin-top: 50px;">ABMAHNUNG</h2>
+
+        <div class="p-content" style="margin-top: 30px;">
+            <p>Sehr geehrte/r Frau/Herr <span id="out_lastname"></span>,</p>
+
+            <p style="margin-top: 15px;">
+                wir müssen Ihr Verhalten am **<span id="out_date"></span>** formell beanstanden. 
+                Nach unseren Feststellungen ereignete sich folgender Vorfall:
+            </p>
+
+            <p style="margin-top: 15px; border-left: 2px solid #000; padding-left: 15px; font-style: italic;">
+                Am <span id="out_date_2"></span> um <span id="out_time"></span> Uhr <span id="out_location"></span> ereignete sich Folgendes: 
+                <span id="out_action"></span>
+                <span id="out_witness_block"> Dieser Vorfall wurde von <span id="out_witness"></span> beobachtet.</span>
+            </p>
+
+            <p style="margin-top: 15px;">
+                Durch dieses Verhalten verletzen Sie **<span id="out_duty"></span>** sowie Ihre im Arbeitsvertrag festgelegten Nebenpflichten erheblich. 
+                Wir fordern Sie hiermit auf, dieses Verhalten unverzüglich abzustellen und Ihren vertraglichen Pflichten künftig vollumfänglich nachzukommen.
+            </p>
+
+            <p style="margin-top: 15px; font-weight: bold;">
+                Wir weisen Sie ausdrücklich darauf hin, dass wir ein solches Fehlverhalten in Zukunft nicht mehr dulden werden. 
+                Sollte es erneut zu einer gleichartigen Pflichtverletzung kommen, werden wir das Arbeitsverhältnis kündigen. Wir behalten uns hierbei ausdrücklich sowohl die ordentliche als auch die außerordentliche, fristlose Kündigung vor.
+            </p>
+
+            <p style="margin-top: 15px;">
+                Eine Kopie dieser Abmahnung wird Ihrer Personalakte beigefügt.
+            </p>
+        </div>
+
+        <div class="signature-area">
+            <div class="sig-box">
+                <p>Ort, Datum</p>
+                <p style="margin-top: 25px;"><span id="out_sign_role"></span></p>
+            </div>
+            <div class="sig-box">
+                <p>Ort, Datum</p>
+                <p style="margin-top: 25px;">Erhalt bestätigt (Arbeitnehmer)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function syncAndPrint() {
+            const fullName = document.getElementById('in_staff_name').value;
+            document.getElementById('out_name').innerText = fullName || "[NAME]";
+            document.getElementById('out_addr').innerText = document.getElementById('in_staff_addr').value || "[ADRESSE]";
+            document.getElementById('out_lastname').innerText = fullName.split(' ').pop();
+            
+            const dateVal = document.getElementById('in_date').value;
+            const formattedDate = dateVal ? new Date(dateVal).toLocaleDateString('de-DE') : "[DATUM]";
+            document.getElementById('out_date').innerText = formattedDate;
+            document.getElementById('out_date_2').innerText = formattedDate;
+            document.getElementById('out_time').innerText = document.getElementById('in_time').value || "[UHRZEIT]";
+            document.getElementById('out_location').innerText = document.getElementById('in_location').value ? "im Bereich " + document.getElementById('in_location').value : "";
+            document.getElementById('out_action').innerText = document.getElementById('in_action').value || "[HANDLUNG FEHLT]";
+            
+            const witness = document.getElementById('in_witness').value;
+            document.getElementById('out_witness_block').style.display = witness ? 'inline' : 'none';
+            document.getElementById('out_witness').innerText = witness;
+
+            document.getElementById('out_duty').innerText = document.getElementById('in_duty').value;
+            document.getElementById('out_today').innerText = new Date().toLocaleDateString('de-DE');
+            document.getElementById('out_sign_role').innerText = document.getElementById('in_sign_role').value;
+
+            window.print();
+        }
+    </script>
+</body>
+</html>
