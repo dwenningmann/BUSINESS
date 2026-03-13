@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | HR Coaching Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; text-align: left; }
+
+        /* Screen UI */
+        .no-print { display: block; }
+        .print-only { display: none; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 2rem; overflow: hidden; }
+        .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--ts-yellow); font-style: italic; display: flex; justify-content: space-between; align-items: center; }
+        .input-box { padding: 1.25rem; border-bottom: 1px solid #262626; }
+        textarea { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.75rem; width: 100%; font-size: 0.85rem; outline: none; }
+        input[type="range"] { accent-color: var(--ts-yellow); width: 100%; margin: 10px 0; }
+        
+        /* Fixed Tooltip Style */
+        .tooltip { position: relative; cursor: help; background: #333; color: var(--ts-yellow); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-style: normal; font-weight: bold; border: 1px solid var(--ts-yellow); }
+        .tooltip:hover::after { 
+            content: attr(data-tip); 
+            position: fixed; /* Fixed sorgt dafür, dass es über allen Containern schwebt */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #f9b233; 
+            color: black; 
+            padding: 20px; 
+            border-radius: 12px; 
+            width: 300px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            line-height: 1.5; 
+            z-index: 9999; /* Maximaler Wert */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
+            text-transform: none; 
+            font-style: normal; 
+            letter-spacing: 0;
+            pointer-events: none;
+        }
+
+        /* Print Engine */
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .p-header { border-bottom: 4px solid #f9b233; padding-bottom: 10px; margin-bottom: 20px; }
+            .p-section { border: 1px solid #eee; padding: 12px; margin-bottom: 15px; border-radius: 6px; page-break-inside: avoid; }
+            .p-label { font-size: 9px; text-transform: uppercase; color: #777; font-weight: 900; margin-bottom: 4px; }
+            .p-content { font-size: 12px; font-weight: 500; white-space: pre-wrap; line-height: 1.5; color: #111; }
+            .score-row { display: flex; justify-content: space-between; align-items: center; background: #f9f9f9; padding: 8px; border-radius: 4px; margin-bottom: 5px; }
+            .score-val { font-weight: 900; color: #f9b233; }
+            .signature-area { margin-top: 50px; display: grid; grid-template-cols: 1fr 1fr; gap: 40px; }
+            .sig-box { border-top: 1px solid #000; padding-top: 8px; text-align: center; font-size: 10px; font-weight: bold; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 text-left">
+
+    <div class="max-w-2xl mx-auto no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-14 h-14 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-3xl shadow-lg border-2 border-black">TS</div>
+            <div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Coaching Deep Dive</h1>
+                <p class="text-[9px] text-gray-500 uppercase tracking-[3px] font-bold">Top Sports Management Tool</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
+            <input type="text" id="in_staff" placeholder="Mitarbeiter" class="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-sm outline-none focus:border-[#f9b233]">
+            <input type="text" id="in_leader" placeholder="Gesprächsführer" class="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-sm outline-none focus:border-[#f9b233]">
+            <input type="text" id="in_period" placeholder="Betrachtungszeitraum (z.B. Q1)" class="bg-[#1a1a1a] border border-[#333] rounded-lg p-3 text-sm outline-none focus:border-[#f9b233]">
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">
+                01. Rückblick & Eigenreflexion
+                <i class="tooltip" data-tip="Hinterfrage die Eigenwahrnehmung: Worauf bist du stolz? Was war dein größter Erfolg? Wo hast du dich verbessert?">?</i>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-2">Erfolge & Highlights der Periode</label>
+                <textarea id="in_success" rows="3" placeholder="Welche Ziele wurden erreicht?"></textarea>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-2">Hürden & Blockaden</label>
+                <textarea id="in_hurdles" rows="3" placeholder="Was hat dich gebremst? Wo brauchst du Hilfe?"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">
+                02. Soft Skills & Mentalität
+                <i class="tooltip" data-tip="ACHTUNG: Wie ist die Energie im Team? Nimmt der MA Feedback an? Wie ist das Auftreten gegenüber Mitgliedern?">?</i>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-1">Erscheinungsbild & Vorbildfunktion (1-10)</label>
+                <input type="range" id="in_s_soft" min="1" max="10" value="5">
+                <textarea id="in_n_soft" rows="2" placeholder="Sauberkeit Kleidung, Namensschild, Körpersprache..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">
+                03. Performance & Kennzahlen
+                <i class="tooltip" data-tip="Zahlen lügen nicht: Sales-Quote prüfen, Termin-Disziplin, Zusatzverkäufe (Upgrades).">?</i>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-1">Sales & Abschluss-Sicherheit (1-10)</label>
+                <input type="range" id="in_s1" min="1" max="10" value="5">
+                <textarea id="in_n1" rows="2" placeholder="Einwandbehandlung, Closing-Technik..."></textarea>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-1">Fläche & Service-Drive (1-10)</label>
+                <input type="range" id="in_s2" min="1" max="10" value="5">
+                <textarea id="in_n2" rows="2" placeholder="Aktive Ansprache, Sauberkeit während der Schicht..."></textarea>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-1">Team-Spirit & Kommunikation (1-10)</label>
+                <input type="range" id="in_s3" min="1" max="10" value="5">
+                <textarea id="in_n3" rows="2" placeholder="Hilfsbereitschaft, Kommunikation in Teams..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">
+                04. Strategie & Ziele
+                <i class="tooltip" data-tip="SMART: Spezifisch, Messbar, Attraktiv, Realistisch, Terminiert. Was muss bis zum nächsten Audit passieren?">?</i>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-2 text-[#f9b233]">Vereinbarte Ziele (Action Plan)</label>
+                <textarea id="in_action" rows="4" placeholder="Bis zum [Datum] werde ich [Ergebnis] erreichen durch [Maßnahme]."></textarea>
+            </div>
+            <div class="input-box">
+                <label class="text-xs font-bold uppercase block mb-2 italic">Persönliche Entwicklungswünsche</label>
+                <textarea id="in_wishes" rows="2" placeholder="Schulungen, Verantwortungsbereiche..."></textarea>
+            </div>
+        </div>
+
+        <button onclick="syncAndPrint()" class="w-full py-5 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all mb-12">
+            🖨️ Finales PDF Protokoll generieren
+        </button>
+    </div>
+
+    <div class="print-only">
+        <div class="p-header">
+            <h1 style="font-size: 22px; font-weight: 900; color: black; margin:0; letter-spacing:-1px;">MITARBEITER-COACHING PROTOKOLL</h1>
+            <p style="font-size: 9px; font-weight: bold; color: #f9b233; margin:0; text-transform:uppercase; letter-spacing:2px;">Top Sports Fitness GmbH & Co. KG</p>
+        </div>
+
+        <div style="display: grid; grid-template-cols: 1fr 1fr; margin-bottom: 20px; padding: 10px 0; border-bottom: 1px solid #eee;">
+            <div>
+                <p class="p-label">Mitarbeiter:</p>
+                <p class="p-content" id="out_staff" style="font-size: 16px; color: #f9b233; font-weight:900;">-</p>
+                <p class="p-label" style="margin-top:10px;">Zeitraum:</p>
+                <p class="p-content" id="out_period">-</p>
+            </div>
+            <div style="text-align: right;">
+                <p class="p-label">Datum des Gesprächs:</p>
+                <p class="p-content" id="out_date" style="font-weight:900;">-</p>
+                <p class="p-label" style="margin-top:10px;">Gesprächsführer:</p>
+                <p class="p-content" id="out_leader">-</p>
+            </div>
+        </div>
+
+        <div class="p-section">
+            <p class="p-label">01. Rückblick & Erfolge (Selbsteinschätzung)</p>
+            <p class="p-content" id="out_success">-</p>
+        </div>
+
+        <div class="p-section">
+            <p class="p-label">02. Hindernisse & Bedarf</p>
+            <p class="p-content" id="out_hurdles">-</p>
+        </div>
+
+        <div class="p-section">
+            <p class="p-label">03. Performance Matrix (Leiter)</p>
+            <div class="score-row"><span class="p-label" style="margin:0;">Soft Skills & CI</span><span class="score-val" id="out_s_soft">-</span></div>
+            <p class="p-content" id="out_n_soft" style="font-size: 10px; margin-bottom: 10px; border-left: 2px solid #eee; padding-left: 10px; color:#555;">-</p>
+
+            <div class="score-row"><span class="p-label" style="margin:0;">Sales / Abschluss</span><span class="score-val" id="out_s1">-</span></div>
+            <p class="p-content" id="out_n1" style="font-size: 10px; margin-bottom: 10px; border-left: 2px solid #eee; padding-left: 10px; color:#555;">-</p>
+            
+            <div class="score-row"><span class="p-label" style="margin:0;">Fläche / Service</span><span class="score-val" id="out_s2">-</span></div>
+            <p class="p-content" id="out_n2" style="font-size: 10px; margin-bottom: 10px; border-left: 2px solid #eee; padding-left: 10px; color:#555;">-</p>
+
+            <div class="score-row"><span class="p-label" style="margin:0;">Team / Spirit</span><span class="score-val" id="out_s3">-</span></div>
+            <p class="p-content" id="out_n3" style="font-size: 10px; border-left: 2px solid #eee; padding-left: 10px; color:#555;">-</p>
+        </div>
+
+        <div class="p-section" style="background: #fdfaf0; border: 1px solid #f9b233;">
+            <p class="p-label" style="color: #f9b233;">04. Action Plan & Vereinbarte Ziele</p>
+            <p class="p-content" id="out_action" style="font-weight: 700; font-size: 13px;">-</p>
+        </div>
+
+        <div class="p-section">
+            <p class="p-label">05. Entwicklungswünsche</p>
+            <p class="p-content" id="out_wishes">-</p>
+        </div>
+
+        <div class="signature-area">
+            <div class="sig-box">Unterschrift Mitarbeiter</div>
+            <div class="sig-box">Unterschrift Gesprächsführer</div>
+        </div>
+        
+        <p style="font-size: 7px; color: #aaa; margin-top: 40px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Dokument für Personalakte • Streng Vertraulich • Top Sports Management Hub 2026</p>
+    </div>
+
+    <script>
+        function syncAndPrint() {
+            const mapping = {
+                'in_staff': 'out_staff',
+                'in_leader': 'out_leader',
+                'in_period': 'out_period',
+                'in_success': 'out_success',
+                'in_hurdles': 'out_hurdles',
+                'in_n_soft': 'out_n_soft',
+                'in_n1': 'out_n1',
+                'in_n2': 'out_n2',
+                'in_n3': 'out_n3',
+                'in_action': 'out_action',
+                'in_wishes': 'out_wishes'
+            };
+
+            for (let id in mapping) {
+                document.getElementById(mapping[id]).innerText = document.getElementById(id).value || "/";
+            }
+
+            const scores = ['in_s_soft', 'in_s1', 'in_s2', 'in_s3'];
+            const outScores = ['out_s_soft', 'out_s1', 'out_s2', 'out_s3'];
+            
+            scores.forEach((id, index) => {
+                document.getElementById(outScores[index]).innerText = document.getElementById(id).value + "/10";
+            });
+            
+            document.getElementById('out_date').innerText = new Date().toLocaleDateString('de-DE');
+            window.print();
+        }
+    </script>
+</body>
+</html>
