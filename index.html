@@ -36,15 +36,35 @@
             color: #000;
             transform: translateY(-2px);
         }
+        .kudos-banner {
+            background: linear-gradient(90deg, #f9b233 0%, #ffcc33 100%);
+            color: black;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6">
     <div class="max-w-6xl w-full p-10 bg-[#1a1a1a] rounded-3xl border border-[#333] shadow-2xl ts-shadow">
         
-        <div class="text-center mb-12">
+        <div class="text-center mb-8">
             <div class="w-16 h-16 bg-[#f9b233] rounded-2xl flex items-center justify-center font-black text-black italic text-3xl mx-auto mb-6 shadow-lg">TS</div>
             <h1 class="text-3xl font-black mb-2 italic uppercase tracking-tighter text-white">Business Tool Center</h1>
             <p class="text-gray-500 text-[10px] uppercase tracking-[4px] text-white/50 font-bold">Top Sports Fitness GmbH & Co. KG</p>
+        </div>
+
+        <div class="mb-10">
+            <span class="category-label">Daily Leadership Goodie</span>
+            <a href="kudos.html" class="kudos-banner group w-full p-5 rounded-2xl flex items-center justify-between transition-all hover:scale-[1.01] shadow-xl">
+                <div class="flex items-center gap-5">
+                    <span class="text-4xl">🚀</span>
+                    <div class="text-left">
+                        <h2 class="font-black uppercase italic text-lg leading-none">Teams Kudos & Feedback</h2>
+                        <p class="text-[10px] uppercase font-bold opacity-70 tracking-tighter">Mitarbeiter motivieren oder charmant korrigieren</p>
+                    </div>
+                </div>
+                <div class="bg-black text-white px-4 py-2 rounded-lg font-black italic text-xs uppercase tracking-widest group-hover:bg-white group-hover:text-black transition-colors">
+                    Starten →
+                </div>
+            </a>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
