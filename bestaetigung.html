@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Mitgliedsbescheinigung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; }
+        
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 1.5rem; }
+        .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); border-radius: 1rem 1rem 0 0; }
+        .input-box { padding: 1.25rem; }
+        
+        input, select { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.85rem; outline: none; }
+        input:focus { border-color: var(--ts-yellow); }
+        label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 4px; }
+
+        @media print {
+            @page { size: A4; margin: 20mm; }
+            body { background: white !important; color: black !important; padding: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            
+            .p-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+            .p-title { font-size: 20pt; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+            
+            .member-info { margin-bottom: 30px; font-size: 12pt; line-height: 1.6; }
+            .cert-text { font-size: 12pt; line-height: 1.8; margin-bottom: 40px; }
+            
+            .footer-area { margin-top: 60px; border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-between; }
+            .sig-box { width: 250px; border-top: 1px solid #000; margin-top: 50px; padding-top: 5px; font-size: 9pt; font-weight: bold; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-3xl mx-auto no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <h1 class="text-2xl font-black uppercase italic tracking-tighter">Mitgliedsbescheinigung</h1>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">Stammdaten Mitglied</div>
+            <div class="input-box space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label>Vorname</label><input type="text" id="in_vn"></div>
+                    <div><label>Nachname</label><input type="text" id="in_nn"></div>
+                </div>
+                <div><label>Geburtsdatum</label><input type="text" id="in_geb" placeholder="TT.MM.JJJJ"></div>
+                <div><label>Mitgliedsnummer (optional)</label><input type="text" id="in_nr"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">Zeitraum & Zweck</div>
+            <div class="input-box space-y-4">
+                <div>
+                    <label>Bescheinigungs-Typ</label>
+                    <select id="in_type">
+                        <option value="aktiv">Aktive Mitgliedschaft (unbefristet)</option>
+                        <option value="zeitraum">Bestimmter Zeitraum</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label>Mitglied seit</label><input type="text" id="in_start" placeholder="TT.MM.JJJJ"></div>
+                    <div><label>Bis (nur bei Zeitraum)</label><input type="text" id="in_end" placeholder="heute / Datum"></div>
+                </div>
+                <div>
+                    <label>Ausstellendes Studio</label>
+                    <select id="in_loc">
+                        <option value="Echterdingen">Echterdingen</option>
+                        <option value="Reutlingen">Reutlingen</option>
+                        <option value="Leinfelden">Leinfelden</option>
+                        <option value="Kornwestheim">Kornwestheim</option>
+                        <option value="Nürtingen">Nürtingen</option>
+                        <option value="Degerloch">Degerloch</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="generatePDF()" class="w-full py-6 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all">
+            Bescheinigung generieren 📄
+        </button>
+    </div>
+
+    <div id="print_area" class="print-only mx-auto" style="max-width: 800px; color: black;"></div>
+
+    <script>
+        function generatePDF() {
+            const val = (id) => document.getElementById(id).value || "__________";
+            const today = new Date().toLocaleDateString('de-DE');
+            const type = document.getElementById('in_type').value;
+            
+            let zeitraumText = type === 'aktiv' 
+                ? `ist seit dem <strong>${val('in_start')}</strong> aktives Mitglied in unserem Fitnessclub.`
+                : `war im Zeitraum vom <strong>${val('in_start')}</strong> bis zum <strong>${val('in_end')}</strong> Mitglied in unserem Fitnessclub.`;
+
+            const html = `
+                <div class="p-header">
+                    <div class="p-title">Mitgliedsbescheinigung</div>
+                    <div style="text-align:right">
+                        <p style="font-weight:900; font-size:14pt; margin:0;">TOP SPORTS</p>
+                        <p style="font-size:8pt; margin:0; text-transform:uppercase;">Fitness Clubs</p>
+                    </div>
+                </div>
+
+                <div class="member-info">
+                    <strong>${val('in_vn')} ${val('in_nn')}</strong><br>
+                    Geburtsdatum: ${val('in_geb')}<br>
+                    Mitgliedsnummer: ${val('in_nr')}
+                </div>
+
+                <div class="cert-text">
+                    Hiermit bestätigen wir, dass die oben genannte Person ${zeitraumText}
+                    <br><br>
+                    Diese Bescheinigung dient zur Vorlage beim Arbeitgeber oder der gesetzlichen Krankenkasse für Präventionszwecke oder Bonusprogramme.
+                    <br><br>
+                    Der Vertrag wird ordnungsgemäß geführt; die monatlichen Beiträge werden entrichtet.
+                </div>
+
+                <div class="sig-box">
+                    ${val('in_loc')}, den ${today}<br>
+                    Stempel / Unterschrift Clubleitung
+                </div>
+
+                <div class="footer-area">
+                    <div style="font-size:8pt; color:#777;">
+                        TOP SPORTS Fitness GmbH & Co. KG<br>
+                        Storlachstraße 1, 72760 Reutlingen
+                    </div>
+                    <div style="font-size:8pt; color:#777; text-align:right;">
+                        www.topsports.de<br>
+                        E-Mail: info@topsports.de
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('print_area').innerHTML = html;
+            window.print();
+        }
+    </script>
+</body>
+</html>
