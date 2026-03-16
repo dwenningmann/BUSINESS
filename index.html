@@ -40,8 +40,11 @@
             background: linear-gradient(90deg, #f9b233 0%, #ffcc33 100%);
             color: black;
         }
-        .hr-card {
+        .highlight-card {
             border-left: 4px solid #f9b233;
+        }
+        .admin-card {
+            border-left: 4px solid #ffffff;
         }
     </style>
 </head>
@@ -73,6 +76,44 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             
             <div class="flex flex-col space-y-3">
+                <span class="category-label">HR & Onboarding</span>
+                <a href="av_minijob.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">📄</span> Arbeitsvertrag Minijob
+                </a>
+                <a href="datev.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🏦</span> DATEV-Personalbogen
+                </a>
+                <a href="rv_befreiung.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">⚖️</span> RV-Befreiungsantrag
+                </a>
+                <a href="bem.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 mt-4">
+                    <span class="text-lg">🏥</span> BEM-Gesprächsleitfaden
+                </a>
+                <a href="zeugnis.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">📜</span> Zeugnis-Generator
+                </a>
+                <a href="warning.html" class="tool-card p-4 rounded-xl font-bold uppercase text-[10px] flex items-center gap-3 opacity-60">
+                    <span class="text-lg">⚠️</span> Abmahnung (Safe-Guard)
+                </a>
+            </div>
+
+            <div class="flex flex-col space-y-3">
+                <span class="category-label">Studio & Kommunikation</span>
+                <a href="aushang.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 bg-white/5">
+                    <span class="text-lg">📢</span> Instant Aushang DIN-A4
+                </a>
+                <a href="audit.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🔎</span> Standort-Audit
+                </a>
+                <a href="feedback.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🧠</span> Mitarbeiter-Feedback
+                </a>
+                <a href="kampagne.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
+                    <span class="text-lg">🎨</span> Kampagnen-Briefing
+                </a>
+            </div>
+
+            <div class="flex flex-col space-y-3">
                 <span class="category-label">Partner & Sales</span>
                 <a href="akquise.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
                     <span class="text-lg">📞</span> Kaltakquise-Tool
@@ -88,55 +129,12 @@
                 </a>
             </div>
 
-            <div class="flex flex-col space-y-3">
-                <span class="category-label">Management & Qualität</span>
-                <a href="audit.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🔎</span> Standort-Audit
-                </a>
-                <a href="feedback.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🧠</span> Mitarbeiter-Feedback
-                </a>
-                <a href="kampagne.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">📢</span> Kampagnen-Briefing
-                </a>
-            </div>
-
-            <div class="flex flex-col space-y-3">
-                <span class="category-label">HR & Administration 2026</span>
-                
-                <a href="av_minijob.html" class="tool-card hr-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 bg-white/5 border-yellow-500/30">
-                    <span class="text-lg">📄</span> Arbeitsvertrag Erstellung
-                </a>
-
-                <a href="datev.html" class="tool-card hr-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 bg-white/5 border-yellow-500/30">
-                    <span class="text-lg">🏦</span> DATEV Personalfragebogen
-                </a>
-
-                <a href="rv_befreiung.html" class="tool-card hr-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 bg-white/5 border-yellow-500/30">
-                    <span class="text-lg">⚖️</span> RV-Befreiungsantrag
-                </a>
-
-                <a href="bem.html" class="tool-card hr-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 bg-white/5 border-yellow-500/30">
-                    <span class="text-lg">🏥</span> BEM-Gesprächsleitfaden
-                </a>
-
-                <div class="pt-4 opacity-40">
-                    <span class="category-label !mb-2">Disziplinarisch</span>
-                    <a href="warning.html" class="tool-card p-4 rounded-xl font-bold uppercase text-[10px] flex items-center gap-3 mb-2">
-                        <span class="text-lg">⚠️</span> Abmahnung (Safe-Guard)
-                    </a>
-                    <a href="zeugnis.html" class="tool-card p-4 rounded-xl font-bold uppercase text-[10px] flex items-center gap-3">
-                        <span class="text-lg">📜</span> Zeugnis-Generator
-                    </a>
-                </div>
-            </div>
-
         </div>
 
         <div class="mt-16 pt-8 border-t border-white/5 flex justify-between items-center">
             <div class="flex flex-col">
                 <p class="text-gray-700 text-[8px] uppercase tracking-[2px] font-bold">Internes Management System</p>
-                <p class="text-gray-800 text-[7px] uppercase tracking-[1px]">Zugriff nur für Studioleiter & Geschäftsführung</p>
+                <p class="text-gray-800 text-[7px] uppercase tracking-[1px]">Nur für Studioleiter & Geschäftsführung</p>
             </div>
             <p class="text-[#f9b233] text-[9px] uppercase tracking-[2px] font-black italic">TOP SPORTS HUB 2026</p>
         </div>
