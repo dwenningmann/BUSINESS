@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Antrag Nebentätigkeit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; }
+        
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 1.5rem; }
+        .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); border-radius: 1rem 1rem 0 0; }
+        .input-box { padding: 1.25rem; }
+        
+        input, select { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.85rem; outline: none; }
+        input:focus { border-color: var(--ts-yellow); }
+        label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 4px; }
+
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            body { background: white !important; color: black !important; padding: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            
+            .p-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .p-title { font-size: 14pt; font-weight: 900; text-transform: uppercase; }
+            .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+            .p-field { border: 1px solid #eee; padding: 8px; }
+            .p-label { font-size: 8px; text-transform: uppercase; color: #666; font-weight: bold; }
+            .p-val { font-size: 11px; font-weight: 700; min-height: 15px; border-bottom: 1px solid #eee; }
+            
+            .legal-text { font-size: 10px; line-height: 1.5; text-align: justify; margin: 20px 0; }
+            .decision-box { border: 2px solid #000; padding: 15px; margin-top: 20px; }
+            .check-item { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-size: 10px; }
+            .check-sq { width: 12px; height: 12px; border: 1px solid #000; }
+            
+            .sig-line { border-top: 1px solid #000; margin-top: 40px; padding-top: 5px; font-size: 9px; font-weight: bold; width: 250px; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <h1 class="text-2xl font-black uppercase italic tracking-tighter">Antrag Nebentätigkeit</h1>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="card">
+                <div class="section-label italic">01. Angaben zur Person</div>
+                <div class="input-box space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label>Nachname</label><input type="text" id="in_nn"></div>
+                        <div><label>Vorname</label><input type="text" id="in_vn"></div>
+                    </div>
+                    <div><label>Adresse</label><input type="text" id="in_adr"></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label>Position</label><input type="text" id="in_pos"></div>
+                        <div><label>Dabei seit</label><input type="text" id="in_since" placeholder="TT.MM.JJJJ"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-label italic">02. Details der Nebentätigkeit</div>
+                <div class="input-box space-y-3">
+                    <div><label>Firma / Arbeitgeber</label><input type="text" id="in_nt_fa"></div>
+                    <div><label>Beginn / Ausübung seit</label><input type="text" id="in_nt_start" placeholder="TT.MM.JJJJ"></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label>Stunden / Woche</label><input type="text" id="in_nt_h"></div>
+                        <div><label>Vergütung (ca. €)</label><input type="text" id="in_nt_pay"></div>
+                    </div>
+                    <div>
+                        <label>Zahlungsart</label>
+                        <select id="in_nt_type">
+                            <option value="Überweisung">Überweisung</option>
+                            <option value="Bar">Bar</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="generateNT()" class="w-full py-6 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all">
+            Antrag generieren & Drucken 📄
+        </button>
+    </div>
+
+    <div id="print_area" class="print-only mx-auto" style="max-width: 800px; color: black;"></div>
+
+    <script>
+        function generateNT() {
+            const val = (id) => document.getElementById(id).value || "____________________";
+            const today = new Date().toLocaleDateString('de-DE');
+
+            const html = `
+                <div class="p-header">
+                    <div class="p-title">Antrag auf Genehmigung einer Nebentätigkeit</div>
+                    <div style="font-size: 10px; font-weight: bold;">Arbeitgeber: TOP SPORTS Fitness GmbH & Co. KG</div>
+                </div>
+
+                <div class="p-grid">
+                    <div class="p-field"><p class="p-label">Name, Vorname</p><p class="p-val">${val('in_nn')}, ${val('in_vn')}</p></div>
+                    <div class="p-field"><p class="p-label">Position</p><p class="p-val">${val('in_pos')}</p></div>
+                    <div class="p-field" style="grid-column: span 2;"><p class="p-label">Adresse</p><p class="p-val">${val('in_adr')}</p></div>
+                    <div class="p-field"><p class="p-label">Angestellt bei Top Sports seit</p><p class="p-val">${val('in_since')}</p></div>
+                </div>
+
+                <div class="legal-text">
+                    Ich beabsichtige, ab dem <strong>${val('in_nt_start')}</strong> eine Nebentätigkeit bei der Firma <strong>${val('in_nt_fa')}</strong> auszuüben bzw. fortzuführen.
+                    <br><br>
+                    Der zeitliche Aufwand für diese nebenberufliche Tätigkeit wird bei ca. <strong>${val('in_nt_h')} Stunden wöchentlich</strong> liegen. 
+                    Die Vergütung wird <strong>${val('in_nt_type')}</strong> gezahlt und ca. <strong>${val('in_nt_pay')} €</strong> betragen.
+                    <br><br>
+                    Sollten sich die obigen Bedingungen der Nebentätigkeit ändern, so ist der Arbeitnehmer verpflichtet, dies dem Arbeitgeber unverzüglich mitzuteilen, um dann auch insoweit dessen Zustimmung abzuwarten.
+                    Der Arbeitnehmer versichert, dass durch die Aufnahme der Nebentätigkeit die gesetzlich vorgeschriebene Höchstarbeitszeit (derzeit 48 Stunden/Woche) nicht überschritten wird. Im Falle geringfügiger Beschäftigung versichert der Arbeitnehmer, dass durch die Nebentätigkeit die Grenzen der sozialversicherungsfreien Beschäftigung gem. § 8 SGB IV insgesamt nicht überschritten werden.
+                </div>
+
+                <div class="sig-line">Ort/Datum, Antragsteller/in</div>
+
+                <div class="decision-box">
+                    <div style="font-weight: 900; text-transform: uppercase; font-size: 10px; margin-bottom: 10px; border-bottom: 1px solid #000;">Entscheidung der Personalabteilung</div>
+                    <div class="p-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 15px;">
+                        <div class="check-item"><div class="check-sq"></div> Genehmigt bis auf Widerruf</div>
+                        <div class="check-item"><div class="check-sq"></div> Nicht genehmigt</div>
+                    </div>
+                    <p style="font-size: 8px; font-weight: bold; margin-bottom: 5px;">GRÜNDE FÜR NICHTGENEHMIGUNG / AUFLAGEN:</p>
+                    <div class="p-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="check-item"><div class="check-sq"></div> Verdacht der Kundenabwerbung</div>
+                        <div class="check-item"><div class="check-sq"></div> Konkurrenzprodukt</div>
+                        <div class="check-item"><div class="check-sq"></div> Überschreitung der Ruhezeit</div>
+                        <div class="check-item"><div class="check-sq"></div> Überschreitung Höchstarbeitszeit</div>
+                    </div>
+                    <div style="margin-top: 15px; border-bottom: 1px dotted #000; height: 20px;"></div>
+                    <div class="sig-line">Ort/Datum, Personalabteilung / Bevollmächtigte(r)</div>
+                </div>
+            `;
+
+            document.getElementById('print_area').innerHTML = html;
+            window.print();
+        }
+    </script>
+</body>
+</html>
