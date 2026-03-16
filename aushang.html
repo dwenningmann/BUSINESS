@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Aushang-Generator PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; margin: 0; padding: 0; }
+        
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; }
+        .input-area { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 1rem; width: 100%; min-height: 120px; font-size: 1rem; outline: none; transition: 0.2s; }
+        .input-area:focus { border-color: var(--ts-yellow); }
+
+        /* Quick-Select Buttons */
+        .chip { background: #252525; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.2s; color: #ccc; }
+        .chip:hover { border-color: var(--ts-yellow); color: var(--ts-yellow); }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            html, body { height: 100%; width: 100%; margin: 0; padding: 0; background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .no-print { display: none !important; }
+            .print-only { display: flex !important; }
+            
+            .aushang-container { width: 210mm; height: 297mm; position: relative; display: flex; flex-direction: column; background: white; color: black !important; overflow: hidden; }
+            .print-border { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 10mm solid var(--ts-yellow); z-index: 10; }
+            .main-content { padding: 25mm; display: flex; flex-direction: column; height: 100%; z-index: 5; }
+            .header-ts { display: flex; justify-content: center; margin-bottom: 20mm; }
+            .logo-box { width: 25mm; height: 25mm; background: black !important; color: var(--ts-yellow) !important; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 40px; font-style: italic; border-radius: 4mm; }
+            .headline { font-size: 52pt; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; line-height: 1.0; text-align: center; margin-bottom: 15mm; }
+            .content-area { flex-grow: 1; font-weight: 400; text-align: center; white-space: pre-wrap; display: flex; align-items: center; justify-content: center; padding: 0 5mm; }
+            .footer-ts { text-align: center; font-weight: 900; font-size: 14pt; text-transform: uppercase; letter-spacing: 5px; margin-top: 10mm; border-top: 1pt solid #eee; padding-top: 5mm; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center">
+
+    <div class="max-w-3xl w-full no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <h1 class="text-2xl font-black uppercase italic tracking-tighter text-white">Theken-Aushang PRO</h1>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-[10px] uppercase font-black text-gray-500 tracking-[2px] mb-3">Schnellauswahl Textbausteine</label>
+            <div class="flex flex-wrap gap-2">
+                <div class="chip" onclick="applyPreset('DEFEKT', 'Dieses Gerät ist leider aktuell außer Betrieb. Der Techniker ist bereits informiert!\n\nWir bitten um Entschuldigung für die Umstände.')">⚠️ Defekt / Techniker</div>
+                <div class="chip" onclick="applyPreset('SERVICE-INFO', 'Vielen Dank für euer Verständnis und eure Mithilfe.\n\nEuer TOP SPORTS Team')">🙏 Danke für Verständnis</div>
+                <div class="chip" onclick="applyPreset('KURS-INFO', 'Der folgende Kurs muss heute leider entfallen:\n\n___________________\n\nWir bemühen uns um schnellen Ersatz!')">🧘 Kursausfall</div>
+                <div class="chip" onclick="applyPreset('DUSCHEN / SAUNA', 'Aufgrund technischer Wartungsarbeiten steht dieser Bereich aktuell nicht zur Verfügung.\n\nWir arbeiten an einer schnellen Lösung!')">🚿 Dusche/Sauna Info</div>
+                <div class="chip" onclick="applyPreset('WICHTIG', 'Bitte achtet darauf, eure Trainingsflächen nach der Benutzung zu desinfizieren und die Gewichte wieder abzuräumen.\n\nGemeinsam für ein sauberes Training!')">🧼 Sauberkeit</div>
+            </div>
+        </div>
+
+        <div class="card p-6 space-y-6">
+            <div>
+                <label class="block text-[10px] uppercase font-black text-[#f9b233] tracking-widest mb-2">Überschrift (Headline)</label>
+                <input type="text" id="in_title" class="input-area !min-h-[50px] text-xl font-black uppercase italic" placeholder="WICHTIGE INFO">
+            </div>
+            
+            <div>
+                <label class="block text-[10px] uppercase font-black text-[#f9b233] tracking-widest mb-2">Nachricht (Inhalt)</label>
+                <textarea id="in_content" class="input-area" placeholder="Hier Text eingeben oder oben Baustein wählen..."></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-500 tracking-widest mb-2">Textgröße</label>
+                    <select id="in_size" class="input-area !min-h-[50px]">
+                        <option value="26pt">Klein</option>
+                        <option value="36pt" selected>Standard</option>
+                        <option value="48pt">Groß</option>
+                        <option value="60pt">XL (Maximal)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-500 tracking-widest mb-2">Ausrichtung</label>
+                    <select id="in_align" class="input-area !min-h-[50px]">
+                        <option value="center" selected>Zentriert</option>
+                        <option value="left">Linksbündig</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="printAushang()" class="w-full mt-8 py-6 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all">
+            Druckvorschau öffnen 📄
+        </button>
+    </div>
+
+    <div id="print_area" class="print-only aushang-container"></div>
+
+    <script>
+        function applyPreset(title, content) {
+            document.getElementById('in_title').value = title;
+            document.getElementById('in_content').value = content;
+            // Effekt für den Nutzer
+            document.querySelector('.card').style.borderColor = '#f9b233';
+            setTimeout(() => { document.querySelector('.card').style.borderColor = '#333'; }, 500);
+        }
+
+        function printAushang() {
+            const title = document.getElementById('in_title').value || "INFO";
+            const content = document.getElementById('in_content').value || "";
+            const size = document.getElementById('in_size').value;
+            const align = document.getElementById('in_align').value;
+
+            const html = `
+                <div class="print-border"></div>
+                <div class="main-content">
+                    <div class="header-ts">
+                        <div class="logo-box">TS</div>
+                    </div>
+                    <div class="headline">${title}</div>
+                    <div class="content-area" style="font-size: ${size}; text-align: ${align};">
+                        ${content}
+                    </div>
+                    <div class="footer-ts">
+                        Top Sports Fitness Clubs
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('print_area').innerHTML = html;
+            window.print();
+        }
+    </script>
+</body>
+</html>
