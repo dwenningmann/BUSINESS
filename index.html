@@ -7,146 +7,117 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { 
-            background-color: #0f0f0f; 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-        }
-        .ts-shadow {
-            box-shadow: 0 0 40px rgba(249, 178, 51, 0.1);
-        }
-        .category-label {
-            display: block;
-            text-align: left;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #f9b233;
-            margin-bottom: 1rem;
-            font-weight: 900;
-            opacity: 0.6;
-        }
-        .tool-card {
-            background-color: #252525;
-            transition: all 0.3s ease;
-            border: 1px solid #333;
-        }
-        .tool-card:hover {
-            background-color: #f9b233;
-            color: #000;
-            transform: translateY(-2px);
-        }
-        .kudos-banner {
-            background: linear-gradient(90deg, #f9b233 0%, #ffcc33 100%);
-            color: black;
-        }
-        .highlight-card {
-            border-left: 4px solid #f9b233;
-        }
+        body { background-color: #0f0f0f; color: white; font-family: 'Inter', sans-serif; }
+        .ts-shadow { box-shadow: 0 0 40px rgba(249, 178, 51, 0.1); }
+        .category-label { display: block; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #f9b233; margin-bottom: 1rem; font-weight: 900; opacity: 0.6; }
+        
+        .tool-card { background-color: #252525; transition: all 0.3s ease; border: 1px solid #333; position: relative; overflow: hidden; }
+        .tool-card:hover { background-color: #f9b233; color: #000; transform: translateY(-2px); }
+        
+        /* Locked State */
+        .locked { opacity: 0.6; cursor: pointer; }
+        .locked::after { content: '🔒'; position: absolute; top: 10px; right: 10px; font-size: 10px; }
+        .locked:hover { background-color: #333; color: white; transform: none; }
+        
+        .kudos-banner { background: linear-gradient(90deg, #f9b233 0%, #ffcc33 100%); color: black; }
+        
+        /* Modal Style */
+        #pw-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .pw-box { background: #1a1a1a; padding: 2rem; border-radius: 1.5rem; border: 1px solid #333; text-align: center; width: 300px; }
+        .pw-input { background: #0f0f0f; border: 1px solid #444; padding: 0.8rem; border-radius: 0.5rem; color: white; width: 100%; text-align: center; font-size: 1.5rem; letter-spacing: 4px; outline: none; margin: 15px 0; }
+        .pw-input:focus { border-color: #f9b233; }
+        
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body class="p-6 min-h-screen flex items-center justify-center">
+
+    <div id="pw-modal">
+        <div class="pw-box">
+            <p class="text-[10px] uppercase font-black text-[#f9b233] tracking-widest mb-2">Admin Access</p>
+            <h3 class="font-bold text-white mb-4">PIN eingeben</h3>
+            <input type="password" id="pw-field" class="pw-input" placeholder="••••" maxlength="4">
+            <button onclick="closeModal()" class="text-gray-500 text-[10px] uppercase font-bold">Abbrechen</button>
+        </div>
+    </div>
+
     <div class="max-w-6xl w-full p-10 bg-[#1a1a1a] rounded-3xl border border-[#333] shadow-2xl ts-shadow">
         
         <div class="text-center mb-12">
-            <div class="w-16 h-16 bg-[#f9b233] rounded-2xl flex items-center justify-center font-black text-black italic text-3xl mx-auto mb-6 shadow-lg border-2 border-black">TS</div>
-            <h1 class="text-4xl font-black mb-2 italic uppercase tracking-tighter text-white">Business Tool Center</h1>
-            <p class="text-gray-500 text-[10px] uppercase tracking-[4px] font-bold">Performance & Administration Hub 2026</p>
-        </div>
-
-        <div class="mb-12">
-            <span class="category-label">Daily Leadership Tool</span>
-            <a href="kudos.html" class="kudos-banner group w-full p-6 rounded-2xl flex items-center justify-between transition-all hover:scale-[1.01] shadow-xl">
-                <div class="flex items-center gap-6">
-                    <span class="text-4xl">🚀</span>
-                    <div class="text-left">
-                        <h2 class="font-black uppercase italic text-xl leading-none">Teams Kudos & Feedback</h2>
-                        <p class="text-[10px] uppercase font-bold opacity-80 tracking-widest mt-1">Motivation & Mitarbeiter-Entwicklung</p>
-                    </div>
-                </div>
-                <div class="bg-black text-white px-5 py-2 rounded-lg font-black italic text-xs uppercase tracking-widest group-hover:bg-white group-hover:text-black transition-colors">
-                    Starten →
-                </div>
-            </a>
+            <div class="w-16 h-16 bg-[#f9b233] rounded-2xl flex items-center justify-center font-black text-black italic text-3xl mx-auto mb-6 border-2 border-black">TS</div>
+            <h1 class="text-4xl font-black mb-2 italic uppercase tracking-tighter text-white uppercase tracking-tighter">Business Tool Center</h1>
+            <p class="text-gray-500 text-[10px] uppercase tracking-[4px] font-bold italic">Top Sports Management 2026</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             
             <div class="flex flex-col space-y-3">
-                <span class="category-label">HR & Onboarding</span>
-                <a href="av_minijob.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">📄</span> Arbeitsvertrag Minijob
-                </a>
-                <a href="datev.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🏦</span> DATEV-Personalbogen
-                </a>
-                <a href="rv_befreiung.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">⚖️</span> RV-Befreiungsantrag
-                </a>
-                <a href="nebentätigkeit.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">💼</span> Antrag Nebentätigkeit
-                </a>
-                <a href="schluessel.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🔑</span> Schlüsselprotokoll
-                </a>
-                <a href="bem.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 mt-4">
-                    <span class="text-lg">🏥</span> BEM-Gesprächsleitfaden
-                </a>
-                <a href="zeugnis.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">📜</span> Zeugnis-Generator
-                </a>
+                <span class="category-label">Theke & Service</span>
+                <a href="aushang.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">📢 Instant Aushang</a>
+                <a href="special.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🔥 Event-Special</a>
+                <a href="bestaetigung.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">📜 Mitgliedsbescheinigung</a>
+                <a href="datev.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🏦 DATEV-Personalbogen</a>
+                <a href="rv_befreiung.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">⚖️ RV-Befreiung</a>
+                <a href="nebentätigkeit.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">💼 Antrag Nebentätigkeit</a>
             </div>
 
             <div class="flex flex-col space-y-3">
-                <span class="category-label">Studio & Service</span>
-                <a href="aushang.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">📢</span> Instant Aushang (Info)
-                </a>
-                <a href="special.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🔥</span> Event-Special Vibrant
-                </a>
-                <a href="bestaetigung.html" class="tool-card highlight-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 bg-white/5">
-                    <span class="text-lg">📜</span> Mitgliedsbescheinigung
-                </a>
-                <a href="audit.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 mt-4">
-                    <span class="text-lg">🔎</span> Standort-Audit
-                </a>
-                <a href="feedback.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🧠</span> Mitarbeiter-Feedback
-                </a>
-                <a href="kampagne.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🎨</span> Kampagnen-Briefing
-                </a>
+                <span class="category-label">HR & Admin (Vault)</span>
+                <a href="av_minijob.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">📄 Arbeitsvertrag</a>
+                <a href="schluessel.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🔑 Schlüsselprotokoll</a>
+                <a href="bem.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🏥 BEM-Gespräch</a>
+                <a href="zeugnis.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">📜 Zeugnis-Generator</a>
+                <a href="audit.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 mt-4">🔎 Standort-Audit</a>
+                <a href="feedback.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🧠 Mitarbeiter-Feedback</a>
+                <a href="warning.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 opacity-40">⚠️ Abmahnung</a>
             </div>
 
             <div class="flex flex-col space-y-3">
-                <span class="category-label">Partner & Sales</span>
-                <a href="akquise.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">📞</span> Kaltakquise-Tool
-                </a>
-                <a href="sales.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">📊</span> Sales-Argumentarium
-                </a>
-                <a href="kooperation.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🤝</span> Kooperations-Planer
-                </a>
-                <a href="kickoff.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">
-                    <span class="text-lg">🎉</span> Kooperations-Kick-Off
-                </a>
-                <a href="warning.html" class="tool-card p-4 rounded-xl font-bold uppercase text-[10px] flex items-center gap-3 mt-4 opacity-60">
-                    <span class="text-lg">⚠️</span> Abmahnung (Safe-Guard)
-                </a>
+                <span class="category-label">Strategie & Sales (Vault)</span>
+                <a href="kampagne.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🎨 Kampagnen-Briefing</a>
+                <a href="akquise.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">📞 Kaltakquise-Tool</a>
+                <a href="sales.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">📊 Sales-Argumentarium</a>
+                <a href="kooperation.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🤝 Kooperations-Plan</a>
+                <a href="kickoff.html" class="tool-card locked p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3">🎉 Kooperations-Kick-Off</a>
+                
+                <a href="kudos.html" class="tool-card p-4 rounded-xl font-bold uppercase text-xs flex items-center gap-3 mt-4">🚀 Kudos & Feedback</a>
             </div>
-
-        </div>
-
-        <div class="mt-16 pt-8 border-t border-white/5 flex justify-between items-center">
-            <div class="flex flex-col">
-                <p class="text-gray-700 text-[8px] uppercase tracking-[2px] font-bold">Internes Management System</p>
-                <p class="text-gray-800 text-[7px] uppercase tracking-[1px]">Nur für Studioleiter & Geschäftsführung</p>
-            </div>
-            <p class="text-[#f9b233] text-[9px] uppercase tracking-[2px] font-black italic">TOP SPORTS HUB 2026</p>
         </div>
     </div>
+
+    <script>
+        const PIN = "2026";
+        let targetUrl = "";
+        const modal = document.getElementById('pw-modal');
+        const pwField = document.getElementById('pw-field');
+
+        // Alle gesperrten Karten abfangen
+        document.querySelectorAll('.locked').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                targetUrl = this.getAttribute('href');
+                modal.style.display = 'flex';
+                pwField.focus();
+            });
+        });
+
+        pwField.addEventListener('input', (e) => {
+            if (e.target.value === PIN) {
+                window.location.href = targetUrl;
+            } else if (e.target.value.length >= 4) {
+                pwField.classList.add('shake');
+                setTimeout(() => {
+                    pwField.classList.remove('shake');
+                    pwField.value = "";
+                }, 400);
+            }
+        });
+
+        function closeModal() {
+            modal.style.display = 'none';
+            pwField.value = "";
+        }
+    </script>
 </body>
 </html>
