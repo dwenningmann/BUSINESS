@@ -3,204 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOP SPORTS | Vollständiger Personalfragebogen</title>
+    <title>TOP SPORTS | DATEV Master-Onboarding</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
         :root { --ts-yellow: #f9b233; }
         body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; }
         
-        /* UI Styles */
         .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 1.5rem; }
         .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); border-radius: 1rem 1rem 0 0; }
         .input-box { padding: 1.25rem; }
-        input, select { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.85rem; outline: none; }
+        
+        input, select { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.85rem; outline: none; transition: 0.2s; }
         input:focus { border-color: var(--ts-yellow); }
-        label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 4px; margin-left: 2px; }
+        input.invalid { border-color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.05); }
+        
+        label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold; display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+        .tooltip-icon { background: #333; color: var(--ts-yellow); width: 14px; height: 14px; border-radius: 50%; display: inline-flex; items-center; justify-content: center; font-size: 9px; cursor: help; font-weight: bold; }
 
         #sig-canvas { background: white; border: 2px dashed #444; border-radius: 0.5rem; cursor: crosshair; width: 100%; height: 180px; }
+        .hidden { display: none; }
+        .warn-text { color: #ef4444; font-size: 11px; margin-top: 8px; font-weight: bold; line-height: 1.4; }
 
-        /* Print Styles */
         @media print {
             @page { size: A4; margin: 10mm; }
             body { background: white !important; color: black !important; padding: 0; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
-            .page-break { page-break-before: always; }
-            .p-header { border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
-            .p-section-title { background: #eee; padding: 4px 8px; font-size: 10px; font-weight: 900; margin: 15px 0 10px 0; border-left: 4px solid #000; }
-            .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .p-field { border-bottom: 1px solid #ddd; padding: 3px 0; margin-bottom: 5px; }
-            .p-label { font-size: 7px; text-transform: uppercase; color: #555; font-weight: bold; margin: 0; }
-            .p-val { font-size: 10px; font-weight: 600; margin: 0; min-height: 14px; }
-            .signature-image { max-height: 50px; display: block; }
-            .sig-box { border-top: 1px solid #000; padding-top: 5px; text-align: center; font-size: 8px; width: 220px; margin-top: 10px; }
-            .rv-container { font-size: 10px; line-height: 1.3; }
+            .p-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+            .p-section { border: 1px solid #000; margin-bottom: 10px; overflow: hidden; }
+            .p-section-head { background: #f0f0f0; color: #000; padding: 4px 10px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; }
+            .p-grid { display: grid; grid-template-columns: 1fr 1fr; }
+            .p-field { border-right: 1px solid #000; padding: 5px 10px; border-bottom: 1px solid #000; }
+            .p-field:last-child { border-right: none; }
+            .p-label { font-size: 7px; text-transform: uppercase; color: #333; font-weight: bold; margin-bottom: 2px; }
+            .p-val { font-size: 10px; font-weight: 700; min-height: 14px; }
+            .signature-image { max-height: 80px; display: block; margin: 0 0 0 auto; }
+            .sig-box { text-align: right; font-size: 8px; width: 250px; margin: 40px 0 0 auto; }
+            .p-notice { font-size: 9px; line-height: 1.4; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; margin-top: 10px; }
         }
-        .print-only { display: none; }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
-    <div class="max-w-4xl mx-auto no-print">
+    <div class="max-w-5xl mx-auto no-print">
         <div class="flex items-center gap-4 mb-8">
             <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
-            <div>
-                <h1 class="text-2xl font-black uppercase italic tracking-tighter italic">DATEV Onboarding Master</h1>
-                <p class="text-[9px] text-gray-500 uppercase tracking-[3px] font-bold italic">Vollständiger Personalfragebogen & RV-Antrag</p>
-            </div>
+            <h1 class="text-2xl font-black uppercase italic tracking-tighter">DATEV Onboarding v10.0</h1>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="card">
-                <div class="section-label italic">01. Personaldaten</div>
+                <div class="section-label italic">01. Identität & Kontakt</div>
                 <div class="input-box space-y-3">
-                    <div><label>Nachname</label><input type="text" id="in_nachname"></div>
-                    <div><label>Vorname</label><input type="text" id="in_vorname"></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label>Vorname</label><input type="text" id="in_vn"></div>
+                        <div><label>Nachname</label><input type="text" id="in_nn"></div>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div><label>Geburtsdatum</label><input type="text" id="in_geb" placeholder="TT.MM.JJJJ"></div>
-                        <div><label>Geburtsort</label><input type="text" id="in_ort"></div>
+                        <div>
+                            <label>Geschlecht</label>
+                            <select id="in_sex">
+                                <option value="männlich">männlich</option>
+                                <option value="weiblich">weiblich</option>
+                                <option value="divers">divers</option>
+                            </select>
+                        </div>
                     </div>
-                    <div><label>Staatsangehörigkeit</label><input type="text" id="in_nation" value="Deutsch"></div>
-                    <div><label>SV-Nummer</label><input type="text" id="in_svnr" placeholder="Zahl-Buchstabe-Zahlen"></div>
-                    <div><label>Anschrift (Straße, Hausnr., PLZ, Ort)</label><input type="text" id="in_adr" placeholder="Musterweg 1, 12345 Stadt"></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label>E-Mail</label><input type="email" id="in_mail"></div>
+                        <div><label>Mobilnummer</label><input type="tel" id="in_tel"></div>
+                    </div>
+                    <div><label>Straße & Hausnummer</label><input type="text" id="in_str"></div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="col-span-1"><label>PLZ</label><input type="text" id="in_plz"></div>
+                        <div class="col-span-2"><label>Ort</label><input type="text" id="in_ort"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="section-label italic">02. Steuer & Bank</div>
+                <div class="section-label italic">02. Finanzen & Qualifikation</div>
                 <div class="input-box space-y-3">
-                    <div><label>Steuer-Identifikationsnummer</label><input type="text" id="in_stid"></div>
+                    <div><label>SV-Nummer <span class="tooltip-icon" title="Sozialversicherungsausweis">?</span></label><input type="text" id="in_sv"></div>
+                    <div><label>Steuer-ID</label><input type="text" id="in_stid" maxlength="11" oninput="valNum(this, 11)"></div>
+                    <div><label>Krankenkasse</label><input type="text" id="in_kasse"></div>
                     <div class="grid grid-cols-2 gap-2">
-                        <div><label>Steuerklasse</label><input type="text" id="in_klasse"></div>
-                        <div><label>Konfession</label><input type="text" id="in_konf"></div>
+                        <div><label>IBAN</label><input type="text" id="in_iban" oninput="valIban(this)"></div>
+                        <div><label>Bank Name</label><input type="text" id="in_bank"></div>
                     </div>
-                    <div><label>Krankenkasse (Name & Ort)</label><input type="text" id="in_kasse"></div>
-                    <div class="pt-2 border-t border-[#333]">
-                        <div><label>IBAN</label><input type="text" id="in_iban"></div>
-                        <div><label>BIC / Kreditinstitut</label><input type="text" id="in_bank"></div>
+                    <div>
+                        <label>Bildungsabschluss</label>
+                        <select id="in_bildung">
+                            <option value="Abitur / Fachabitur">Abitur / Fachabitur</option>
+                            <option value="Abgeschlossene Ausbildung">Abgeschlossene Ausbildung</option>
+                            <option value="Hochschulabschluss">Hochschulabschluss</option>
+                            <option value="Realschulabschluss">Realschulabschluss</option>
+                        </select>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <div class="section-label italic">03. Beschäftigungsverhältnis</div>
-            <div class="input-box grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div><label>Eintrittsdatum</label><input type="text" id="in_entry" placeholder="TT.MM.JJJJ"></div>
-                <div>
-                    <label>Art der Beschäftigung</label>
-                    <select id="in_type" onchange="toggleRV()">
-                        <option value="Vollzeit / Teilzeit">Vollzeit / Teilzeit</option>
-                        <option value="Minijob">Geringfügig (Minijob)</option>
-                        <option value="Dualer Student">Dualer Student</option>
-                        <option value="Auszubildender">Auszubildender</option>
-                        <option value="Werkstudent">Werkstudent</option>
-                    </select>
+            <div class="section-label italic">03. Beschäftigung</div>
+            <div class="input-box">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div><label>Standort</label><select id="in_loc"><option value="Echterdingen">Echterdingen</option><option value="Reutlingen">Reutlingen</option><option value="Leinfelden">Leinfelden</option><option value="Kornwestheim">Kornwestheim</option><option value="Nürtingen">Nürtingen</option><option value="Degerloch">Degerloch</option><option value="Zentrale">Zentrale</option></select></div>
+                    <div><label>Anstellung</label><select id="in_type" onchange="checkMinijob(this.value)"><option value="Festangestellt">Festangestellt</option><option value="Minijob">Minijob</option><option value="Dualer Student">Dualer Student</option></select></div>
+                    <div><label>Eintritt</label><input type="text" id="in_entry" placeholder="TT.MM.JJJJ"></div>
+                    <div><label>Wochenstunden</label><input type="text" id="in_h"></div>
                 </div>
-                <div><label>Wochenstunden</label><input type="text" id="in_std"></div>
-                <div class="md:col-span-3"><label>Befristet bis (falls zutreffend)</label><input type="text" id="in_limit"></div>
+                <div id="minijob_fields" class="hidden mt-6 pt-6 border-t border-[#333]">
+                    <label>Weiterer Minijob?</label>
+                    <select id="in_minijob_check" onchange="checkWarning(this.value)"><option value="Nein">Nein</option><option value="Ja">Ja</option></select>
+                    <div id="minijob_warning" class="hidden warn-text">⚠️ WICHTIG: Zusammenrechnung bei über 538 €!</div>
+                </div>
             </div>
         </div>
 
         <div class="card">
-            <div class="section-label italic">04. Digitale Signatur (Mitarbeiter)</div>
+            <div class="section-label italic">04. Digitale Signatur</div>
             <div class="p-5">
                 <canvas id="sig-canvas"></canvas>
                 <div class="flex gap-2 mt-3">
-                    <button onclick="clearSig()" class="px-4 py-2 bg-gray-800 text-[10px] rounded uppercase font-bold">Löschen</button>
-                    <button onclick="saveSig()" class="px-4 py-2 bg-green-600 text-[10px] rounded uppercase font-bold text-white">Unterschrift bestätigen</button>
+                    <button onclick="clearSig()" class="px-4 py-2 bg-gray-800 text-xs rounded uppercase font-bold">Löschen</button>
                 </div>
             </div>
         </div>
 
-        <button onclick="window.print()" class="w-full py-6 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all mb-10">
-            Drucken / Als PDF speichern 📄
-        </button>
+        <button onclick="generatePDF()" class="w-full py-6 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all mb-20">PDF generieren 📄</button>
     </div>
 
-    <div class="print-only mx-auto" style="max-width: 800px; color: black;">
-        <div class="p-header">
-            <div>
-                <p style="font-weight: 900; font-size: 16px;">PERSONALFRAGEBOGEN</p>
-                <p style="font-size: 9px;">Erstellung für die Lohnabrechnung (DATEV)</p>
-            </div>
-            <p style="font-weight: 900; font-size: 14px; italic">TOP SPORTS</p>
-        </div>
-
-        <div class="p-section-title">1. PERSÖNLICHE ANGABEN</div>
-        <div class="p-grid">
-            <div class="p-field"><p class="p-label">Familienname</p><p class="p-val" id="out_nachname"></p></div>
-            <div class="p-field"><p class="p-label">Vorname</p><p class="p-val" id="out_vorname"></p></div>
-            <div class="p-field"><p class="p-label">Geburtsdatum</p><p class="p-val" id="out_geb"></p></div>
-            <div class="p-field"><p class="p-label">Geburtsort / Geburtsname</p><p class="p-val" id="out_ort"></p></div>
-            <div class="p-field"><p class="p-label">Staatsangehörigkeit</p><p class="p-val" id="out_nation"></p></div>
-            <div class="p-field"><p class="p-label">Versicherungsnummer (SV-Nr.)</p><p class="p-val" id="out_svnr"></p></div>
-        </div>
-        <div class="p-field"><p class="p-label">Anschrift (Straße, Hausnummer, PLZ, Ort)</p><p class="p-val" id="out_adr"></p></div>
-
-        <div class="p-section-title">2. STEUER / BANK / KRANKENKASSE</div>
-        <div class="p-grid">
-            <div class="p-field"><p class="p-label">Steuer-ID</p><p class="p-val" id="out_stid"></p></div>
-            <div class="p-field"><p class="p-label">Steuerklasse / Konfession</p><p class="p-val"><span id="out_klasse"></span> / <span id="out_konf"></span></p></div>
-            <div class="p-field" style="grid-column: span 2;"><p class="p-label">Gesetzliche Krankenkasse</p><p class="p-val" id="out_kasse"></p></div>
-            <div class="p-field" style="grid-column: span 2;"><p class="p-label">IBAN</p><p class="p-val" id="out_iban"></p></div>
-            <div class="p-field" style="grid-column: span 2;"><p class="p-label">Kreditinstitut (Bankname)</p><p class="p-val" id="out_bank"></p></div>
-        </div>
-
-        <div class="p-section-title">3. ANGABEN ZUR BESCHÄFTIGUNG</div>
-        <div class="p-grid">
-            <div class="p-field"><p class="p-label">Eintrittsdatum</p><p class="p-val" id="out_entry"></p></div>
-            <div class="p-field"><p class="p-label">Art der Beschäftigung</p><p class="p-val" id="out_type"></p></div>
-            <div class="p-field"><p class="p-label">Wochenstunden</p><p class="p-val" id="out_std"></p></div>
-            <div class="p-field"><p class="p-label">Befristung</p><p class="p-val" id="out_limit"></p></div>
-        </div>
-
-        <div style="margin-top: 30px; font-size: 8px; color: #444;">
-            Ich bestätige die Richtigkeit der Angaben. Änderungen werde ich unverzüglich mitteilen.
-        </div>
-
-        <div class="sig-box">
-            <img class="signature-img-target signature-image">
-            <p>Datum, Unterschrift Arbeitnehmer</p>
-        </div>
-    </div>
-
-    <div id="rv_page" class="print-only page-break mx-auto" style="max-width: 800px; color: black;">
-        <div class="p-header" style="border-bottom: 2px solid #f9b233;">
-            <p style="font-weight: 900; font-size: 14px;">ANTRAG AUF BEFREIUNG VON DER RENTENVERSICHERUNGSPFLICHT</p>
-        </div>
-
-        <div class="rv-container mt-8">
-            <p>Hiermit beantrage ich, der/die unten Genannte, die Befreiung von der Versicherungspflicht in der Rentenversicherung für meine geringfügig entlohnte Beschäftigung und erkläre:</p>
-            
-            <div class="my-6 p-4 border border-black">
-                <div class="p-grid">
-                    <div><p class="p-label">Name, Vorname</p><p class="p-val"><span class="val_name"></span></p></div>
-                    <div><p class="p-label">Geburtsdatum</p><p class="p-val" id="val_geb"></p></div>
-                </div>
-            </div>
-
-            <p class="font-bold">Arbeitgeber: TOP SPORTS Fitness GmbH & Co. KG</p>
-            
-            <p class="mt-4">Mir ist bekannt, dass:</p>
-            <ul class="list-disc ml-5 space-y-2">
-                <li>der Antrag nur für alle zeitgleich ausgeübten geringfügigen Beschäftigungen gilt.</li>
-                <li>die Befreiung für die Dauer der Beschäftigungen bindend ist und nicht widerrufen werden kann.</li>
-                <li>die Befreiung dazu führt, dass ich keine Rentenansprüche aus dieser Tätigkeit erwerbe.</li>
-            </ul>
-
-            <div style="margin-top: 60px;" class="sig-box">
-                <img class="signature-img-target signature-image">
-                <p>Datum, Unterschrift Arbeitnehmer (Befreiungsantrag)</p>
-            </div>
-
-            <div style="margin-top: 40px; border: 1px dashed #999; padding: 10px; font-size: 9px;">
-                <p class="font-bold">Vom Arbeitgeber auszufüllen:</p>
-                <p>Der Antrag ist am ___________ eingegangen. Die Befreiung wirkt ab ___________.</p>
-            </div>
-        </div>
-    </div>
+    <div id="print_area" class="print-only mx-auto" style="max-width: 800px; color: black;"></div>
 
     <script>
         const canvas = document.getElementById('sig-canvas');
@@ -209,57 +145,67 @@
 
         function resizeCanvas() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
         window.onload = resizeCanvas;
-
         canvas.addEventListener('mousedown', () => drawing = true);
         canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; });
-        canvas.addEventListener('touchend', () => { drawing = false; ctx.beginPath(); });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
-
-        function draw(e) {
-            if (!drawing) return;
-            ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = 'black';
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.pageX) - rect.left;
-            const y = (e.clientY || e.pageY) - rect.top;
-            ctx.lineTo(x, y); ctx.stroke();
-        }
+        canvas.addEventListener('mousemove', (e) => { if (!drawing) return; const rect = canvas.getBoundingClientRect(); ctx.lineWidth = 2; ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke(); });
 
         function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-        
-        function saveSig() {
-            const dataURL = canvas.toDataURL();
-            document.querySelectorAll('.signature-img-target').forEach(img => img.src = dataURL);
-            alert("Unterschrift wurde übernommen!");
-        }
+        function valNum(el, len) { el.value = el.value.replace(/\D/g, ''); el.classList.toggle('invalid', el.value.length !== len); }
+        function valIban(el) { el.value = el.value.replace(/\s/g, '').toUpperCase(); el.classList.toggle('invalid', !/^DE\d{20}$/.test(el.value)); }
+        function checkMinijob(val) { document.getElementById('minijob_fields').classList.toggle('hidden', val !== 'Minijob'); }
+        function checkWarning(val) { document.getElementById('minijob_warning').classList.toggle('hidden', val !== 'Ja'); }
 
-        function sync() {
-            const fields = ['nachname', 'vorname', 'geb', 'ort', 'nation', 'svnr', 'adr', 'stid', 'klasse', 'konf', 'kasse', 'iban', 'bank', 'entry', 'type', 'std', 'limit'];
-            fields.forEach(f => {
-                const val = document.getElementById('in_' + f).value;
-                const out = document.getElementById('out_' + f);
-                if(out) out.innerText = val;
-            });
+        function generatePDF() {
+            const val = (id) => document.getElementById(id).value || "---";
+            const sigImgData = canvas.toDataURL(); // Immer aktuelle Daten nehmen
+            const today = new Date().toLocaleDateString('de-DE');
 
-            // Spezielle Mirror-Felder für Seite 2
-            const fn = document.getElementById('in_vorname').value + " " + document.getElementById('in_nachname').value;
-            document.querySelectorAll('.val_name').forEach(el => el.innerText = fn);
-            document.getElementById('val_geb').innerText = document.getElementById('in_geb').value;
-        }
+            let html = `
+                <div class="p-header">
+                    <div><p style="font-weight:900; font-size:18px;">PERSONALFRAGEBOGEN</p><p style="font-size:9px;">DATEV-Erfassung</p></div>
+                    <p style="font-weight:900; font-size:14px;">TOP SPORTS - ${val('in_loc')}</p>
+                </div>
+                <div class="p-section">
+                    <div class="p-section-head">Angaben zum Arbeitnehmer</div>
+                    <div class="p-grid">
+                        <div class="p-field"><p class="p-label">Name, Vorname</p><p class="p-val">${val('in_nn')}, ${val('in_vn')}</p></div>
+                        <div class="p-field"><p class="p-label">Geschlecht / Geburtsdatum</p><p class="p-val">${val('in_sex')} / ${val('in_geb')}</p></div>
+                        <div class="p-field" style="grid-column: span 2;"><p class="p-label">Anschrift</p><p class="p-val">${val('in_str')}, ${val('in_plz')} ${val('in_ort')}</p></div>
+                        <div class="p-field"><p class="p-label">E-Mail</p><p class="p-val">${val('in_mail')}</p></div>
+                        <div class="p-field"><p class="p-label">Mobil</p><p class="p-val">${val('in_tel')}</p></div>
+                        <div class="p-field"><p class="p-label">SV-Nummer</p><p class="p-val">${val('in_sv')}</p></div>
+                        <div class="p-field"><p class="p-label">Steuer-ID</p><p class="p-val">${val('in_stid')}</p></div>
+                    </div>
+                </div>
+                <div class="p-section">
+                    <div class="p-section-head">Bank / Kasse / Bildung</div>
+                    <div class="p-grid">
+                        <div class="p-field"><p class="p-label">Krankenkasse</p><p class="p-val">${val('in_kasse')}</p></div>
+                        <div class="p-field"><p class="p-label">Bildungsabschluss</p><p class="p-val">${val('in_bildung')}</p></div>
+                        <div class="p-field" style="grid-column: span 2;"><p class="p-label">IBAN / Bank</p><p class="p-val">${val('in_iban')} (${val('in_bank')})</p></div>
+                    </div>
+                </div>
+                <div class="p-section">
+                    <div class="p-section-head">Beschäftigung</div>
+                    <div class="p-grid">
+                        <div class="p-field"><p class="p-label">Eintritt</p><p class="p-val">${val('in_entry')}</p></div>
+                        <div class="p-field"><p class="p-label">Art / Std.</p><p class="p-val">${val('in_type')} (${val('in_h')} h)</p></div>
+                    </div>
+                </div>`;
 
-        function toggleRV() {
-            const type = document.getElementById('in_type').value;
-            const rvPage = document.getElementById('rv_page');
-            if (type === "Minijob") {
-                rvPage.style.display = 'block';
-            } else {
-                rvPage.style.display = 'none';
+            if (val('in_type') === 'Minijob') {
+                html += `<div class="p-notice">Weiterer Minijob: <strong>${val('in_minijob_check')}</strong>. Bei Überschreiten der 538€ Grenze tritt SV-Pflicht ein.</div>`;
             }
-            sync();
-        }
 
-        document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', sync));
+            html += `
+                <div class="sig-box">
+                    <img src="${sigImgData}" class="signature-image">
+                    <p style="border-top:1px solid #000; padding-top:4px; font-weight:bold;">${today}, Unterschrift Mitarbeiter</p>
+                </div>`;
+
+            document.getElementById('print_area').innerHTML = html;
+            setTimeout(() => { window.print(); }, 300);
+        }
     </script>
 </body>
 </html>
