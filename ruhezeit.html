@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Ruhezeit PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; margin: 0; }
+        
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 1rem; }
+        .section-label { background: #252525; padding: 0.6rem 1rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); border-radius: 1rem 1rem 0 0; }
+        .input-box { padding: 1rem; }
+        
+        input, select, textarea { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.85rem; outline: none; }
+        input:focus { border-color: var(--ts-yellow); }
+
+        #signature-pad { background: white; border-radius: 0.5rem; width: 100%; height: 160px; cursor: crosshair; }
+        .preview-img { width: 100%; height: 120px; object-fit: cover; border-radius: 0.5rem; border: 2px dashed #444; }
+        
+        .privacy-note { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4; }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            body { background: white !important; color: black !important; padding: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .page-break { page-break-before: always; }
+            
+            .a4-page { width: 210mm; height: 297mm; padding: 20mm; box-sizing: border-box; position: relative; }
+            .p-header { border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+            .p-title { font-size: 18pt; font-weight: 900; text-transform: uppercase; }
+            .info-box { border: 1pt solid #000; padding: 15px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .p-label { font-size: 8pt; color: #666; font-weight: bold; text-transform: uppercase; }
+            .p-val { font-size: 11pt; font-weight: 700; border-bottom: 1px solid #eee; margin-bottom: 8px; }
+            .rule-box { background: #f9f9f9; padding: 15px; border-left: 5pt solid var(--ts-yellow); font-size: 10pt; line-height: 1.5; margin-bottom: 20px; }
+            .sig-img { max-width: 250px; border-bottom: 1px solid #000; display: block; }
+            .attachment-img { max-width: 100%; max-height: 220mm; object-fit: contain; display: block; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6">
+
+    <div class="max-w-6xl mx-auto no-print">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-[#f9b233] rounded-lg flex items-center justify-center font-black text-black italic text-xl border-2 border-black">TS</div>
+                <h1 class="text-xl font-black uppercase italic tracking-tighter text-white">Ruhezeit-Antrag PRO</h1>
+            </div>
+            <button onclick="generatePrint()" class="bg-[#f9b233] text-black px-8 py-3 rounded-xl font-black uppercase text-sm shadow-xl hover:scale-105 transition-all">Drucken / PDF generieren</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div class="card">
+                <div class="section-label">Mitglied & Kontakt</div>
+                <div class="input-box space-y-3">
+                    <input type="text" id="in_nn" placeholder="Nachname">
+                    <input type="text" id="in_vn" placeholder="Vorname">
+                    <input type="email" id="in_mail" placeholder="Antwort-E-Mail (für Bestätigung)">
+                    <input type="text" id="in_nr" placeholder="Mitglieds-Nr.">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-label">Konditionen</div>
+                <div class="input-box space-y-3">
+                    <select id="in_type" onchange="handleModeChange()">
+                        <option value="pflichtig">Beitragspflichtig (ohne Grund)</option>
+                        <option value="frei">Beitragsfrei (Nachweis erforderlich)</option>
+                    </select>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="in_start" placeholder="Vom (TT.MM.)">
+                        <input type="text" id="in_end" placeholder="Bis (TT.MM.)">
+                    </div>
+                    <input type="text" id="in_staff" placeholder="Bearbeiter (Mitarbeiter)">
+                </div>
+            </div>
+
+            <div class="card hidden" id="photo-card">
+                <div class="section-label">Nachweis (Kamera/Galerie)</div>
+                <div class="input-box text-center">
+                    <input type="file" id="in_file" accept="image/*" capture="environment" class="hidden" onchange="previewFile()">
+                    <div id="photo-preview" onclick="document.getElementById('in_file').click()" class="cursor-pointer">
+                        <div class="preview-img flex items-center justify-center text-gray-500 text-[9px] font-bold uppercase p-4 text-center">
+                            Foto des Nachweises aufnehmen
+                        </div>
+                    </div>
+                    <button id="del-photo" onclick="clearPhoto()" class="hidden text-red-500 text-[10px] font-bold mt-2 uppercase">Löschen</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-label">Digitale Unterschrift</div>
+                <div class="input-box">
+                    <canvas id="signature-pad"></canvas>
+                    <button onclick="signaturePad.clear()" class="text-[10px] font-bold text-red-500 mt-2 uppercase">Löschen</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 p-6 bg-[#151515] rounded-xl border border-[#222]">
+            <p class="privacy-note">
+                <strong>Datenschutz & Sicherheit:</strong> Dieses Formular nutzt lokales Processing. Personenbezogene Daten verbleiben im flüchtigen Speicher dieses Geräts. Der Antrag wird nach Generierung als PDF zur Archivierung an <strong>verwaltung@topsports-fitness.de</strong> übermittelt.
+            </p>
+        </div>
+    </div>
+
+    <div id="print_area" class="print-only"></div>
+
+    <script>
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas, { backgroundColor: 'rgb(255, 255, 255)' });
+        let photoData = null;
+
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+        window.onresize = resizeCanvas; resizeCanvas();
+
+        function handleModeChange() {
+            const isFrei = document.getElementById('in_type').value === 'frei';
+            document.getElementById('photo-card').classList.toggle('hidden', !isFrei);
+            if (!isFrei) clearPhoto();
+        }
+
+        function previewFile() {
+            const file = document.getElementById('in_file').files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                photoData = reader.result;
+                document.getElementById('photo-preview').innerHTML = `<img src="${photoData}" class="preview-img">`;
+                document.getElementById('del-photo').classList.remove('hidden');
+            }
+            if (file) reader.readAsDataURL(file);
+        }
+
+        function clearPhoto() {
+            photoData = null;
+            document.getElementById('photo-preview').innerHTML = `<div class="preview-img flex items-center justify-center text-gray-500 text-[9px] font-bold uppercase p-4 text-center">Foto aufnehmen</div>`;
+            document.getElementById('del-photo').classList.add('hidden');
+            document.getElementById('in_file').value = "";
+        }
+
+        function generatePrint() {
+            if (signaturePad.isEmpty()) { alert("Bitte das Mitglied unterschreiben lassen."); return; }
+            
+            const val = (id) => document.getElementById(id).value || "________________";
+            const type = document.getElementById('in_type').value;
+            const sig = signaturePad.toDataURL('image/png'); // Unterschrift abrufen
+            const today = new Date().toLocaleDateString('de-DE');
+
+            let html = `
+                <div class="a4-page">
+                    <div class="p-header">
+                        <div class="p-title">Antrag auf Ruhezeit</div>
+                        <div style="text-align:right"><p style="font-weight:900; font-size:14pt; margin:0;">TOP SPORTS</p></div>
+                    </div>
+                    <div class="info-box">
+                        <div><p class="p-label">Mitglied</p><p class="p-val">${val('in_vn')} ${val('in_nn')}</p></div>
+                        <div><p class="p-label">Mitglieds-Nr.</p><p class="p-val">${val('in_nr')}</p></div>
+                        <div><p class="p-label">Antwort an (E-Mail)</p><p class="p-val">${val('in_mail')}</p></div>
+                        <div><p class="p-label">Bearbeiter</p><p class="p-val">${val('in_staff')}</p></div>
+                        <div style="grid-column: span 2;"><p class="p-label">Zeitraum</p><p class="p-val">${val('in_start')} bis ${val('in_end')}</p></div>
+                    </div>
+                    <div class="rule-box">
+                        ${type === 'pflichtig' ? 
+                          '<strong>Beitragspflichtig:</strong> Beitrag läuft weiter, Ruhezeit wird am Ende beitragsfrei angehängt.' : 
+                          '<strong>Beitragsfrei:</strong> Beitrag pausiert, Laufzeit verlängert sich beitragspflichtig um die Dauer der Pause.'}
+                        <br><br>
+                        Wichtig: Ein vorzeitiges Ende muss per Mail an <strong>verwaltung@topsports-fitness.de</strong> gemeldet werden.
+                    </div>
+                    <div style="border: 2pt solid #000; padding: 10px; text-align:center; font-weight:900; font-size:10pt;">
+                        ANTRAG UNTER VORBEHALT DER PRÜFUNG.
+                    </div>
+                    <div style="margin-top:30px;">
+                        <p class="p-label">Unterschrift Mitglied (Datum: ${today})</p>
+                        <img src="${sig}" class="sig-img">
+                    </div>
+                </div>`;
+
+            if (photoData && type === 'frei') {
+                html += `<div class="a4-page page-break">
+                    <div class="p-header"><div class="p-title">Anlage: Nachweis</div></div>
+                    <img src="${photoData}" class="attachment-img">
+                </div>`;
+            }
+
+            document.getElementById('print_area').innerHTML = html;
+            
+            // Verzögerung, damit das Bild der Unterschrift sicher geladen ist
+            setTimeout(() => { window.print(); }, 250);
+        }
+    </script>
+</body>
+</html>
