@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | Event-Poster VIBRANT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; margin: 0; }
+        
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; }
+        .input-area { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.8rem; width: 100%; font-size: 0.9rem; outline: none; transition: 0.2s; }
+        .input-area:focus { border-color: var(--ts-yellow); }
+
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--ts-yellow); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            html, body { height: 100%; width: 100%; background: white !important; -webkit-print-color-adjust: exact !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            
+            .aushang-container {
+                width: 210mm; height: 297mm; position: relative; background: white; color: black !important;
+                display: flex; flex-direction: column; overflow: hidden;
+            }
+
+            /* Hintergrund-Wasserzeichen für mehr "Kick" */
+            .bg-watermark {
+                position: absolute;
+                top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+                font-size: 400pt; font-weight: 900; color: rgba(249, 178, 51, 0.04);
+                z-index: 1; user-select: none; font-style: italic;
+            }
+
+            .top-bar { height: 15mm; background: var(--ts-yellow); width: 100%; z-index: 10; }
+            .main-content { padding: 15mm 20mm; flex-grow: 1; display: flex; flex-direction: column; z-index: 10; }
+            
+            .event-cat-badge { background: black; color: var(--ts-yellow); padding: 4mm 8mm; font-weight: 900; font-size: 18pt; display: inline-block; text-transform: uppercase; transform: skewX(-10deg); margin-bottom: 8mm; }
+            .event-title { font-size: 60pt; font-weight: 900; line-height: 0.9; text-transform: uppercase; letter-spacing: -3px; margin-bottom: 10mm; color: black; }
+            
+            .event-desc { font-size: 22pt; line-height: 1.3; font-weight: 400; margin-bottom: 15mm; border-left: 6pt solid var(--ts-yellow); padding-left: 8mm; color: #1a1a1a; }
+
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin-bottom: 15mm; }
+            .info-box { border-bottom: 2.5pt solid var(--ts-yellow); padding-bottom: 3mm; }
+            .info-label { font-size: 10pt; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); margin-bottom: 2mm; letter-spacing: 1px; }
+            .info-val { font-size: 24pt; font-weight: 800; text-transform: uppercase; color: black; }
+
+            .action-area { margin-top: auto; background: #fdfdfd; padding: 10mm; border-radius: 4mm; display: flex; justify-content: space-between; align-items: center; border: 2pt solid black; }
+            .reg-val { font-size: 22pt; font-weight: 900; text-transform: uppercase; }
+
+            .friend-störer {
+                background: black; color: var(--ts-yellow); padding: 4mm 8mm; font-weight: 900; font-size: 15pt;
+                text-transform: uppercase; transform: rotate(1.5deg); margin: 5mm auto;
+                text-align: center; width: fit-content; border-radius: 2mm;
+            }
+            
+            .limit-störer { background: var(--ts-yellow); padding: 3mm 6mm; font-weight: 900; font-size: 16pt; text-transform: uppercase; border: 1.5pt solid black; transform: rotate(-2deg); }
+            .footer-ts { padding: 8mm 20mm; display: flex; justify-content: space-between; align-items: center; border-top: 1pt solid #eee; background: white; }
+            .logo-ts { font-size: 26pt; font-weight: 900; font-style: italic; color: black; }
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-5xl mx-auto no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <h1 class="text-2xl font-black uppercase italic tracking-tighter">Event-Special Vibrant v4.0</h1>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="card p-6 space-y-4">
+                <label class="text-[10px] font-black text-[#f9b233] uppercase tracking-widest">Headline & Text</label>
+                <input type="text" id="in_cat" class="input-area" placeholder="Kategorie (z.B. KURS-SPECIAL)">
+                <input type="text" id="in_title" class="input-area text-xl font-black" placeholder="TITEL">
+                <textarea id="in_desc" class="input-area" placeholder="Beschreibung (max. 2 Zeilen)..."></textarea>
+            </div>
+
+            <div class="card p-6 space-y-4">
+                <label class="text-[10px] font-black text-[#f9b233] uppercase tracking-widest">Wann & Wo</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="in_date" class="input-area" placeholder="Datum">
+                    <input type="text" id="in_time" class="input-area" placeholder="Uhrzeit">
+                </div>
+                <input type="text" id="in_coach" class="input-area" placeholder="Trainer">
+                <input type="text" id="in_loc" class="input-area" placeholder="Ort/Studio">
+            </div>
+
+            <div class="card p-6 space-y-4">
+                <label class="text-[10px] font-black text-[#f9b233] uppercase tracking-widest">Anmeldung & Extra</label>
+                <select id="in_limit" class="input-area">
+                    <option value="">Kein Teilnehmerlimit</option>
+                    <option value="Limitierte Plätze!">Limitierte Plätze</option>
+                    <option value="STARK LIMITIERT!">STARK LIMITIERT</option>
+                </select>
+                <select id="in_reg" class="input-area">
+                    <option value="In der Technogym APP">Technogym APP</option>
+                    <option value="Liste an der Theke">Theken-Liste</option>
+                    <option value="Direkt beim Trainer">Beim Trainer</option>
+                </select>
+                
+                <div class="flex items-center justify-between p-3 bg-black/30 rounded-lg">
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Jemanden mitbringen?</span>
+                    <label class="switch">
+                        <input type="checkbox" id="in_friend">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <button onclick="printSpecial()" class="w-full py-5 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl hover:scale-[1.02] transition-all mt-2">
+                    Poster drucken 📄
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="print_area" class="print-only aushang-container"></div>
+
+    <script>
+        function printSpecial() {
+            const getVal = (id) => document.getElementById(id).value;
+            const hasFriend = document.getElementById('in_friend').checked;
+            
+            const html = `
+                <div class="bg-watermark">TS</div>
+                <div class="top-bar"></div>
+                <div class="main-content">
+                    <div><div class="event-cat-badge">${getVal('in_cat') || 'SPECIAL'}</div></div>
+                    <div class="event-title">${getVal('in_title') || 'EVENT'}</div>
+                    
+                    <div class="event-desc">${getVal('in_desc') || 'Sei dabei und erlebe ein Training der Extraklasse. Wir freuen uns auf dich!'}</div>
+
+                    <div class="info-grid">
+                        <div class="info-box"><div class="info-label">Wann</div><div class="info-val">${getVal('in_date') || '-'}</div></div>
+                        <div class="info-box"><div class="info-label">Beginn</div><div class="info-val">${getVal('in_time') || '-'} Uhr</div></div>
+                        <div class="info-box"><div class="info-label">Trainer</div><div class="info-val">${getVal('in_coach') || '-'}</div></div>
+                        <div class="info-box"><div class="info-label">Location</div><div class="info-val">${getVal('in_loc') || 'Studio'}</div></div>
+                    </div>
+
+                    ${hasFriend ? `<div class="friend-störer">🔥 Bring a Friend: Gäste heute herzlich willkommen!</div>` : ''}
+
+                    <div class="action-area">
+                        <div>
+                            <div style="font-size: 10pt; font-weight:900; color: #777; text-transform:uppercase; letter-spacing:1px;">Anmeldung über:</div>
+                            <div class="reg-val">${getVal('in_reg')}</div>
+                        </div>
+                        ${getVal('in_limit') ? `<div class="limit-störer">${getVal('in_limit')}</div>` : ''}
+                    </div>
+                </div>
+                <div class="footer-ts"><div class="logo-ts">TS</div><div style="text-align:right; font-weight:900; font-size:11pt; letter-spacing:1px;">TOP SPORTS FITNESS CLUBS</div></div>
+            `;
+            
+            document.getElementById('print_area').innerHTML = html;
+            window.print();
+        }
+    </script>
+</body>
+</html>
