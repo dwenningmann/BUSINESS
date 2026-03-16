@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SPORTS | RV-Befreiungsantrag</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f0f0f; color: white; }
+        
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 1rem; margin-bottom: 1.5rem; }
+        .section-label { background: #252525; padding: 0.8rem 1.25rem; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); border-radius: 1rem 1rem 0 0; }
+        .input-box { padding: 1.25rem; }
+        
+        input { background: #0f0f0f; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.85rem; outline: none; }
+        input:focus { border-color: var(--ts-yellow); }
+        
+        label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 4px; }
+        #sig-canvas { background: white; border: 2px dashed #444; border-radius: 0.5rem; cursor: crosshair; width: 100%; height: 180px; }
+
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            body { background: white !important; color: black !important; padding: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            
+            .p-header { border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 25px; }
+            .p-title { font-size: 16px; font-weight: 900; text-transform: uppercase; line-height: 1.2; }
+            
+            .p-box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; }
+            .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .p-label { font-size: 8px; text-transform: uppercase; color: #555; font-weight: bold; margin-bottom: 2px; }
+            .p-val { font-size: 12px; font-weight: 700; border-bottom: 1px solid #ccc; min-height: 18px; }
+            
+            .rv-text { font-size: 10.5px; line-height: 1.6; text-align: justify; margin: 25px 0; }
+            .rv-bold { font-weight: bold; }
+            
+            .signature-image { max-height: 80px; display: block; margin: 0 0 0 auto; }
+            .sig-area { text-align: right; margin-top: 40px; }
+            .sig-line { border-top: 1px solid #000; padding-top: 5px; font-size: 9px; font-weight: bold; width: 280px; margin-left: auto; }
+            
+            .p-footer-box { margin-top: 40px; border: 1px dashed #999; padding: 10px; font-size: 9px; line-height: 1.4; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-3xl mx-auto no-print">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+            <h1 class="text-2xl font-black uppercase italic tracking-tighter">RV-Befreiung Minijob</h1>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">01. Antragsteller</div>
+            <div class="input-box space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label>Vorname</label><input type="text" id="in_vn"></div>
+                    <div><label>Nachname</label><input type="text" id="in_nn"></div>
+                </div>
+                <div><label>Geburtsdatum</label><input type="text" id="in_geb" placeholder="TT.MM.JJJJ"></div>
+                <div><label>Straße & Hausnummer</label><input type="text" id="in_str"></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-1"><label>PLZ</label><input type="text" id="in_plz"></div>
+                    <div class="col-span-2"><label>Ort</label><input type="text" id="in_ort"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label italic">02. Unterschrift Arbeitnehmer</div>
+            <div class="p-5">
+                <canvas id="sig-canvas"></canvas>
+                <button onclick="clearSig()" class="mt-3 px-4 py-2 bg-gray-800 text-xs rounded uppercase font-bold">Löschen</button>
+            </div>
+        </div>
+
+        <button onclick="generateRV()" class="w-full py-6 bg-[#f9b233] text-black font-black uppercase italic rounded-xl shadow-xl active:scale-95 transition-all mb-20">
+            Antrag generieren & Drucken 📄
+        </button>
+    </div>
+
+    <div id="print_area" class="print-only mx-auto" style="max-width: 800px; color: black;"></div>
+
+    <script>
+        const canvas = document.getElementById('sig-canvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function resizeCanvas() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+        window.onload = resizeCanvas;
+        canvas.addEventListener('mousedown', () => drawing = true);
+        canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+        canvas.addEventListener('mousemove', (e) => { if (!drawing) return; const rect = canvas.getBoundingClientRect(); ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke(); });
+
+        function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+        function generateRV() {
+            const val = (id) => document.getElementById(id).value || "____________________";
+            const sigImg = canvas.toDataURL();
+            const today = new Date().toLocaleDateString('de-DE');
+
+            const html = `
+                <div class="p-header">
+                    <p class="p-title">Antrag auf Befreiung von der Versicherungspflicht in der Rentenversicherung</p>
+                    <p style="font-size: 10px; margin-top: 5px;">für eine geringfügig entlohnte Beschäftigung nach § 6 Abs. 1b SGB VI</p>
+                </div>
+
+                <div class="p-box">
+                    <div class="p-grid">
+                        <div>
+                            <p class="p-label">Name, Vorname des Arbeitnehmers</p>
+                            <p class="p-val">${val('in_nn')}, ${val('in_vn')}</p>
+                        </div>
+                        <div>
+                            <p class="p-label">Geburtsdatum</p>
+                            <p class="p-val">${val('in_geb')}</p>
+                        </div>
+                    </div>
+                    <div style="margin-top:15px;">
+                        <p class="p-label">Anschrift (Straße, Hausnummer, PLZ, Ort)</p>
+                        <p class="p-val">${val('in_str')}, ${val('in_plz')} ${val('in_ort')}</p>
+                    </div>
+                </div>
+
+                <p class="rv-bold" style="font-size: 12px;">Arbeitgeber: TOP SPORTS Fitness GmbH & Co. KG</p>
+
+                <div class="rv-text">
+                    Hiermit beantrage ich die Befreiung von der Versicherungspflicht in der Rentenversicherung für meine geringfügig entlohnte Beschäftigung und erkläre gleichzeitig:
+                    <br><br>
+                    1. Ich bin darüber belehrt worden, dass ich durch die Befreiung auf den Erwerb von vollwertigen Pflichtbeitragszeiten in der Rentenversicherung verzichte. Die Beschäftigungszeit wird lediglich anteilig auf die Wartezeiten angerechnet.
+                    <br><br>
+                    2. Mir ist bekannt, dass ich durch die Befreiung keinen Anspruch auf Leistungen zur medizinischen und beruflichen Rehabilitation sowie auf eine Rente wegen Erwerbsminderung erwerbe.
+                    <br><br>
+                    3. Der Befreiungsantrag gilt für alle von mir zeitgleich ausgeübten geringfügig entlohnten Beschäftigungen und ist für die Dauer der Beschäftigungen bindend; er kann nicht widerrufen werden.
+                </div>
+
+                <div class="sig-area">
+                    <img src="${sigImg}" class="signature-image">
+                    <p class="sig-line">${today}, Unterschrift des Arbeitnehmers</p>
+                </div>
+
+                <div class="p-footer-box">
+                    <strong>Vom Arbeitgeber auszufüllen:</strong><br>
+                    Der Antrag ist am ____________________ beim Arbeitgeber eingegangen.<br>
+                    Die Befreiung wirkt ab dem ____________________ (Datum des Beginns der Beschäftigung oder des Eingangs des Antrags).
+                    <br><br>
+                    <div style="height: 40px;"></div>
+                    <p style="border-top: 1px solid #000; width: 250px; padding-top: 3px;">Datum, Unterschrift Arbeitgeber</p>
+                </div>
+            `;
+
+            document.getElementById('print_area').innerHTML = html;
+            setTimeout(() => { window.print(); }, 300);
+        }
+    </script>
+</body>
+</html>
