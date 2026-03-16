@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | Kampagnen-Master Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; }
+        .card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1.25rem; overflow: hidden; }
+        .section-label { background: #1f1f1f; padding: 0.75rem 1.25rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); letter-spacing: 1px; border-bottom: 1px solid #2a2a2a; }
+        input, select { background: #0c0c0c; border: 1px solid #333; border-radius: 0.75rem; color: white; padding: 0.75rem; width: 100%; font-size: 0.9rem; outline: none; }
+        .warning-box { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #f87171; padding: 1rem; border-radius: 1rem; font-size: 11px; margin-top: 10px; }
+        .info-bw { border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 10px; font-size: 11px; margin-top: 10px; border-radius: 0 1rem 1rem 0; }
+        .next-camp-box { border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 0 1rem 1rem 0; margin-top: 15px; }
+        .checkbox-item { display: flex; align-items: center; gap: 10px; padding: 8px; background: #111; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border: 1px solid transparent; }
+        input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: var(--ts-yellow); }
+
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .p-header { border-bottom: 4px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th { border: 1px solid #000; padding: 8px; font-size: 8pt; background: #f2f2f2; text-transform: uppercase; }
+            td { border: 1px solid #000; padding: 10px; font-size: 9pt; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div class="max-w-7xl mx-auto no-print">
+        <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Kampagnen-Master Pro 2026</h1>
+            </div>
+            <button onclick="window.print()" class="bg-[#f9b233] text-black px-8 py-3 rounded-xl font-black uppercase text-xs shadow-xl active:scale-95 transition-all">Drucken / PDF Export</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4 space-y-6">
+                <div class="card">
+                    <div class="section-label">Konfiguration</div>
+                    <div class="p-5 space-y-4">
+                        <input type="text" id="cp_name" placeholder="Name der Kampagne" oninput="updateCycle()">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[9px] font-black text-orange-500 uppercase block mb-1">🚀 Launch</label>
+                                <input type="date" id="cp_launch" onchange="updateCycle()">
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-black text-gray-500 uppercase block mb-1">Dauer (Wk)</label>
+                                <input type="number" id="cp_weeks" value="6" min="1" oninput="updateCycle()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-label">Material-Order (Zentral)</div>
+                    <div class="p-5 space-y-2" id="order_checks">
+                        <label class="checkbox-item"><input type="checkbox" data-label="5.000x Flyer A5" checked onchange="updateCycle()"> Flyer A5</label>
+                        <label class="checkbox-item"><input type="checkbox" data-label="75x A1 Plakate" checked onchange="updateCycle()"> A1 Plakate</label>
+                        <label class="checkbox-item"><input type="checkbox" data-label="6x Außen-Banner" checked onchange="updateCycle()"> Außen-Banner</label>
+                        <label class="checkbox-item"><input type="checkbox" data-label="6x Roll-Ups" checked onchange="updateCycle()"> Roll-Ups</label>
+                    </div>
+                </div>
+
+                <div id="bw_alerts" class="space-y-2"></div>
+                
+                <div id="next_cycle_info" class="next-camp-box hidden">
+                    <p class="text-green-500 font-black text-[10px] uppercase tracking-widest">🔄 Nächste Kampagne Planungsstart</p>
+                    <p id="next_plan_date" class="text-2xl font-black mt-1">--.--.</p>
+                    <p class="text-[10px] text-gray-400 mt-1 uppercase">Vorbereitung (Briefing & Kreativ-Phase) für das nächste Event.</p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8">
+                <div class="card">
+                    <div class="section-label">Strategischer Ablaufplan (Reverse Engineering)</div>
+                    <div class="p-6 space-y-4" id="timeline_ui">
+                        <p class="text-center text-gray-600 italic py-20">Bitte Launch-Datum wählen...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-only mx-auto" style="max-width: 800px; color: black;">
+        <div class="p-header">
+            <h1 style="font-size: 20pt; font-weight: 900; text-transform: uppercase; margin:0;">Kampagnen-Fahrplan & Zyklus</h1>
+            <p style="font-weight: bold; color: #f9b233; margin:0;">TOP SPORTS STRATEGIE | BW EDITION 2026</p>
+        </div>
+        <div id="pr_info" style="margin-bottom: 20px; border: 2px solid #000; padding: 10px; font-weight: bold; font-size: 14pt;"></div>
+        <table>
+            <thead><tr><th>Datum</th><th>Meilenstein</th><th>Logistik / Details</th></tr></thead>
+            <tbody id="pr_body"></tbody>
+        </table>
+        <div style="margin-top: 30px; border-top: 2px solid #000; padding-top: 10px;">
+            <p style="font-size: 10pt; font-weight: 900; text-transform: uppercase;">🔜 Timing für Folge-Kampagne:</p>
+            <p id="pr_next_step" style="font-size: 11pt; font-weight: 700; color: #10b981;"></p>
+        </div>
+    </div>
+
+    <script>
+        const holidaysBW = [
+            { date: "2026-01-01", name: "Neujahr" }, { date: "2026-01-06", name: "Hl. 3 Könige" },
+            { date: "2026-04-03", name: "Karfreitag" }, { date: "2026-04-06", name: "Ostermontag" },
+            { date: "2026-05-01", name: "Tag der Arbeit" }, { date: "2026-05-14", name: "Himmelfahrt" },
+            { date: "2026-05-25", name: "Pfingstmontag" }, { date: "2026-06-04", name: "Fronleichnam" },
+            { date: "2026-10-03", name: "Dt. Einheit" }, { date: "2026-11-01", name: "Allerheiligen" }
+        ];
+
+        const vacationsBW = [
+            { start: "2026-03-31", end: "2026-04-10", name: "Osterferien" },
+            { start: "2026-05-26", end: "2026-06-06", name: "Pfingstferien" },
+            { start: "2026-07-30", end: "2026-09-12", name: "Sommerferien" },
+            { start: "2026-10-26", end: "2026-10-30", name: "Herbstferien" }
+        ];
+
+        function checkBW(dateStr) {
+            const d = new Date(dateStr).toISOString().split('T')[0];
+            const hol = holidaysBW.find(h => h.date === d);
+            if(hol) return `⚠️ FEIERTAG: ${hol.name}`;
+            const vac = vacationsBW.find(v => d >= v.start && d <= v.end);
+            if(vac) return `ℹ️ FERIEN: ${vac.name}`;
+            return "";
+        }
+
+        function updateCycle() {
+            const launchInput = document.getElementById('cp_launch').value;
+            const weeks = parseInt(document.getElementById('cp_weeks').value) || 6;
+            if (!launchInput) return;
+
+            const launchDate = new Date(launchInput);
+            
+            // Berechnung Folgeplanung: 6 Wochen + 14 Tage Pause = 56 Tage bis nächster Launch.
+            // Davon 12 Tage rückwärts für Kreativ-Start = 44 Tage nach dem heutigen Launch.
+            const nextPlanStart = new Date(launchDate);
+            nextPlanStart.setDate(launchDate.getDate() + (weeks * 7) + 14 - 12);
+
+            const schedule = [
+                { days: 12, label: "Start Kreativ-Phase", desc: "Grafiker erstellt Erstentwürfe (2 Tage Kreativzeit)." },
+                { days: 10, label: "Finaler Design-Check", desc: "Druckfreigabe & finale Daten-Vorbereitung." },
+                { days: 8, label: "Zentrale Bestellung", desc: "Deadline für Produktion (Flyer, Plakate, Banner)." },
+                { days: 4, label: "Versand / Verteilung", desc: "Zentraler Versand an alle Standorte startet." },
+                { days: 3, label: "Team-Briefing", desc: "Vor Ort Schulung: Skripte & Kampagnen-Angebote." },
+                { days: 0, label: "🚀 KAMPAGNEN-START", desc: "Offizieller Launch (Studio & Online)." },
+                { days: -(weeks * 7), label: "🛑 Kampagnen-Ende", desc: `Kampagnen-Ende nach ${weeks} Wochen.` },
+                { days: -(weeks * 7 + 14), label: "🏁 Ende der Pause", desc: "Pause vorbei. Nächster Kampagnen-Launch." }
+            ];
+
+            let html = ""; let prHtml = "";
+            schedule.sort((a,b) => b.days - a.days).forEach(step => {
+                const sDate = new Date(launchDate);
+                sDate.setDate(launchDate.getDate() - step.days);
+                const iso = sDate.toISOString().split('T')[0];
+                const bw = checkBW(iso);
+                const dStr = sDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+
+                html += `
+                    <div class="flex items-center gap-4 p-3 border-l-4 ${step.days === 0 ? 'border-[#f9b233] bg-white/10' : 'border-gray-800 bg-white/5'} rounded-r-xl">
+                        <div class="min-w-[60px] font-black text-[#f9b233]">${dStr}</div>
+                        <div class="flex-grow">
+                            <p class="text-[10px] font-black uppercase tracking-widest">${step.label}</p>
+                            <p class="text-[11px] text-gray-500">${step.desc}</p>
+                            ${bw ? `<p class="text-[9px] text-blue-400 font-bold uppercase mt-1">${bw}</p>` : ''}
+                        </div>
+                    </div>`;
+
+                prHtml += `<tr style="${step.days === 0 ? 'background:#f9b233; font-weight:bold;' : ''}">
+                    <td>${dStr}.2026</td>
+                    <td>${step.label}</td>
+                    <td>${step.desc} ${bw ? `(${bw})` : ''}</td>
+                </tr>`;
+            });
+
+            document.getElementById('timeline_ui').innerHTML = html;
+            document.getElementById('pr_body').innerHTML = prHtml;
+            document.getElementById('next_plan_date').innerText = nextPlanStart.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('next_cycle_info').classList.remove('hidden');
+            document.getElementById('pr_next_step').innerText = `Start der Vorbereitung für die Folge-Kampagne: ${nextPlanStart.toLocaleDateString('de-DE')}`;
+            document.getElementById('pr_info').innerText = `${document.getElementById('cp_name').value || 'KAMPAGNE'} | DAUER: ${weeks} WOCHEN`;
+            document.getElementById('bw_alerts').innerHTML = `<div class="info-bw">Baden-Württemberg 2026 aktiv.</div>` + (checkBW(launchInput) ? `<div class="warning-box">${checkBW(launchInput)} am Launch-Tag!</div>` : '');
+        }
+    </script>
+</body>
+</html>
