@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | Erste Hilfe & Notfall-Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { background-color: #0c0c0c; color: white; font-family: 'Inter', sans-serif; }
+        .emergency-card { background: linear-gradient(145deg, #b91c1c, #7f1d1d); border: 2px solid #ef4444; }
+        .step-box { background: rgba(0,0,0,0.3); border-left: 4px solid #ef4444; padding: 1rem; margin-bottom: 1rem; }
+        .pulse { animation: pulse-red 2s infinite; }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; color: black !important; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto no-print">
+        <div class="emergency-card p-6 rounded-3xl mb-8 pulse">
+            <h1 class="text-3xl font-black uppercase mb-4 flex items-center gap-3">
+                🚨 Akut-Hilfe: Person nicht ansprechbar
+            </h1>
+            
+            <div class="space-y-4">
+                <div class="step-box">
+                    <p class="text-xs uppercase font-black opacity-70">Schritt 1</p>
+                    <p class="text-xl font-bold">Notruf 112 wählen (lassen)!</p>
+                    <p class="text-sm">Laut rufen: "HILFE! Setzen Sie einen Notruf ab!"</p>
+                </div>
+
+                <div class="step-box">
+                    <p class="text-xs uppercase font-black opacity-70">Schritt 2</p>
+                    <p class="text-xl font-bold">Atmung prüfen</p>
+                    <p class="text-sm">Kopf nackenwärts beugen. Hören, Sehen, Fühlen (max. 10 Sek).</p>
+                </div>
+
+                <div class="step-box border-white">
+                    <p class="text-xs uppercase font-black opacity-70">Schritt 3: Wenn keine normale Atmung</p>
+                    <p class="text-xl font-bold text-white">HERZDRUCKMASSAGE</p>
+                    <p class="text-sm">In der Mitte des Brustkorbs. 100-120x pro Minute. (Rhythmus: 'Stayin' Alive')</p>
+                </div>
+
+                <div class="step-box border-yellow-400">
+                    <p class="text-xs uppercase font-black opacity-70 text-yellow-400">Schritt 4</p>
+                    <p class="text-xl font-bold text-yellow-400 italic">AED (DEFIBRILLATOR) HOLEN</p>
+                    <p class="text-sm text-yellow-100">AED einschalten und den Sprachanweisungen folgen!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-[#1a1a1a] p-8 rounded-3xl border border-[#333]">
+            <h2 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
+                📝 Dokumentation (BG-Verbandbuch)
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <label class="block">
+                        <span class="text-[10px] uppercase font-bold text-gray-500">Name des Verunfallten</span>
+                        <input type="text" id="in_name" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
+                    </label>
+                    <label class="block">
+                        <span class="text-[10px] uppercase font-bold text-gray-500">Unfallort / Gerät</span>
+                        <input type="text" id="in_place" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
+                    </label>
+                </div>
+                <div class="space-y-4">
+                    <label class="block">
+                        <span class="text-[10px] uppercase font-bold text-gray-500">Art der Verletzung</span>
+                        <input type="text" id="in_injury" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
+                    </label>
+                    <label class="block">
+                        <span class="text-[10px] uppercase font-bold text-gray-500">Ersthelfer (Personal)</span>
+                        <input type="text" id="in_helper" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
+                    </label>
+                </div>
+            </div>
+            <button onclick="window.print()" class="w-full mt-8 bg-white text-black font-black py-4 rounded-xl uppercase hover:bg-[#f9b233] transition-all">
+                Protokoll drucken & Abheften
+            </button>
+        </div>
+    </div>
+
+    <div class="hidden print-only text-black p-10" style="color: black !important;">
+        <div style="border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px;">
+            <h1 style="font-size: 20pt; font-weight: 900; margin: 0;">UNFALLPROTOKOLL / VERBANDBUCH</h1>
+            <p style="margin: 0; font-weight: bold;">TOP SPORTS FITNESS CLUBS</p>
+        </div>
+        
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold; width: 30%;">Name Verunfallter:</td>
+                <td style="padding: 10px; border: 1px solid #ccc;" id="p_name"></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Datum / Uhrzeit:</td>
+                <td style="padding: 10px; border: 1px solid #ccc;">${new Date().toLocaleString()}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Ort des Geschehens:</td>
+                <td style="padding: 10px; border: 1px solid #ccc;" id="p_place"></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Art der Verletzung:</td>
+                <td style="padding: 10px; border: 1px solid #ccc;" id="p_injury"></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Ersthelfer:</td>
+                <td style="padding: 10px; border: 1px solid #ccc;" id="p_helper"></td>
+            </tr>
+        </table>
+
+        <div style="margin-top: 50px;">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="border-top: 1px solid black; width: 45%; text-align: center; padding-top: 5px; font-size: 10px;">Unterschrift Ersthelfer</div>
+                <div style="border-top: 1px solid black; width: 45%; text-align: center; padding-top: 5px; font-size: 10px;">Kenntnisnahme Studioleitung</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onbeforeprint = () => {
+            document.getElementById('p_name').innerText = document.getElementById('in_name').value;
+            document.getElementById('p_place').innerText = document.getElementById('in_place').value;
+            document.getElementById('p_injury').innerText = document.getElementById('in_injury').value;
+            document.getElementById('p_helper').innerText = document.getElementById('in_helper').value;
+        };
+    </script>
+</body>
+</html>
