@@ -3,137 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TS | Erste Hilfe & Notfall-Guide</title>
+    <title>TS | NOTFALL-COACH PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #0c0c0c; color: white; font-family: 'Inter', sans-serif; }
-        .emergency-card { background: linear-gradient(145deg, #b91c1c, #7f1d1d); border: 2px solid #ef4444; }
-        .step-box { background: rgba(0,0,0,0.3); border-left: 4px solid #ef4444; padding: 1rem; margin-bottom: 1rem; }
-        .pulse { animation: pulse-red 2s infinite; }
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
+        .step-card { display: none; }
+        .step-card.active { display: block; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-action { background: white; color: black; font-weight: 900; text-transform: uppercase; padding: 1.25rem; border-radius: 1rem; width: 100%; font-size: 1.1rem; transition: 0.2s; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
+        .btn-action:active { transform: scale(0.98); }
+        .cpr-metronome { width: 120px; height: 120px; background: #ef4444; border-radius: 50%; margin: 20px auto; animation: heartbeat 0.54s infinite; border: 10px solid rgba(255,255,255,0.2); }
+        @keyframes heartbeat { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 50% { transform: scale(1.1); box-shadow: 0 0 0 25px rgba(239, 68, 68, 0); } 100% { transform: scale(1); } }
         @media print {
             .no-print { display: none !important; }
             .print-only { display: block !important; color: black !important; }
-            body { background: white; }
+            body { background: white !important; color: black !important; padding: 0; }
+            .p-header { border-bottom: 4px solid black; margin-bottom: 25px; padding-bottom: 10px; text-align: left; }
+            .p-label { font-size: 8pt; font-weight: bold; text-transform: uppercase; color: #555; display: block; margin-bottom: 2px; }
+            .p-val { font-size: 11pt; font-weight: bold; display: block; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 10px; }
+            .p-log-box { border: 1px solid black; padding: 15px; border-radius: 8px; margin-top: 20px; }
+            .p-signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 50px; }
+            .p-sig-line { border-top: 1px solid black; padding-top: 5px; font-size: 8pt; font-weight: bold; }
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 flex flex-col items-center justify-center min-h-screen">
 
-    <div class="max-w-4xl mx-auto no-print">
-        <div class="emergency-card p-6 rounded-3xl mb-8 pulse">
-            <h1 class="text-3xl font-black uppercase mb-4 flex items-center gap-3">
-                🚨 Akut-Hilfe: Person nicht ansprechbar
-            </h1>
-            
-            <div class="space-y-4">
-                <div class="step-box">
-                    <p class="text-xs uppercase font-black opacity-70">Schritt 1</p>
-                    <p class="text-xl font-bold">Notruf 112 wählen (lassen)!</p>
-                    <p class="text-sm">Laut rufen: "HILFE! Setzen Sie einen Notruf ab!"</p>
+    <div class="max-w-xl w-full no-print">
+        
+        <div id="step1" class="step-card active">
+            <h1 class="text-4xl font-black text-red-600 mb-8 uppercase italic text-center">NOTFALL ERKANNT!</h1>
+            <div class="space-y-4 text-left">
+                <div class="bg-yellow-900/20 border-2 border-yellow-600 p-5 rounded-2xl">
+                    <p class="font-black text-lg mb-1 uppercase text-yellow-500">1. Eigenschutz prüfen</p>
+                    <p class="text-sm italic">Gefahren für dich ausschließen! (Strom? Nässe? Schwere Lasten?)</p>
                 </div>
-
-                <div class="step-box">
-                    <p class="text-xs uppercase font-black opacity-70">Schritt 2</p>
-                    <p class="text-xl font-bold">Atmung prüfen</p>
-                    <p class="text-sm">Kopf nackenwärts beugen. Hören, Sehen, Fühlen (max. 10 Sek).</p>
+                <div class="bg-blue-900/20 border-2 border-blue-600 p-5 rounded-2xl">
+                    <p class="font-black text-lg mb-1 uppercase text-blue-400">2. Hilfe rufen</p>
+                    <p class="text-sm font-bold italic">Rufe laut nach Kollegen oder Mitgliedern!</p>
+                    <p class="text-sm mt-3 p-3 bg-blue-600 rounded font-black text-center uppercase text-white shadow-lg">"HILFE! SOFORT ZUR THEKE/FLÄCHE KOMMEN!"</p>
                 </div>
-
-                <div class="step-box border-white">
-                    <p class="text-xs uppercase font-black opacity-70">Schritt 3: Wenn keine normale Atmung</p>
-                    <p class="text-xl font-bold text-white">HERZDRUCKMASSAGE</p>
-                    <p class="text-sm">In der Mitte des Brustkorbs. 100-120x pro Minute. (Rhythmus: 'Stayin' Alive')</p>
-                </div>
-
-                <div class="step-box border-yellow-400">
-                    <p class="text-xs uppercase font-black opacity-70 text-yellow-400">Schritt 4</p>
-                    <p class="text-xl font-bold text-yellow-400 italic">AED (DEFIBRILLATOR) HOLEN</p>
-                    <p class="text-sm text-yellow-100">AED einschalten und den Sprachanweisungen folgen!</p>
-                </div>
+                <button onclick="logEvent('Umfeld gesichert, Hilfe gerufen'); nextStep('step2')" class="btn-action mt-6">Vitalwerte prüfen</button>
             </div>
         </div>
 
-        <div class="bg-[#1a1a1a] p-8 rounded-3xl border border-[#333]">
-            <h2 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
-                📝 Dokumentation (BG-Verbandbuch)
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <label class="block">
-                        <span class="text-[10px] uppercase font-bold text-gray-500">Name des Verunfallten</span>
-                        <input type="text" id="in_name" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
-                    </label>
-                    <label class="block">
-                        <span class="text-[10px] uppercase font-bold text-gray-500">Unfallort / Gerät</span>
-                        <input type="text" id="in_place" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
-                    </label>
-                </div>
-                <div class="space-y-4">
-                    <label class="block">
-                        <span class="text-[10px] uppercase font-bold text-gray-500">Art der Verletzung</span>
-                        <input type="text" id="in_injury" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
-                    </label>
-                    <label class="block">
-                        <span class="text-[10px] uppercase font-bold text-gray-500">Ersthelfer (Personal)</span>
-                        <input type="text" id="in_helper" class="w-full bg-black border border-[#444] p-3 rounded-xl mt-1">
-                    </label>
-                </div>
+        <div id="step2" class="step-card text-center">
+            <h2 class="text-2xl font-black mb-6 uppercase italic">Reagiert die Person?</h2>
+            <div class="bg-white/5 p-6 rounded-2xl mb-8 border border-white/10 text-left">
+                <p class="text-lg font-bold">An den Schultern rütteln</p>
+                <p class="text-sm text-gray-400 italic">Laut ansprechen: "Hallo! Hören Sie mich? Was ist passiert?"</p>
             </div>
-            <button onclick="window.print()" class="w-full mt-8 bg-white text-black font-black py-4 rounded-xl uppercase hover:bg-[#f9b233] transition-all">
-                Protokoll drucken & Abheften
-            </button>
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="logEvent('Bewusstsein: JA'); nextStep('step_stable_guide')" class="btn-action bg-green-600 text-white">JA (Reagiert)</button>
+                <button onclick="logEvent('Bewusstsein: NEIN'); nextStep('step3')" class="btn-action bg-red-600 text-white italic underline">NEIN (Keine Reaktion)</button>
+            </div>
+        </div>
+
+        <div id="step3" class="step-card text-center">
+            <h2 class="text-2xl font-black mb-4 uppercase italic text-left">Prüfe die Atmung</h2>
+            <div class="bg-white/10 p-6 rounded-3xl mb-6 border-l-8 border-[#f9b233] text-left">
+                <p class="font-black text-xl mb-2 uppercase text-[#f9b233]">KOPF NACKENWÄRTS!</p>
+                <p class="text-sm italic text-white">Ohr über den Mund, Blick zum Brustkorb (10 Sek. prüfen).</p>
+            </div>
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="logEvent('Atmung: NORMAL'); nextStep('step_stable_guide')" class="btn-action bg-green-600 text-white">ATMUNG NORMAL</button>
+                <button onclick="logEvent('Atmung: KEINE'); nextStep('step_delegate')" class="btn-action bg-red-600 text-white italic underline uppercase">KEINE ATMUNG</button>
+            </div>
+        </div>
+
+        <div id="step_delegate" class="step-card">
+            <h2 class="text-3xl font-black text-red-600 mb-6 uppercase italic text-center underline">📢 AUFGABEN VERTEILEN!</h2>
+            <div class="space-y-4 text-left">
+                <div class="bg-blue-900/30 border border-blue-500 p-4 rounded-xl">
+                    <p class="font-black text-blue-400 text-[10px] uppercase mb-1">Person 1:</p>
+                    <p class="text-sm font-bold italic text-blue-100">"DU! Rufen Sie 112! Bewusstlose Person ohne Atmung bei TOP SPORTS!"</p>
+                </div>
+                <div class="bg-blue-900/30 border border-blue-500 p-4 rounded-xl">
+                    <p class="font-black text-blue-400 text-[10px] uppercase mb-1">Person 2:</p>
+                    <p class="text-sm font-bold italic text-blue-100">"DU! Geh sofort vor das Gebäude! Weise den Notarzt ein!"</p>
+                </div>
+                <button onclick="logEvent('Notruf & Einweisung delegiert'); nextStep('step4')" class="btn-action mt-4 bg-red-600 text-white italic">START REANIMATION</button>
+            </div>
+        </div>
+
+        <div id="step4" class="step-card text-center bg-red-700 p-8 rounded-[3rem]">
+            <h2 class="text-3xl font-black uppercase mb-2 text-white italic">Drücken!</h2>
+            <div class="cpr-metronome"></div>
+            <p class="font-black text-sm italic mb-6 uppercase tracking-widest text-white">NICHT AUFHÖREN!</p>
+            <div class="text-left text-xs bg-black/40 p-5 rounded-2xl border border-white/20 text-white">
+                <p>• <strong>Druckpunkt:</strong> Mitte des Brustkorbs</p>
+                <p>• <strong>Frequenz:</strong> Takt des Kreises (110 bpm)</p>
+            </div>
+            <button onclick="logEvent('HLW durchgeführt'); nextStep('doc_form')" class="mt-10 text-[10px] underline opacity-60 uppercase font-black text-white">Zum Protokoll</button>
+        </div>
+
+        <div id="step_stable_guide" class="step-card">
+            <h2 class="text-2xl font-black text-green-500 mb-6 uppercase italic text-center text-left">Stabile Seitenlage</h2>
+            <div class="space-y-4 mb-8 text-sm text-left">
+                <p class="bg-white/10 p-3 rounded-lg italic">1. Arm rechtwinklig nach oben legen.</p>
+                <p class="bg-white/10 p-3 rounded-lg italic">2. Handrücken an die Wange drücken.</p>
+                <p class="bg-white/10 p-3 rounded-lg italic">3. Bein beugen und Person herüberrollen.</p>
+                <div class="bg-green-600 p-5 rounded-2xl font-black text-center italic uppercase shadow-xl border-2 border-white/30">KOPF NACKENWÄRTS ÜBERSTRECKEN!</div>
+            </div>
+            <button onclick="logEvent('Stabile Seitenlage durchgeführt'); nextStep('doc_form')" class="btn-action">Einsatz dokumentieren</button>
+        </div>
+
+        <div id="doc_form" class="step-card bg-[#1a1a1a] p-8 rounded-3xl border border-[#333] text-left">
+            <h2 class="text-2xl font-black uppercase mb-6 italic text-[#f9b233]">Protokoll</h2>
+            <div class="space-y-4">
+                <input type="text" id="in_name" placeholder="Name der verletzten Person" class="bg-black border border-gray-700 w-full p-4 rounded-xl text-white outline-none">
+                <input type="text" id="in_helper1" placeholder="Dein Name (Ersthelfer)" class="bg-black border border-gray-700 w-full p-4 rounded-xl text-white">
+                <input type="text" id="in_helper2" placeholder="Name des 2. Helfers" class="bg-black border border-gray-700 w-full p-4 rounded-xl text-white">
+                <textarea id="in_witnesses" class="bg-black border border-gray-700 w-full p-4 rounded-xl text-white min-h-[80px]" placeholder="Zeugen"></textarea>
+                <button onclick="printProtocol()" class="btn-action bg-[#f9b233]">Drucken</button>
+            </div>
         </div>
     </div>
 
-    <div class="hidden print-only text-black p-10" style="color: black !important;">
-        <div style="border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px;">
-            <h1 style="font-size: 20pt; font-weight: 900; margin: 0;">UNFALLPROTOKOLL / VERBANDBUCH</h1>
-            <p style="margin: 0; font-weight: bold;">TOP SPORTS FITNESS CLUBS</p>
+    <div id="print_area" class="hidden print-only text-black p-10 w-full text-left">
+        <div class="p-header">
+            <h1 style="font-size: 20pt; font-weight: 900; margin:0;">Erste-Hilfe Protokoll</h1>
+            <p style="margin:0; font-weight: bold; color: #555;">TOP SPORTS FITNESS CLUBS | VERBANDBUCH 2026</p>
         </div>
-        
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold; width: 30%;">Name Verunfallter:</td>
-                <td style="padding: 10px; border: 1px solid #ccc;" id="p_name"></td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Datum / Uhrzeit:</td>
-                <td style="padding: 10px; border: 1px solid #ccc;">${new Date().toLocaleString()}</td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Ort des Geschehens:</td>
-                <td style="padding: 10px; border: 1px solid #ccc;" id="p_place"></td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Art der Verletzung:</td>
-                <td style="padding: 10px; border: 1px solid #ccc;" id="p_injury"></td>
-            </tr>
-            <tr>
-                <td style="padding: 10px; border: 1px solid #ccc; font-weight: bold;">Ersthelfer:</td>
-                <td style="padding: 10px; border: 1px solid #ccc;" id="p_helper"></td>
-            </tr>
-        </table>
-
-        <div style="margin-top: 50px;">
-            <div style="display: flex; justify-content: space-between;">
-                <div style="border-top: 1px solid black; width: 45%; text-align: center; padding-top: 5px; font-size: 10px;">Unterschrift Ersthelfer</div>
-                <div style="border-top: 1px solid black; width: 45%; text-align: center; padding-top: 5px; font-size: 10px;">Kenntnisnahme Studioleitung</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+            <div>
+                <span class="p-label">Verunfallte Person:</span> <span class="p-val" id="pr_name">--</span>
+                <span class="p-label">Datum / Zeit:</span> <span class="p-val" id="pr_time">--</span>
+                <span class="p-label">Zeugen:</span> <span class="p-val" id="pr_witnesses">--</span>
             </div>
+            <div>
+                <span class="p-label">Ersthelfer:</span> <span class="p-val" id="pr_helper1">--</span>
+                <span class="p-label">2. Helfer:</span> <span class="p-val" id="pr_helper2">--</span>
+            </div>
+        </div>
+        <div class="p-log-box">
+            <p style="font-weight: 900; text-transform: uppercase; font-size: 9pt; border-bottom: 1px solid black; margin-bottom: 10px;">Maßnahmen-Log:</p>
+            <ul id="pr_log" style="font-size: 10pt; line-height: 1.6; list-style-type: square; padding-left: 20px;"></ul>
+        </div>
+        <div class="p-signature-grid">
+            <div class="p-sig-line">Unterschrift Ersthelfer</div>
+            <div class="p-sig-line">Kenntnisnahme Studioleitung</div>
         </div>
     </div>
 
     <script>
-        window.onbeforeprint = () => {
-            document.getElementById('p_name').innerText = document.getElementById('in_name').value;
-            document.getElementById('p_place').innerText = document.getElementById('in_place').value;
-            document.getElementById('p_injury').innerText = document.getElementById('in_injury').value;
-            document.getElementById('p_helper').innerText = document.getElementById('in_helper').value;
-        };
+        let eventLog = [];
+        function logEvent(m) { eventLog.push(`${new Date().toLocaleTimeString('de-DE')} - ${m}`); }
+        function nextStep(id) {
+            document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        function printProtocol() {
+            document.getElementById('pr_name').innerText = document.getElementById('in_name').value || "--";
+            document.getElementById('pr_helper1').innerText = document.getElementById('in_helper1').value || "--";
+            document.getElementById('pr_helper2').innerText = document.getElementById('in_helper2').value || "--";
+            document.getElementById('pr_witnesses').innerText = document.getElementById('in_witnesses').value || "--";
+            document.getElementById('pr_time').innerText = new Date().toLocaleString('de-DE');
+            document.getElementById('pr_log').innerHTML = eventLog.map(e => `<li>${e}</li>`).join('');
+            window.print();
+        }
     </script>
 </body>
 </html>
