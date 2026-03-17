@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | HERZINFARKT-COACH</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
+        .step-card { display: none; width: 100%; max-width: 550px; }
+        .step-card.active { display: block; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-action { background: white; color: black; font-weight: 900; text-transform: uppercase; padding: 1.25rem; border-radius: 1rem; width: 100%; font-size: 1.1rem; transition: 0.2s; }
+        .symptom-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; }
+        
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; color: black !important; display: block !important; }
+            .p-header { border-bottom: 4px solid black; margin-bottom: 25px; padding-bottom: 10px; }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-xl w-full no-print">
+        
+        <div id="step1" class="step-card active">
+            <h1 class="text-3xl font-black text-red-600 mb-6 uppercase italic text-center text-left">Herzinfarkt Verdacht?</h1>
+            
+            <div class="space-y-4 mb-6">
+                <div class="symptom-box border-l-4 border-red-600">
+                    <p class="font-black text-sm uppercase text-red-500 mb-2">Typisch (Oft Mann):</p>
+                    <ul class="text-sm space-y-1 italic">
+                        <li>• Massiver Druck / Brennen in der Brust</li>
+                        <li>• Ausstrahlung in Arm, Kiefer oder Rücken</li>
+                        <li>• Todesangst & kalter Schweiß</li>
+                    </ul>
+                </div>
+                
+                <div class="symptom-box border-l-4 border-pink-500">
+                    <p class="font-black text-sm uppercase text-pink-500 mb-2">Atypisch (Oft Frau):</p>
+                    <ul class="text-sm space-y-1 italic">
+                        <li>• Starke Übelkeit / Erbrechen</li>
+                        <li>• Schmerzen im Oberbauch</li>
+                        <li>• Plötzliche, extreme Kurzatmigkeit</li>
+                        <li>• Schwächegefühl / Druck zwischen Schulterblättern</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <button onclick="logEvent('Verdacht auf Herzinfarkt bestätigt'); nextStep('step_delegate')" class="btn-action bg-red-600 text-white">Symptome treffen zu</button>
+        </div>
+
+        <div id="step_delegate" class="step-card">
+            <h2 class="text-3xl font-black text-red-600 mb-6 uppercase italic text-center">Sofort-Maßnahmen</h2>
+            <div class="space-y-4">
+                <div class="bg-blue-900/30 border-2 border-blue-500 p-4 rounded-xl">
+                    <p class="font-black text-blue-400 text-xs uppercase mb-1">Person 1:</p>
+                    <p class="text-sm font-bold italic">"RUFEN SIE DIE 112! Sagen: Verdacht auf Herzinfarkt bei TOP SPORTS!"</p>
+                </div>
+                <div class="bg-blue-900/30 border-2 border-blue-500 p-4 rounded-xl">
+                    <p class="font-black text-blue-400 text-xs uppercase mb-1">Person 2:</p>
+                    <p class="text-sm font-bold italic">"GEHEN SIE VOR DAS GEBÄUDE! Weisen Sie den Notarzt ein!"</p>
+                </div>
+                <button onclick="logEvent('Notruf & Einweisung veranlasst'); nextStep('step_action')" class="btn-action mt-4">Delegiert! Was mache ich?</button>
+            </div>
+        </div>
+
+        <div id="step_action" class="step-card">
+            <h2 class="text-2xl font-black mb-6 uppercase italic text-center">Patienten versorgen</h2>
+            <div class="space-y-3 mb-6">
+                <p class="bg-white/10 p-3 rounded-lg border-l-4 border-yellow-500 italic">1. Oberkörper hochlagern (halbsitzend auf Boden/Bank).</p>
+                <p class="bg-white/10 p-3 rounded-lg border-l-4 border-yellow-500 italic">2. Enge Kleidung öffnen (Kragen, Gürtel).</p>
+                <p class="bg-white/10 p-3 rounded-lg border-l-4 border-yellow-500 italic">3. Fenster auf: Frischluft zuführen.</p>
+                <p class="bg-white/10 p-3 rounded-lg border-l-4 border-yellow-500 italic">4. Beruhigen: "Hilfe ist unterwegs. Bleiben Sie bei mir."</p>
+                <div class="bg-red-600 p-4 rounded-xl font-black text-center uppercase shadow-xl animate-pulse">
+                    WICHTIG: KEINE ANSTRENGUNG MEHR! (Nicht laufen lassen!)
+                </div>
+            </div>
+            <button onclick="logEvent('Patient hochgelagert & betreut'); nextStep('step_monitor')" class="btn-action">Patient wird bewusstlos?</button>
+        </div>
+
+        <div id="step_monitor" class="step-card text-center">
+            <h2 class="text-2xl font-black text-red-500 mb-6 uppercase">Bewusstlosigkeit!</h2>
+            <p class="mb-8 italic">Wenn die Person nicht mehr reagiert und nicht mehr atmet:</p>
+            <a href="erstehilfe.html" class="btn-action bg-red-600 text-white block">Sofort Reanimation starten</a>
+            <button onclick="nextStep('doc_form')" class="mt-8 text-xs underline opacity-50 block w-full">Situation stabil / Übergabe an Notarzt</button>
+        </div>
+
+        <div id="doc_form" class="step-card bg-[#1a1a1a] p-8 rounded-3xl border border-[#333]">
+            <h2 class="text-xl font-black mb-6 uppercase text-[#f9b233] italic">Einsatz-Details</h2>
+            <div class="space-y-4">
+                <input type="text" id="in_name" placeholder="Name Patient" class="bg-black border border-gray-700 w-full p-4 rounded-xl text-white">
+                <input type="text" id="in_h1" placeholder="Dein Name (Ersthelfer)" class="bg-black border border-gray-700 w-full p-4 rounded-xl text-white">
+                <button onclick="printProtocol()" class="btn-action bg-[#f9b233]">Protokoll Drucken</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="print_area" class="hidden print-only text-black w-full">
+        <div class="p-header">
+            <h1 style="font-size: 20pt; font-weight: 900; margin:0;">VERDACHT HERZINFARKT PROTOKOLL</h1>
+            <p style="margin:0; font-weight: bold; color: #555;">TOP SPORTS FITNESS CLUBS | NOTFALL-DOKUMENTATION</p>
+        </div>
+        <p>Datum: <strong id="pr_time"></strong></p>
+        <p>Patient: <strong id="pr_name"></strong> | Ersthelfer: <strong id="pr_h1"></strong></p>
+        <div style="margin-top: 30px; border: 1px solid black; padding: 15px;">
+            <p style="font-weight: 900; text-transform: uppercase; font-size: 8pt;">Maßnahmenverlauf:</p>
+            <ul id="pr_log" style="font-size: 10pt; line-height: 1.6; padding-left: 20px;"></ul>
+        </div>
+    </div>
+
+    <script>
+        let eventLog = [];
+        function logEvent(m) { eventLog.push(`${new Date().toLocaleTimeString('de-DE')} - ${m}`); }
+        function nextStep(id) {
+            document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        function printProtocol() {
+            document.getElementById('pr_name').innerText = document.getElementById('in_name').value || "---";
+            document.getElementById('pr_h1').innerText = document.getElementById('in_h1').value || "---";
+            document.getElementById('pr_time').innerText = new Date().toLocaleString('de-DE');
+            document.getElementById('pr_log').innerHTML = eventLog.map(e => `<li>${e}</li>`).join('');
+            window.print();
+        }
+    </script>
+</body>
+</html>
