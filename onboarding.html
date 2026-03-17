@@ -3,170 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TS | Onboarding Guide Pro</title>
+    <title>TS | Onboarding Guide Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
         :root { --ts-yellow: #f9b233; }
         body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
         
-        .card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1.25rem; margin-bottom: 1.5rem; }
+        .card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1.25rem; margin-bottom: 1rem; }
         .section-label { background: #1f1f1f; padding: 0.75rem 1.25rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--ts-yellow); border-bottom: 1px solid #2a2a2a; }
-        input { background: #0c0c0c; border: 1px solid #333; border-radius: 0.75rem; color: white; padding: 0.75rem; width: 100%; font-size: 0.9rem; outline: none; }
+        input, select { background: #0c0c0c; border: 1px solid #333; border-radius: 0.75rem; color: white; padding: 0.6rem; width: 100%; font-size: 0.85rem; outline: none; }
         
-        .status-check { display: flex; items-center; gap: 8px; font-size: 11px; padding: 4px 0; }
-        .status-check input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--ts-yellow); }
+        .status-check { display: flex; align-items: center; gap: 8px; font-size: 11px; padding: 2px 0; }
+        input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--ts-yellow); cursor: pointer; }
 
         @media print {
-            @page { size: A4; margin: 10mm; }
-            body { background: white !important; color: black !important; }
+            @page { size: A4; margin: 8mm; }
+            body { background: white !important; color: black !important; padding: 0; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             
-            .welcome-header { background: #000 !important; color: #f9b233 !important; padding: 40px 20px; border-radius: 15px; text-align: center; margin-bottom: 25px; -webkit-print-color-adjust: exact; }
-            .p-section { border: 1px solid #000; padding: 15px; border-radius: 10px; margin-bottom: 15px; page-break-inside: avoid; }
-            .p-label { font-size: 8pt; font-weight: 900; color: #666; text-transform: uppercase; }
-            .p-val { font-size: 12pt; font-weight: 800; border-bottom: 1px solid #eee; margin-bottom: 10px; }
+            .welcome-header { background: #000 !important; color: #f9b233 !important; padding: 25px 15px; border-radius: 15px; text-align: center; margin-bottom: 15px; -webkit-print-color-adjust: exact; }
+            .p-section { border: 1px solid #eee; padding: 12px; border-radius: 10px; margin-bottom: 12px; page-break-inside: avoid; }
+            .p-label { font-size: 7pt; font-weight: 900; color: #666; text-transform: uppercase; margin-bottom: 2px; }
+            .p-val { font-size: 10pt; font-weight: 800; border-bottom: 1px solid #f9b233; margin-bottom: 5px; display: inline-block; min-width: 150px; }
             
-            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            th { background: #f0f0f0; padding: 8px; font-size: 8pt; text-align: left; border: 1px solid #000; }
-            td { border: 1px solid #000; padding: 10px; font-size: 9pt; vertical-align: top; }
+            .timeline-container { position: relative; padding-left: 30px; margin-top: 10px; }
+            .timeline-container::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: #eee; }
+            .timeline-item { position: relative; margin-bottom: 12px; }
+            .timeline-dot { position: absolute; left: -30px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #000; border: 3px solid #f9b233; }
+            .t-title { font-weight: 900; font-size: 10pt; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #f4f4f4; padding-bottom: 2px; }
+            .checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 8.5pt; color: #333; }
+            .check-box { font-family: monospace; font-weight: bold; font-size: 10pt; margin-right: 4px; }
+            
+            .footer-quote { margin-top: 10px; text-align: center; border-top: 1px solid #eee; padding-top: 8px; }
         }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="p-4 md:p-8">
 
     <div class="max-w-6xl mx-auto no-print">
-        <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-[#f9b233] rounded-xl flex items-center justify-center font-black text-black italic text-2xl border-2 border-black">TS</div>
-                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Onboarding Master 2026</h1>
+                <div class="w-10 h-10 bg-[#f9b233] rounded-lg flex items-center justify-center font-black text-black italic text-xl border-2 border-black">TS</div>
+                <h1 class="text-xl font-black uppercase italic tracking-tighter text-white">Onboarding Master PRO</h1>
             </div>
-            <button onclick="window.print()" class="bg-[#f9b233] text-black px-10 py-4 rounded-xl font-black uppercase text-sm shadow-xl active:scale-95 transition-all">Onboarding-Guide Drucken</button>
+            <button onclick="window.print()" class="bg-[#f9b233] text-black px-8 py-3 rounded-xl font-black uppercase text-xs shadow-xl hover:scale-105 active:scale-95 transition-all">Jetzt Drucken</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="card lg:col-span-1">
-                <div class="section-label">Stammdaten & Start</div>
-                <div class="p-6 space-y-4">
-                    <input type="text" id="in_name" placeholder="Vor- & Nachname des Neuen" oninput="document.getElementById('header_name').innerText = this.value">
+                <div class="section-label">1. Person & Studio</div>
+                <div class="p-5 space-y-3">
+                    <input type="text" id="in_name" placeholder="Vorname des Neuen">
+                    <input type="text" id="in_tel" placeholder="Studio Telefonnummer">
+                    <input type="text" id="in_mail" placeholder="Studio E-Mail">
                     <input type="text" id="in_mentor" placeholder="Ausbilder / Mentor">
-                    <div>
-                        <label class="text-[10px] text-gray-500 font-bold uppercase block mb-1">Arbeitsbeginn Tag 1-3</label>
-                        <div class="space-y-2">
-                            <input type="text" id="time_1" placeholder="Tag 1 (z.B. 09:00 - 17:00)">
-                            <input type="text" id="time_2" placeholder="Tag 2">
-                            <input type="text" id="time_3" placeholder="Tag 3">
+                    
+                    <div class="pt-3 border-t border-gray-800">
+                        <label class="text-[9px] text-gray-500 font-bold uppercase block mb-2 italic">Termine (Kalender nutzen)</label>
+                        <div class="space-y-3">
+                            <div class="flex gap-2"><input type="date" id="d1"><input type="time" id="t1"></div>
+                            <div class="flex gap-2"><input type="date" id="d2"><input type="time" id="t2"></div>
+                            <div class="flex gap-2"><input type="date" id="d3"><input type="time" id="t3"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="card lg:col-span-2">
-                <div class="section-label">Vorbereitungs-Status (Clubleiter)</div>
-                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-                    <div class="status-check"><input type="checkbox" id="c_ml"> <span>Magicline Zugang erstellt</span></div>
-                    <div class="status-check"><input type="checkbox" id="c_mw"> <span>Mywellness Account</span></div>
-                    <div class="status-check"><input type="checkbox" id="c_tm"> <span>MS Teams Gruppe hinzugefügt</span></div>
-                    <div class="status-check"><input type="checkbox" id="c_tr"> <span>Transponder / Chip programmiert</span></div>
-                    <div class="status-check"><input type="checkbox" id="c_kz"> <span>Kennzeichen (DEG/RT/NT/LF)</span></div>
-                    <div class="status-check"><input type="checkbox" id="c_ak"> <span>Arbeitskleidung (S/M/L/XL)</span></div>
-                    <div class="status-check"><input type="checkbox" id="c_ns"> <span>Namensschild produziert</span></div>
-                    <div class="status-check"><input type="checkbox" id="c_ep"> <span>Einsatzplan Woche 1 steht</span></div>
+                <div class="section-label">2. Vorbereitung (Clubleiter Check)</div>
+                <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
+                    <div class="status-check"><input type="checkbox" id="c_ml" checked> <span>Magicline Zugang aktiv</span></div>
+                    <div class="status-check"><input type="checkbox" id="c_mw" checked> <span>Mywellness Account bereit</span></div>
+                    <div class="status-check"><input type="checkbox" id="c_tm" checked> <span>MS Teams hinzugefügt</span></div>
+                    <div class="status-check"><input type="checkbox" id="c_tr" checked> <span>Transponder programmiert</span></div>
+                    <div class="status-check"><input type="checkbox" id="c_kz"> <span>Kennzeichen Parking</span></div>
+                    <div class="status-check"><input type="checkbox" id="c_ak" checked> <span>Arbeitskleidung vollständig</span></div>
+                    <div class="status-check"><input type="checkbox" id="c_ns" checked> <span>Namensschild bereit</span></div>
+                    <div class="status-check"><input type="checkbox" id="c_ep" checked> <span>Einsatzplan steht</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="print-only mx-auto" style="max-width: 850px; color: black;">
+    <div class="print-only mx-auto" style="max-width: 800px; color: black;">
         <div class="welcome-header">
             <h1 style="font-size: 24pt; font-weight: 900; margin:0; letter-spacing: -1px; text-transform: uppercase;">
-                Herzlich Willkommen, <span id="header_name_print">TEAMMITGLIED</span>!
+                Willkommen im Team, <span id="pr_name">TEAMMITGLIED</span>!
             </h1>
-            <p style="font-size: 14pt; font-weight: 700; margin-top: 10px;">Schön, dass du ab heute Teil der TOP SPORTS Familie bist.</p>
+            <p style="font-size: 11pt; font-weight: 700; margin-top: 5px;">Dein individueller Start-Fahrplan bei TOP SPORTS Fitness.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 10px;">
             <div class="p-section">
-                <p class="p-label">Dein Ausbilder / Mentor</p>
-                <p class="p-val" id="pr_mentor">--</p>
-                <p class="p-label">Deine Arbeitszeiten (Einarbeitung)</p>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; font-size: 10pt;">
-                    <div>Tag 1: <span id="pr_t1" style="font-weight:700;">--</span></div>
-                    <div>Tag 2: <span id="pr_t2" style="font-weight:700;">--</span></div>
-                    <div>Tag 3: <span id="pr_t3" style="font-weight:700;">--</span></div>
+                <p class="p-label">Studio-Kontakt</p>
+                <div style="font-size: 9pt; font-weight: 700;">
+                    📞 <span id="pr_tel">--</span> | ✉️ <span id="pr_mail">--</span>
                 </div>
+                <p class="p-label" style="margin-top:10px;">Dein Mentor / Ausbilder</p>
+                <p class="p-val" id="pr_mentor" style="margin-bottom:0;">--</p>
             </div>
             <div class="p-section">
-                <p class="p-label">Setup Status</p>
-                <div id="pr_checklist" style="font-size: 8pt; line-height: 1.4;">
-                    </div>
+                <p class="p-label">Deine Start-Termine</p>
+                <div style="font-size: 8.5pt; line-height: 1.6;">
+                    Tag 1: <strong id="out_d1">--</strong> um <strong id="out_t1">--</strong> Uhr<br>
+                    Tag 2: <strong id="out_d2">--</strong> um <strong id="out_t2">--</strong> Uhr<br>
+                    Tag 3: <strong id="out_d3">--</strong> um <strong id="out_t3">--</strong> Uhr
+                </div>
             </div>
         </div>
 
         <div class="p-section">
-            <p class="p-label">Dein Fahrplan: Die ersten 3 Tage</p>
-            <table>
-                <thead>
-                    <tr><th>Phase</th><th>Themenschwerpunkte & Lernziele</th></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="font-weight:900;">TAG 1<br><small>Safety & Intro</small></td>
-                        <td>
-                            <strong>Organisation:</strong> Systemzugänge (ML/MyWellness), Transponder-Check.<br>
-                            <strong>Sicherheit:</strong> Erste-Hilfe, Hygieneregeln, Notfallabläufe, Brandschutz.<br>
-                            <strong>Rechtliches:</strong> Unterweisung Datenschutz & Geheimhaltung.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:900;">TAG 2<br><small>Brand & Service</small></td>
-                        <td>
-                            <strong>Spirit:</strong> TOP SPORTS Philosophie & Verhaltensregeln im Team/mit Mitgliedern.<br>
-                            <strong>Action:</strong> Theken-Einstieg, Check-In Management, Telefon-Etikette.<br>
-                            <strong>Anforderung:</strong> Erwartungsmanagement für die kommenden Wochen.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:900;">TAG 3<br><small>Integration</small></td>
-                        <td>
-                            <strong>Vertiefung:</strong> Eigenständiges Arbeiten an der Theke unter Mentor-Aufsicht.<br>
-                            <strong>Feedback:</strong> Kurzes Resümee der ersten Tage mit der Studioleitung.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <p class="p-label">Die Timeline: Deine ersten 3 Tage (Checkliste)</p>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="t-title"><span>Tag 1: Safety & Intro</span></div>
+                    <div class="checklist-grid">
+                        <div><span class="check-box">☐</span> Magicline Login Check</div>
+                        <div><span class="check-box">☐</span> MyWellness Trainer-Profil</div>
+                        <div><span class="check-box">☐</span> Erste-Hilfe & Notfall-Ablauf</div>
+                        <div><span class="check-box">☐</span> Rundgang & Brandschutz</div>
+                        <div><span class="check-box">☐</span> Hygiene & Notfallpläne</div>
+                        <div><span class="check-box">☐</span> Datenschutz-Unterweisung</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="t-title"><span>Tag 2: Brand Spirit & Service</span></div>
+                    <div class="checklist-grid">
+                        <div><span class="check-box">☐</span> TOP SPORTS Philosophie</div>
+                        <div><span class="check-box">☐</span> Check-In & Lead-Management</div>
+                        <div><span class="check-box">☐</span> Telefon-Etikette (Skripte)</div>
+                        <div><span class="check-box">☐</span> Service-Basics & Theke</div>
+                        <div><span class="check-box">☐</span> Umgang mit Mitgliedern</div>
+                        <div><span class="check-box">☐</span> Erwartungsmanagement Briefing</div>
+                    </div>
+                </div>
+                <div class="timeline-item" style="margin-bottom:5px;">
+                    <div class="timeline-dot"></div>
+                    <div class="t-title"><span>Tag 3: Integration & Feedback</span></div>
+                    <div class="checklist-grid">
+                        <div><span class="check-box">☐</span> Selbstständiger Check-In</div>
+                        <div><span class="check-box">☐</span> Lead-Erfassung (Interessent)</div>
+                        <div><span class="check-box">☐</span> Spind-Check & Sauberkeit</div>
+                        <div><span class="check-box">☐</span> Umgang mit Beschwerden</div>
+                        <div><span class="check-box">☐</span> Kursraum- & Geräte-Check</div>
+                        <div><span class="check-box">☐</span> Feedback-Gespräch Tag 3</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div style="margin-top: 30px; text-align: center; border-top: 2px solid #000; padding-top: 15px;">
-            <p style="font-size: 11pt; font-weight: 900; margin:0;">„QUALITÄT IST KEIN ZUFALL, SONDERN DAS ERGEBNIS VON STRUKTUR.“</p>
-            <p style="font-size: 8pt; color: #666;">TOP SPORTS FITNESS | ONBOARDING 2026</p>
+        <div class="footer-quote">
+            <p style="font-size: 11pt; font-weight: 900; margin:0; text-transform: uppercase; color: #000; letter-spacing: 0.5px;">
+                „Qualität ist kein Zufall, sondern das Ergebnis von Struktur.“
+            </p>
+            <p style="font-size: 7pt; color: #888; margin-top: 4px;">TOP SPORTS FITNESS MANAGEMENT | ONBOARDING SYSTEM 2026</p>
         </div>
     </div>
 
     <script>
-        window.onbeforeprint = function() {
-            const name = document.getElementById('in_name').value || "Teammitglied";
-            document.getElementById('header_name_print').innerText = name;
-            document.getElementById('pr_mentor').innerText = document.getElementById('in_mentor').value || "Studioleitung";
-            document.getElementById('pr_t1').innerText = document.getElementById('time_1').value || "--";
-            document.getElementById('pr_t2').innerText = document.getElementById('time_2').value || "--";
-            document.getElementById('pr_t3').innerText = document.getElementById('time_3').value || "--";
+        function formatDate(isoDate) {
+            if(!isoDate) return "--";
+            const d = new Date(isoDate);
+            return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
 
-            // Checkliste für Print bauen
-            const checks = [
-                {id: 'c_ml', label: 'Magicline'}, {id: 'c_mw', label: 'Mywellness'},
-                {id: 'c_tm', label: 'Teams'}, {id: 'c_tr', label: 'Chip/Key'},
-                {id: 'c_kz', label: 'Kennzeichen'}, {id: 'c_ak', label: 'Kleidung'},
-                {id: 'c_ns', label: 'Namensschild'}, {id: 'c_ep', label: 'Einsatzplan'}
-            ];
+        window.onbeforeprint = function() {
+            document.getElementById('pr_name').innerText = document.getElementById('in_name').value || "TEAMMITGLIED";
+            document.getElementById('pr_tel').innerText = document.getElementById('in_tel').value || "--";
+            document.getElementById('pr_mail').innerText = document.getElementById('in_mail').value || "--";
+            document.getElementById('pr_mentor').innerText = document.getElementById('in_mentor').value || "--";
             
-            let checkHtml = "";
-            checks.forEach(c => {
-                const isChecked = document.getElementById(c.id).checked ? "☑" : "☐";
-                checkHtml += `<div>${isChecked} ${c.label}</div>`;
-            });
-            document.getElementById('pr_checklist').innerHTML = `<div style="display:grid; grid-template-columns: 1fr 1fr;">${checkHtml}</div>`;
+            document.getElementById('out_d1').innerText = formatDate(document.getElementById('d1').value);
+            document.getElementById('out_d2').innerText = formatDate(document.getElementById('d2').value);
+            document.getElementById('out_d3').innerText = formatDate(document.getElementById('d3').value);
+            document.getElementById('out_t1').innerText = document.getElementById('t1').value || "--";
+            document.getElementById('out_t2').innerText = document.getElementById('t2').value || "--";
+            document.getElementById('out_t3').innerText = document.getElementById('t3').value || "--";
         };
     </script>
 </body>
