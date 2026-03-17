@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | Digitaler Vertrags-Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
+        
+        .input-card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1.25rem; }
+        input, select { background: #0c0c0c; border: 1px solid #333; border-radius: 0.75rem; color: white; padding: 0.75rem; width: 100%; outline: none; }
+        input:focus { border-color: #f9b233; }
+        
+        #signature-pad { background: #fff; border-radius: 0.5rem; cursor: crosshair; touch-action: none; width: 100%; height: 180px; }
+
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; color: black !important; }
+            body { background: white !important; color: black !important; display: block !important; }
+            .p-header { border-bottom: 4px solid black; margin-bottom: 20px; padding-bottom: 10px; text-align: left; }
+            .p-section { border-bottom: 1px solid #eee; padding: 15px 0; text-align: left; }
+            .signature-img { max-width: 250px; height: auto; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10 flex flex-col items-center">
+
+    <div class="max-w-2xl w-full no-print">
+        <div class="mb-8 flex items-center gap-4">
+            <div class="w-10 h-10 bg-[#f9b233] rounded-lg flex items-center justify-center font-black text-black italic text-xl border-2 border-black">TS</div>
+            <h1 class="text-2xl font-black uppercase italic text-[#f9b233]">Vertrags-Service</h1>
+        </div>
+
+        <div class="input-card p-6 space-y-6 shadow-2xl">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" id="in_name" placeholder="Name Mitglied">
+                <input type="text" id="in_nr" placeholder="Mitgliedsnummer">
+            </div>
+
+            <div class="space-y-3">
+                <label class="flex items-center gap-3 bg-black/40 p-3 rounded-lg cursor-pointer border border-transparent hover:border-[#f9b233]/50 transition-all">
+                    <input type="checkbox" id="check_retention" class="w-4 h-4">
+                    <span class="text-sm font-bold">Kündigung zurücknehmen</span>
+                </label>
+
+                <div class="bg-black/20 p-3 rounded-xl border border-gray-800">
+                    <label class="flex items-center gap-3 cursor-pointer mb-3">
+                        <input type="checkbox" id="check_bv" class="w-4 h-4" onchange="toggleField('fields_bv')">
+                        <span class="text-sm font-bold">Bankverbindung (IBAN) ändern</span>
+                    </label>
+                    <div id="fields_bv" class="hidden space-y-2">
+                        <input type="text" id="in_iban" placeholder="Neue IBAN">
+                        <input type="text" id="in_bv_date" placeholder="Wirksam ab (z.B. Sofort oder 01.10.26)">
+                    </div>
+                </div>
+
+                <div class="bg-black/20 p-3 rounded-xl border border-gray-800">
+                    <label class="flex items-center gap-3 cursor-pointer mb-3">
+                        <input type="checkbox" id="check_tarif" class="w-4 h-4" onchange="toggleField('fields_tarif')">
+                        <span class="text-sm font-bold">Tarif / Modul anpassen</span>
+                    </label>
+                    <div id="fields_tarif" class="hidden space-y-2">
+                        <input type="text" id="in_tarif_new" placeholder="Neuer Tarif/Modul">
+                        <input type="text" id="in_price" placeholder="Neuer Preis">
+                        <input type="text" id="in_tarif_date" placeholder="Wirksam ab (Datum)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-gray-800">
+                <input type="text" id="in_ma" placeholder="Bearbeitender Mitarbeiter (Klarname)" class="mb-4 !border-[#f9b233]/30">
+                
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Unterschrift Mitglied (Digital)</label>
+                <canvas id="signature-pad" class="border border-gray-700"></canvas>
+                <button onclick="clearPad()" class="text-[10px] uppercase font-bold text-red-500 mt-2">Signatur leeren</button>
+            </div>
+
+            <button onclick="prepareAndPrint()" class="w-full bg-[#f9b233] text-black py-4 rounded-xl font-black uppercase text-sm shadow-xl hover:bg-white transition-all">Bestätigung & Druck</button>
+        </div>
+    </div>
+
+    <div id="print_area" class="hidden print-only text-black w-full">
+        <div class="p-header flex justify-between items-end">
+            <div>
+                <h1 style="font-size: 20pt; font-weight: 900; margin:0;">VEREINBARUNG</h1>
+                <p style="margin:0; font-weight: bold; color: #555;">ZUR VERTRAGSÄNDERUNG | TOP SPORTS</p>
+            </div>
+            <div style="font-weight: 900; font-style: italic; font-size: 24pt;">TS</div>
+        </div>
+
+        <div style="margin: 25px 0;">
+            <p>Zwischen <strong>TOP SPORTS</strong> und dem Mitglied:</p>
+            <p style="font-size: 13pt; margin: 10px 0;">Name: <strong id="out_name">---</strong> | Nr.: <strong id="out_nr">---</strong></p>
+            <p>wird am <strong id="out_date"></strong> Folgendes rechtsverbindlich vereinbart:</p>
+        </div>
+
+        <div id="out_retention_box" class="hidden p-section">
+            <h3 style="font-weight: 900; margin:0;">• KÜNDIGUNGSRÜCKNAHME</h3>
+            <p style="margin: 5px 0;">Das Mitglied nimmt die Kündigung hiermit ausdrücklich zurück. Der Vertrag wird zu den bestehenden Konditionen fortgeführt.</p>
+        </div>
+
+        <div id="out_bv_box" class="hidden p-section">
+            <h3 style="font-weight: 900; margin:0;">• ÄNDERUNG BANKVERBINDUNG</h3>
+            <p style="margin: 5px 0;">Neue IBAN: <strong id="out_iban">---</strong></p>
+            <p style="margin: 5px 0;">Wirksam zum: <strong id="out_bv_date">---</strong></p>
+        </div>
+
+        <div id="out_tarif_box" class="hidden p-section">
+            <h3 style="font-weight: 900; margin:0;">• TARIFANPASSUNG / UPGRADE</h3>
+            <p style="margin: 5px 0;">Neuer Tarif/Modul: <strong id="out_tarif_new">---</strong> | Neuer Preis: <strong id="out_price">---</strong></p>
+            <p style="margin: 5px 0;">Wirksam zum: <strong id="out_tarif_date">---</strong></p>
+        </div>
+
+        <div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;">
+            <div>
+                <p style="font-size: 8pt; font-weight: bold; margin-bottom: 5px;">Unterschrift Mitglied:</p>
+                <img id="out_signature" class="signature-img" src="" alt="Signatur">
+                <div style="border-top: 1px solid black; width: 100%;"></div>
+            </div>
+            <div style="padding-bottom: 5px;">
+                <p style="font-size: 8pt; font-weight: bold; margin-bottom: 5px;">Bearbeitet durch (TOP SPORTS Mitarbeiter):</p>
+                <p style="font-size: 12pt; font-weight: 900; margin-bottom: 10px;" id="out_ma">---</p>
+                <div style="border-top: 1px solid black; width: 100%;"></div>
+            </div>
+        </div>
+
+        <p style="margin-top: 40px; font-size: 7.5pt; color: #888; line-height: 1.4;">
+            Dieses Dokument wurde digital erstellt und vom Mitglied persönlich unterzeichnet. Eine Kopie wird auf Wunsch ausgehändigt. <br>
+            Erstellt am: <span id="out_ts"></span> | TS Business Hub v2.6
+        </p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('signature-pad');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function setupCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 3;
+            ctx.lineCap = "round";
+        }
+
+        canvas.addEventListener('mousedown', () => drawing = true);
+        window.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
+        canvas.addEventListener('touchend', () => drawing = false);
+        canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+
+        function draw(e) {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function clearPad() { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.beginPath(); }
+        function toggleField(id) { document.getElementById(id).classList.toggle('hidden'); }
+
+        function prepareAndPrint() {
+            // Datenübertrag
+            document.getElementById('out_name').innerText = document.getElementById('in_name').value || "---";
+            document.getElementById('out_nr').innerText = document.getElementById('in_nr').value || "---";
+            document.getElementById('out_date').innerText = new Date().toLocaleDateString('de-DE');
+            document.getElementById('out_ts').innerText = new Date().toLocaleString();
+            document.getElementById('out_ma').innerText = document.getElementById('in_ma').value.toUpperCase() || "---";
+            
+            document.getElementById('out_iban').innerText = document.getElementById('in_iban').value || "---";
+            document.getElementById('out_bv_date').innerText = document.getElementById('in_bv_date').value || "sofort";
+            document.getElementById('out_tarif_new').innerText = document.getElementById('in_tarif_new').value || "---";
+            document.getElementById('out_price').innerText = document.getElementById('in_price').value || "---";
+            document.getElementById('out_tarif_date').innerText = document.getElementById('in_tarif_date').value || "sofort";
+
+            // Boxen steuern
+            document.getElementById('out_retention_box').style.display = document.getElementById('check_retention').checked ? 'block' : 'none';
+            document.getElementById('out_bv_box').style.display = document.getElementById('check_bv').checked ? 'block' : 'none';
+            document.getElementById('out_tarif_box').style.display = document.getElementById('check_tarif').checked ? 'block' : 'none';
+
+            // Signatur
+            document.getElementById('out_signature').src = canvas.toDataURL();
+
+            setTimeout(() => { window.print(); }, 250);
+        }
+
+        window.onload = setupCanvas;
+    </script>
+</body>
+</html>
