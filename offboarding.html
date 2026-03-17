@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | Offboarding Protokoll</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        :root { --ts-yellow: #f9b233; }
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
+        
+        .card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1.25rem; margin-bottom: 1.5rem; }
+        .section-label { background: #1f1f1f; padding: 0.75rem 1.25rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #ef4444; border-bottom: 1px solid #2a2a2a; }
+        input, select { background: #0c0c0c; border: 1px solid #333; border-radius: 0.75rem; color: white; padding: 0.75rem; width: 100%; font-size: 0.9rem; outline: none; }
+        
+        .check-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #111; border-radius: 10px; margin-bottom: 8px; font-size: 12px; border: 1px solid #222; }
+        input[type="checkbox"] { width: 16px; height: 16px; accent-color: #ef4444; }
+
+        @media print {
+            @page { size: A4; margin: 10mm; }
+            body { background: white !important; color: black !important; padding: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .exit-header { border-bottom: 4px solid #000; padding-bottom: 15px; margin-bottom: 25px; }
+            .p-section { border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; page-break-inside: avoid; }
+            .p-label { font-size: 8pt; font-weight: 900; color: #888; text-transform: uppercase; }
+            .p-val { font-size: 11pt; font-weight: 700; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px; }
+            .status-line { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 5px 0; font-size: 10pt; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div class="max-w-6xl mx-auto no-print">
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center font-black text-white italic text-2xl border-2 border-black">TS</div>
+                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Offboarding Protokoll</h1>
+            </div>
+            <button onclick="window.print()" class="bg-red-600 text-white px-10 py-4 rounded-xl font-black uppercase text-sm shadow-xl hover:bg-red-700 transition-all">Protokoll finalisieren</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="card">
+                <div class="section-label" style="color: white;">01. Person & Austritt</div>
+                <div class="p-6 space-y-4">
+                    <input type="text" id="in_name" placeholder="Name des Mitarbeiters">
+                    <input type="text" id="in_date" placeholder="Letzter Arbeitstag (Datum)">
+                    <select id="in_reason">
+                        <option value="">Grund des Austritts (Optional)</option>
+                        <option value="Kündigung Mitarbeiter">Kündigung Mitarbeiter</option>
+                        <option value="Kündigung Arbeitgeber">Kündigung Arbeitgeber</option>
+                        <option value="Ende Befristung / Studium">Ende Befristung / Studium</option>
+                        <option value="Aufhebungsvertrag">Aufhebungsvertrag</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-label" style="color: white;">02. Checkliste Rückgabe & Sperrung</div>
+                <div class="p-6 space-y-2">
+                    <div class="check-item"><input type="checkbox" id="c1"> <span>Schlüssel / Transponder zurückgegeben</span></div>
+                    <div class="check-item"><input type="checkbox" id="c2"> <span>Dienstkleidung zurück (gewaschen)</span></div>
+                    <div class="check-item"><input type="checkbox" id="c3"> <span>Namensschild abgegeben</span></div>
+                    <div class="check-item"><input type="checkbox" id="c4"> <span>Spind geleert & gesäubert</span></div>
+                    <div class="check-item"><input type="checkbox" id="c5"> <span>IT-Zugänge gesperrt (ML, MyWellness, Teams)</span></div>
+                    <div class="check-item"><input type="checkbox" id="c6"> <span>Kennzeichen-Löschung veranlasst</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-only mx-auto" style="max-width: 800px; color: black;">
+        <div class="exit-header">
+            <h1 style="font-size: 22pt; font-weight: 900; margin:0; letter-spacing: -1px;">AUSTRITTS-PROTOKOLL</h1>
+            <p style="font-weight: 700; color: #ef4444; margin:0; text-transform: uppercase;">TOP SPORTS Personalverwaltung</p>
+        </div>
+
+        <div class="p-section">
+            <p class="p-label">Mitarbeiter/in</p>
+            <p class="p-val" id="pr_name">--</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <p class="p-label">Letzter Arbeitstag</p>
+                    <p class="p-val" id="pr_date">--</p>
+                </div>
+                <div>
+                    <p class="p-label">Art des Austritts</p>
+                    <p class="p-val" id="pr_reason">--</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-section">
+            <p class="p-label">Status der Abwicklung</p>
+            <div id="pr_checklist" style="margin-top: 10px;"></div>
+        </div>
+
+        <div class="p-section">
+            <p class="p-label">Bestätigung Clubleiter</p>
+            <p style="font-size: 9pt; margin-bottom: 30px;">Hiermit wird bestätigt, dass alle oben genannten Punkte ordnungsgemäß abgewickelt wurden und keine Forderungen gegenüber dem Mitarbeiter mehr bestehen.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div style="border-top: 1px solid #000; padding-top: 5px; font-size: 8pt; text-align: center; font-weight: bold;">Ort, Datum</div>
+                <div style="border-top: 1px solid #000; padding-top: 5px; font-size: 8pt; text-align: center; font-weight: bold;">Unterschrift Clubleiter</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 50px; text-align: center; font-size: 8pt; color: #888;">
+            Dieses Dokument ist Teil der Personalakte und dient der Absicherung des Standortes.<br>
+            TOP SPORTS FITNESS CLUBS | OFFBOARDING SYSTEM 2026
+        </div>
+    </div>
+
+    <script>
+        window.onbeforeprint = function() {
+            document.getElementById('pr_name').innerText = document.getElementById('in_name').value || "--";
+            document.getElementById('pr_date').innerText = document.getElementById('in_date').value || "--";
+            document.getElementById('pr_reason').innerText = document.getElementById('in_reason').value || "Nicht angegeben";
+
+            const checks = [
+                {id: 'c1', label: 'Schlüssel / Transponder'},
+                {id: 'c2', label: 'Dienstkleidung (vollständig)'},
+                {id: 'c3', label: 'Namensschild'},
+                {id: 'c4', label: 'Mitarbeiter-Spind'},
+                {id: 'c5', label: 'Sperrung IT-Systeme'},
+                {id: 'c6', label: 'Parkberechtigung (Kennzeichen)'}
+            ];
+
+            let html = "";
+            checks.forEach(c => {
+                const status = document.getElementById(c.id).checked ? "ERLEDIGT" : "OFFEN";
+                html += `<div class="status-line"><span>${c.label}</span><strong>${status}</strong></div>`;
+            });
+            document.getElementById('pr_checklist').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
