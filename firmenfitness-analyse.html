@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | BIA-Analyse SMART LOGIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
+        .input-card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1.25rem; }
+        input { background: #0c0c0c; border: 1px solid #333; border-radius: 0.5rem; color: white; padding: 0.6rem; width: 100%; outline: none; }
+        
+        @media print {
+            @page { size: A4; margin: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; overflow: hidden !important; }
+            .report-page { 
+                width: 210mm; height: 297mm; padding: 15mm 20mm; 
+                background: white !important; color: black !important;
+                position: absolute; top: 0; left: 0;
+                overflow: hidden !important; box-sizing: border-box;
+                display: flex; flex-direction: column;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+            }
+            .scale-bar { 
+                height: 14px; background: linear-gradient(to right, #60a5fa, #4ade80, #facc15, #fb923c, #f87171) !important; 
+                border-radius: 10px; position: relative; border: 1px solid #ddd;
+            }
+            .marker { position: absolute; top: -4px; width: 5px; height: 22px; background: black !important; border: 1px solid white; }
+        }
+    </style>
+</head>
+<body class="p-4 flex flex-col items-center">
+
+    <div class="max-w-2xl w-full no-print mb-8">
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-10 h-10 bg-[#f9b233] rounded flex items-center justify-center font-black text-black italic text-xl border-2 border-black">TS</div>
+            <h1 class="text-xl font-black uppercase text-[#f9b233]">BIA Coach Smart Logic</h1>
+        </div>
+
+        <div class="input-card p-6 space-y-4 shadow-xl">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" id="in_name" placeholder="Vorname">
+                <input type="number" id="in_real_age" placeholder="Echtes Alter">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" id="in_firma" placeholder="Firma / Event">
+                <input type="number" id="in_weight" placeholder="Gewicht kg">
+            </div>
+            <div class="grid grid-cols-4 gap-2">
+                <input type="number" id="in_kfa" placeholder="KFA %">
+                <input type="number" id="in_visceral" placeholder="Viszeral (1-20)">
+                <input type="number" id="in_age" placeholder="Biol. Alter">
+                <input type="number" id="in_kcal" placeholder="Kcal BMR">
+            </div>
+            <input type="text" id="in_offer" placeholder="Exklusives Angebot">
+            <button onclick="prepareAndPrint()" class="w-full bg-[#f9b233] text-black py-4 rounded-xl font-black uppercase shadow-xl hover:bg-white transition-all">
+                Analyse & Angebot drucken
+            </button>
+        </div>
+    </div>
+
+    <div class="print-only hidden report-page text-black" id="report-container">
+        <div class="flex justify-between items-end border-b-4 border-black pb-4 mb-8">
+            <div class="text-left">
+                <h1 style="font-size: 38pt;" class="font-black italic leading-none mb-0">DEIN CHECK-UP</h1>
+                <p class="font-bold tracking-[4px] text-[10px] text-gray-400 uppercase">TOP SPORTS BUSINESS FITNESS & HEALTH</p>
+            </div>
+            <div class="text-right">
+                <p class="font-black italic text-2xl">TOP SPORTS</p>
+                <p class="text-[10px] font-bold uppercase" id="out_firma">FIRMA: ---</p>
+            </div>
+        </div>
+
+        <p class="mb-6 text-xl leading-snug text-left">Hallo <strong id="out_name">--</strong>,<br>schön, dass du heute dabei bist! Hier sind deine Messergebnisse vom <span id="out_date"></span>.</p>
+
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div style="background: #f3f4f6 !important;" class="p-4 rounded-2xl border-2 border-black">
+                <p class="text-[9px] font-black uppercase text-gray-500 mb-1">Stoffwechselalter</p>
+                <p class="text-3xl font-black italic"><span id="out_age">--</span> J.</p>
+                <p class="text-[8px] mt-1 font-bold uppercase" id="out_age_msg"></p>
+            </div>
+            <div style="background: #f3f4f6 !important;" class="p-4 rounded-2xl border-2 border-black">
+                <p class="text-[9px] font-black uppercase text-gray-500 mb-1">Viszeralfett</p>
+                <p class="text-3xl font-black italic">Level <span id="out_visceral">--</span></p>
+                <p class="text-[8px] mt-1 font-bold uppercase" id="out_visceral_msg"></p>
+            </div>
+            <div style="background: #f3f4f6 !important;" class="p-4 rounded-2xl border-2 border-black">
+                <p class="text-[9px] font-black uppercase text-gray-500 mb-1">Fettmasse</p>
+                <p class="text-3xl font-black italic"><span id="out_kfa_kg">--</span> kg</p>
+                <p class="text-[8px] mt-1 font-bold uppercase italic text-gray-500">Ist-Zustand</p>
+            </div>
+        </div>
+
+        <div class="mb-10 text-left">
+            <p class="text-lg font-black italic uppercase mb-2">Körperfettanteil: <span id="out_kfa_p" class="text-3xl">--</span>%</p>
+            <div class="scale-bar">
+                <div id="marker" class="marker" style="left: 0%;"></div>
+            </div>
+            <div class="flex justify-between text-[8px] font-black uppercase mt-2 text-gray-400 tracking-tighter">
+                <span>Athletisch</span><span>Fitness</span><span>Normal</span><span>Erhöht</span><span>Risiko</span>
+            </div>
+        </div>
+
+        <div class="mb-8 flex-grow text-left">
+            <h3 class="text-xl font-black uppercase italic border-l-8 border-[#f9b233] pl-4 mb-4" id="strategy_title">Analyse & Strategie</h3>
+            <div id="out_strategy_text" class="space-y-4 text-[11.5pt] leading-relaxed text-justify">
+                </div>
+        </div>
+
+        <div style="background: black !important; color: white !important;" class="p-8 rounded-[2.5rem] flex items-center justify-between text-left">
+            <div class="flex-1">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-[#f9b233] mb-1">Mein exklusives Angebot für dich:</p>
+                <p class="text-2xl font-black italic uppercase leading-tight" id="out_offer">ANGEBOT</p>
+            </div>
+            <div class="text-right ml-4">
+                <p class="font-black italic text-xl text-white">TOP SPORTS</p>
+                <p class="text-[9px] font-black text-[#f9b233] uppercase">Einfach besser trainieren.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function prepareAndPrint() {
+            const name = document.getElementById('in_name').value || "---";
+            const realAge = parseInt(document.getElementById('in_real_age').value) || 0;
+            const biolAge = parseInt(document.getElementById('in_age').value) || 0;
+            const visceral = parseInt(document.getElementById('in_visceral').value) || 0;
+            const weight = parseFloat(document.getElementById('in_weight').value) || 0;
+            const kfa = parseFloat(document.getElementById('in_kfa').value) || 0;
+            const kcal = document.getElementById('in_kcal').value || "--";
+            const offer = document.getElementById('in_offer').value || "JETZT SONDERKONDITIONEN SICHERN!";
+            const kfaKg = (weight * (kfa / 100)).toFixed(1);
+
+            document.getElementById('out_name').innerText = name;
+            document.getElementById('out_firma').innerText = "FIRMA: " + (document.getElementById('in_firma').value || "EVENT").toUpperCase();
+            document.getElementById('out_kfa_p').innerText = kfa;
+            document.getElementById('out_kfa_kg').innerText = kfaKg;
+            document.getElementById('out_age').innerText = biolAge;
+            document.getElementById('out_visceral').innerText = visceral;
+            document.getElementById('out_offer').innerText = offer.toUpperCase();
+            document.getElementById('out_date').innerText = new Date().toLocaleDateString('de-DE');
+
+            let pos = ((kfa - 5) / (45 - 5)) * 100;
+            if(pos < 0) pos = 0; if(pos > 98) pos = 98;
+            document.getElementById('marker').style.left = pos + "%";
+
+            // LOGIK ENGINE
+            let strategyHTML = "";
+            let title = "Analyse & Strategie";
+
+            // STATUS TOP (Athletisch / Sehr fit)
+            if (biolAge <= realAge - 5 && visceral <= 4 && kfa <= 22) {
+                title = "Status: TOP-Level halten";
+                strategyHTML = `<p>Herausragend, <strong>${name}</strong>! Dein Stoffwechselalter von <strong>${biolAge} Jahren</strong> beweist, dass du bereits vieles richtig machst. Dein viszerales Fett ist auf einem optimalen Niveau.</p>
+                                <p class="font-bold italic">Unsere Strategie: Performance & Prävention. Um dieses hohe Niveau gegen den natürlichen Alterungsprozess zu verteidigen, braucht dein Körper weiterhin regelmäßige, hochwertige Reize.</p>
+                                <p>Wir helfen dir dabei, Plateaus zu überwinden und deine Vitalität langfristig zu konservieren. Mit unserer individuellen Trainingsplanung sorgen wir dafür, dass du effizient und sicher an deiner Form arbeitest.</p>`;
+            } 
+            // STATUS RISIKO (Handlungsbedarf)
+            else if (biolAge > realAge + 5 || visceral >= 10 || kfa >= 30) {
+                title = "Status: Vitalität zurückgewinnen";
+                strategyHTML = `<p>Die Analyse zeigt Handlungsbedarf, <strong>${name}</strong>. Ein erhöhtes viszerales Fett (Level <strong>${visceral}</strong>) ist ein Risikofaktor für Herz-Kreislauf-Themen. Dein Stoffwechsel läuft aktuell unter seinen Möglichkeiten.</p>
+                                <p class="font-bold italic">Unsere Lösung: Gezielter Stoffwechsel-Aktivierung. Durch professionell angeleitetes Krafttraining bauen wir die aktive Muskelmasse auf, die als 24/7-Verbrennungsmotor wirkt.</p>
+                                <p>Wir begleiten dich persönlich bei jedem Schritt. Unser Ziel ist es, dein biologisches Alter nachhaltig zu senken und dein Wohlbefinden im Alltag spürbar zu steigern. Lass uns heute den Grundstein legen.</p>`;
+            }
+            // STATUS OK (Durchschnitt / Optimierbar)
+            else {
+                title = "Status: Potenziale nutzen";
+                strategyHTML = `<p>Gute Basis, <strong>${name}</strong>! Deine Werte liegen in einem soliden Bereich, bieten aber spannende Optimierungsmöglichkeiten für deine Quality of Life.</p>
+                                <p class="font-bold italic">Unsere Strategie: Stoffwechsel-Optimierung. Ein Grundumsatz von <strong>${kcal} kcal</strong> ist die Basis, die wir durch gezieltes Training im Studio weiter steigern können.</p>
+                                <p>Schon kleine Anpassungen in deiner Trainingsplanung können große Effekte auf deine Energie im Alltag haben. Wir erstellen dir einen Plan, der perfekt in deinen Berufsalltag passt und dich spürbar fitter macht.</p>`;
+            }
+
+            document.getElementById('strategy_title').innerText = title;
+            document.getElementById('out_strategy_text').innerHTML = strategyHTML;
+            document.getElementById('out_visceral_msg').innerText = visceral > 9 ? "Erhöhtes Risiko" : (visceral > 5 ? "Beobachten" : "Optimal");
+            document.getElementById('out_visceral_msg').style.color = visceral > 9 ? "red" : (visceral > 5 ? "orange" : "green");
+            document.getElementById('out_age_msg').innerText = (biolAge > realAge) ? "Optimierbar" : "Top Wert";
+            document.getElementById('out_age_msg').style.color = (biolAge > realAge) ? "orange" : "green";
+
+            setTimeout(() => { window.print(); }, 300);
+        }
+    </script>
+</body>
+</html>
