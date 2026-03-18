@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | Hansefit Ruhendstellung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
+        .no-print { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .input-card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1rem; padding: 20px; width: 100%; max-width: 600px; }
+        input { background: #0c0c0c; border: 1px solid #333; border-radius: 0.4rem; color: white; padding: 0.5rem; width: 100%; margin-bottom: 10px; font-size: 0.9rem; }
+        canvas { border: 1px dashed #444; background: #fff; cursor: crosshair; width: 100%; height: 120px; border-radius: 8px; }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; color: black !important; }
+            .a4-container { width: 210mm; height: 297mm; padding: 20mm; box-sizing: border-box; display: flex; flex-direction: column; background: white !important; }
+            .border-box { border: 1px solid black; padding: 15px; margin-bottom: 20px; }
+            h1 { font-size: 20pt; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-transform: uppercase; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print">
+        <div class="input-card">
+            <h2 class="text-[#f9b233] font-black uppercase mb-4 text-xl italic">Hansefit Tool</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-gray-400">Name des Mitglieds</label>
+                    <input type="text" id="in_name" placeholder="Name Mitglied">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-gray-400">Ruhendstellung Ab</label>
+                        <input type="date" id="in_start">
+                    </div>
+                    <div>
+                        <label class="text-[10px] uppercase font-bold text-gray-400">Restlaufzeit (Monate)</label>
+                        <input type="number" id="in_months" placeholder="z.B. 12">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-gray-400">Unterzeichner Top Sports</label>
+                    <input type="text" id="in_staff" placeholder="Dein Name">
+                </div>
+
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-gray-400">Unterschrift Mitglied</label>
+                    <canvas id="sig-canvas"></canvas>
+                    <button onclick="clearCanvas()" class="text-[9px] uppercase text-red-500 font-bold mt-1">Löschen</button>
+                </div>
+
+                <button onclick="prepareAndPrint()" class="w-full bg-[#f9b233] text-black font-black py-4 rounded-xl mt-4 uppercase italic">PDF Generieren</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-only hidden">
+        <div class="a4-container">
+            <div class="flex justify-between items-start border-b-4 border-black pb-4 mb-8">
+                <div>
+                    <h1 class="italic">VEREINBARUNG ZUR<br>RUHENDSTELLUNG</h1>
+                    <p class="text-[9pt] font-bold tracking-widest uppercase">Aufgrund Hansefit-Kooperation</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-black italic text-xl">TOP SPORTS</p>
+                    <p class="text-[8pt]">Fitness GmbH & Co. KG</p>
+                </div>
+            </div>
+
+            <div class="mb-8 text-[11pt]">
+                <p>Zwischen der <strong>Top Sports Fitness GmbH & Co. KG</strong> und dem Mitglied:</p>
+                <p class="text-lg font-bold border-b border-black mt-2 pb-1" id="out_name">--</p>
+            </div>
+
+            <div class="space-y-6 text-[11pt] leading-relaxed">
+                <p>Das Studio bestätigt, dass der Vertrag über die Studio-Mitgliedschaft des oben genannten Mitglieds ab dem <strong id="out_start">--</strong> aufgrund der Teilnahme am Firmenfitnessprogramm <strong>Hansefit</strong> kostenfrei ruhend gestellt wird.</p>
+
+                <div class="border-box bg-gray-50">
+                    <p>Während der Ruhendstellung sind sämtliche Rechte und Pflichten aus dem Vertrag ausgesetzt. Die verbleibende Studio-Vertragslaufzeit von <strong id="out_months">--</strong> Monaten läuft nach Beendigung der Ruhendstellung weiter. Die Gesamtlaufzeit des Vertrages verlängert sich durch diese Vereinbarung nicht.</p>
+                </div>
+
+                <p>Die Ruhendstellung endet automatisch, sobald das Mitglied aus dem Hansefit-Programm ausscheidet. Das Mitglied verpflichtet sich, dies dem Studio <strong>unverzüglich</strong> mitzuteilen. Etwaige Beitragsrückstände durch verspätete Mitteilung sind nachzuentrichten.</p>
+            </div>
+
+            <div class="mt-auto grid grid-cols-2 gap-10">
+                <div class="flex flex-col">
+                    <div class="h-20 border-b border-black mb-1">
+                        <img id="out_sig_img" class="h-full object-contain mx-auto">
+                    </div>
+                    <p class="text-[8pt] font-bold uppercase">Datum | Unterschrift Mitglied</p>
+                    <p class="text-[7pt] mt-1" id="out_date_1"></p>
+                </div>
+                <div class="flex flex-col">
+                    <div class="h-20 border-b border-black mb-1 flex items-end justify-center pb-2">
+                        <p class="text-lg font-bold italic" id="out_staff">--</p>
+                    </div>
+                    <p class="text-[8pt] font-bold uppercase">Mitarbeiter Top Sports (Klarname)</p>
+                    <p class="text-[7pt] mt-1" id="out_date_2"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('sig-canvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function setupSignature() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const startDrawing = (e) => { drawing = true; draw(e); };
+            const stopDrawing = () => { drawing = false; ctx.beginPath(); };
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+
+            canvas.addEventListener('touchstart', (e) => { drawing = true; draw(e.touches[0]); e.preventDefault(); });
+            canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+        function prepareAndPrint() {
+            // Daten übertragen
+            document.getElementById('out_name').innerText = document.getElementById('in_name').value || "--";
+            document.getElementById('out_months').innerText = document.getElementById('in_months').value || "--";
+            document.getElementById('out_staff').innerText = document.getElementById('in_staff').value || "--";
+            
+            const startVal = document.getElementById('in_start').value;
+            document.getElementById('out_start').innerText = startVal ? new Date(startVal).toLocaleDateString('de-DE') : "--";
+
+            const today = new Date().toLocaleDateString('de-DE');
+            document.getElementById('out_date_1').innerText = today;
+            document.getElementById('out_date_2').innerText = today;
+
+            // Unterschrift konvertieren
+            const sigImg = document.getElementById('out_sig_img');
+            sigImg.src = canvas.toDataURL();
+
+            // Drucken
+            setTimeout(() => { window.print(); }, 200);
+        }
+
+        setupSignature();
+    </script>
+</body>
+</html>
