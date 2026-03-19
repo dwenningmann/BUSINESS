@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS | Vorfall-Protokoll FINAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0c0c0c; color: white; margin: 0; }
+        .input-card { background: #161616; border: 1px solid #2a2a2a; border-radius: 1rem; padding: 20px; width: 100%; max-width: 850px; }
+        input, textarea, select { background: #0c0c0c; border: 1px solid #333; border-radius: 0.4rem; color: white; padding: 0.5rem; width: 100%; margin-bottom: 8px; font-size: 0.85rem; outline: none; }
+        textarea { height: 70px; }
+        
+        @media print {
+            @page { size: A4; margin: 0; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; color: black !important; }
+            
+            .report-page { 
+                width: 210mm; 
+                height: 297mm; 
+                padding: 12mm 18mm; 
+                box-sizing: border-box; 
+                display: flex; 
+                flex-direction: column; 
+                background: white !important; 
+                position: relative;
+                overflow: hidden; 
+            }
+            .border-box { border: 1px solid black; padding: 6px; margin-top: 4px; min-height: 25px; font-size: 9.5pt; }
+            h1 { font-size: 18pt; font-weight: 900; line-height: 1; text-transform: uppercase; italic; margin: 0; }
+            .section-title { font-size: 8.5pt; font-weight: 900; text-transform: uppercase; margin-top: 10px; border-bottom: 2px solid black; }
+            
+            .footer-signatures {
+                position: absolute;
+                bottom: 12mm;
+                left: 18mm;
+                right: 18mm;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center py-6">
+
+    <div class="no-print w-full flex flex-col items-center px-4">
+        <div class="input-card shadow-2xl">
+            <h2 class="text-[#f9b233] font-black uppercase mb-4 text-xl italic">Vorfallsbericht PRO</h2>
+            
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-gray-500">Datum / Zeit</label>
+                    <div class="flex gap-1">
+                        <input type="date" id="in_date">
+                        <input type="text" id="in_time" placeholder="Uhrzeit">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-gray-500">Standort</label>
+                    <select id="in_location">
+                        <option>Echterdingen</option>
+                        <option>Reutlingen</option>
+                        <option>Leinfelden</option>
+                        <option>Kornwestheim</option>
+                        <option>Nürtingen</option>
+                        <option>Degerloch</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-gray-500">Protokollführer</label>
+                    <input type="text" id="in_witness" placeholder="Name">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1">
+                <label class="text-[10px] uppercase font-bold text-gray-500">Betroffener Mitarbeiter</label>
+                <input type="text" id="in_staff" placeholder="Vollständiger Name">
+            </div>
+
+            <label class="text-[10px] uppercase font-bold text-gray-500">Sachverhalt (Was ist passiert?)</label>
+            <textarea id="in_fact"></textarea>
+
+            <label class="text-[10px] uppercase font-bold text-gray-500">Beweismittel / Dokumentation</label>
+            <input type="text" id="in_proof" placeholder="Video, Kassenjournal, Zeugen...">
+
+            <label class="text-[10px] uppercase font-bold text-gray-500">Stellungnahme des Mitarbeiters</label>
+            <textarea id="in_statement"></textarea>
+
+            <label class="text-[10px] uppercase font-bold text-gray-500">Maßnahmen / Vereinbarungen</label>
+            <input type="text" id="in_action">
+
+            <button onclick="window.print()" class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl mt-4 uppercase italic">
+                Protokoll finalisieren
+            </button>
+        </div>
+    </div>
+
+    <div class="print-only hidden">
+        <div class="report-page">
+            <div class="flex justify-between items-start border-b-4 border-black pb-2 mb-4">
+                <div>
+                    <h1>VORFALLSBERICHT</h1>
+                    <p class="text-[8.5pt] font-black tracking-widest uppercase text-gray-500">Aktenvermerk / Mitarbeitergespräch</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-black italic text-xl">TOP SPORTS</p>
+                    <p class="text-[7pt] font-bold uppercase">Management Confidential</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-2 text-[9.5pt] leading-tight">
+                <div>
+                    <p><strong>Datum:</strong> <span id="out_date"></span> | <strong>Zeit:</strong> <span id="out_time"></span></p>
+                    <p><strong>Standort:</strong> <span id="out_location"></span></p>
+                </div>
+                <div>
+                    <p><strong>Mitarbeiter:</strong> <span id="out_staff"></span></p>
+                    <p><strong>Gesprächsführer:</strong> <span id="out_witness"></span></p>
+                </div>
+            </div>
+
+            <div class="section-title">1. Sachverhalt & Dokumentation</div>
+            <div class="border-box leading-tight" id="out_fact"></div>
+            <p class="text-[7.5pt] mt-1"><strong>Beweismittel:</strong> <span id="out_proof"></span></p>
+
+            <div class="section-title">2. Stellungnahme des Mitarbeiters</div>
+            <div class="border-box italic leading-tight" id="out_statement"></div>
+
+            <div class="section-title">3. Bewertung & Maßnahmen</div>
+            <div class="border-box font-bold bg-gray-50 leading-tight" id="out_action"></div>
+
+            <div class="mt-4 p-3 border border-black rounded bg-gray-50 text-[7.5pt] leading-tight">
+                <strong>Rechtlicher Hinweis:</strong> Der betroffene Mitarbeiter wurde zum oben genannten Sachverhalt angehört. Die Schilderungen dienen als Grundlage für die arbeitsrechtliche Bewertung. Das Dokument wird der Personalakte beigefügt.
+            </div>
+
+            <div class="footer-signatures">
+                <div class="border-t border-black pt-1">
+                    <p class="text-[7pt] font-bold uppercase">Datum | Unterschrift Protokollführer</p>
+                </div>
+                <div class="border-t border-black pt-1">
+                    <p class="text-[7pt] font-bold uppercase">Datum | Unterschrift Mitarbeiter</p>
+                    <div class="flex items-center gap-3 mt-1 text-[6.5pt]">
+                        <span>[ ] Inhalt bestätigt</span>
+                        <span>[ ] Widerspruch eingelegt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onbeforeprint = () => {
+            const fields = ['date', 'time', 'location', 'staff', 'witness', 'fact', 'proof', 'statement', 'action'];
+            fields.forEach(f => {
+                const val = document.getElementById('in_' + f).value || "---";
+                document.getElementById('out_' + f).innerText = val;
+            });
+        };
+    </script>
+</body>
+</html>
